@@ -22,7 +22,7 @@ public class SeleniumTest {
     @Ignore("need chrome driver")
     @Test
     public void testSelenium() {
-        System.getProperties().setProperty("webdriver.chrome.driver", "/Users/yihua/Downloads/chromedriver");
+        System.getProperties().setProperty("webdriver.chrome.driver", "D:\\software\\chromedriver.exe");
         Map<String, Object> contentSettings = new HashMap<String, Object>();
         contentSettings.put("images", 2);
 

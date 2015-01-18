@@ -25,6 +25,8 @@ public class Request implements Serializable {
 
     private String method;
 
+    private int level = 0;
+
     /**
      * Store additional information in extras.
      */
@@ -42,6 +44,23 @@ public class Request implements Serializable {
 
     public Request(String url) {
         this.url = url;
+    }
+
+    public Request(String url, int level){
+        this.url = url;
+        this.level = level;
+    }
+
+    /**
+     * depth of the page in parsing list
+     * @return
+     */
+    public int getLevel(){
+        return this.level;
+    }
+
+    public void setLevel(int level){
+        this.level = level;
     }
 
     public long getPriority() {

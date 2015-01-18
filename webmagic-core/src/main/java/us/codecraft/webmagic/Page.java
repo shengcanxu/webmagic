@@ -44,6 +44,8 @@ public class Page {
 
     private List<Request> targetRequests = new ArrayList<Request>();
 
+    private int level =0;
+
     public Page() {
     }
 
@@ -51,6 +53,18 @@ public class Page {
         resultItems.setSkip(skip);
         return this;
 
+    }
+
+    /**
+     * depth of the page in parsing list
+     * @return
+     */
+    public int getLevel(){
+        return this.level;
+    }
+
+    public void setLevel(int level){
+        this.level = level;
     }
 
     /**
@@ -114,6 +128,24 @@ public class Page {
                 }
                 s = UrlUtils.canonicalizeUrl(s, url.toString());
                 targetRequests.add(new Request(s));
+            }
+        }
+    }
+
+    /**
+     * add urls to fetch in level
+     *
+     * @param requests
+     * @param level
+     */
+    public void addTargetRequests(List<String> requests, int level) {
+        synchronized (targetRequests) {
+            for (String s : requests) {
+                if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+                    continue;
+                }
+                s = UrlUtils.canonicalizeUrl(s, url.toString());
+                targetRequests.add(new Request(s,level));
             }
         }
     }
