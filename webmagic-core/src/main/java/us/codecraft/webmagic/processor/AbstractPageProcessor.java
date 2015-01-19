@@ -31,4 +31,9 @@ public abstract class AbstractPageProcessor implements PageProcessor {
             page.addTargetRequests(nextURLs);
         }
     }
+
+    public List<String> getLinksFromRegrex(Page page, String regrex, String from, String to){
+        regrex = regrex.replace(".", "\\.").replace("*", "[^\"'#]*");
+        return page.getHtml().links().regex(regrex).all();
+    }
 }

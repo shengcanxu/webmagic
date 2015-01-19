@@ -28,11 +28,11 @@ public class AlbumList extends AbstractPageProcessor {
         int level = page.getLevel();
         switch (level){
             case 0:
-                links =  page.getHtml().links().regex("http://www\\.ximalaya\\.com/\\d+/album/\\d+").all();
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+",null,null);
                 logger.info("get " + links.size() + " links to follow");
                 break;
             case 1:
-                links =  page.getHtml().links().regex("http://www\\.ximalaya\\.com/zhubo/\\d+").all();
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/zhubo/\\d+",null,null);
                 logger.info("get " + links.size() + " links to follow");
                 break;
             default:
