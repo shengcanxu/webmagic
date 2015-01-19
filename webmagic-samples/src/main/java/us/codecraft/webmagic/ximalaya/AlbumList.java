@@ -28,11 +28,11 @@ public class AlbumList extends AbstractPageProcessor {
         int level = page.getLevel();
         switch (level){
             case 0:
-                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+",null,null);
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
                 logger.info("get " + links.size() + " links to follow");
                 break;
             case 1:
-                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/zhubo/\\d+",null,null);
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
                 logger.info("get " + links.size() + " links to follow");
                 break;
             default:
@@ -43,7 +43,7 @@ public class AlbumList extends AbstractPageProcessor {
 
     @Override
     public void extractContent(Page page) {
-        page.putField("title",page.getHtml().xpath("//*[@id=\"timelinePage\"]//h1/text()").toString());
+        this.getContentFromXpath(page,"title", "//*[@id=\"timelinePage\"]//h1/text()");
     }
 
     public static void main(String[] args){
