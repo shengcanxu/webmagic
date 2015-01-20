@@ -14,8 +14,8 @@ import java.util.List;
  * Created by cano on 2015/1/17.
  */
 public class AlbumList extends AbstractPageProcessor {
-    Site site = Site.me().setDomain("www.ximalaya.com");
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private Site site = Site.me().setDomain("www.ximalaya.com");
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public Site getSite() {
@@ -29,6 +29,7 @@ public class AlbumList extends AbstractPageProcessor {
         switch (level){
             case 0:
                 links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
+                links = links.subList(0,2);
                 logger.info("get " + links.size() + " links to follow");
                 break;
             case 1:
@@ -44,6 +45,7 @@ public class AlbumList extends AbstractPageProcessor {
     @Override
     public void extractContent(Page page) {
         this.getContentFromXpath(page,"title", "//*[@id=\"timelinePage\"]//h1/text()");
+        this.getContentFromXpath(page,"sounds","//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()");
     }
 
     public static void main(String[] args){
