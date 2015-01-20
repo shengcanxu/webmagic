@@ -14,7 +14,7 @@ import java.util.List;
  * Created by cano on 2015/1/17.
  */
 public class AlbumList extends AbstractPageProcessor {
-    Site site = Site.me().setDomain("www.examples.com");
+    Site site = Site.me().setDomain("www.ximalaya.com");
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -28,11 +28,11 @@ public class AlbumList extends AbstractPageProcessor {
         int level = page.getLevel();
         switch (level){
             case 0:
-                links =  this.getLinksFromRegrex(page,"http://www.examples.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
                 logger.info("get " + links.size() + " links to follow");
                 break;
             case 1:
-                links =  this.getLinksFromRegrex(page,"http://www.examples.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
+                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
                 logger.info("get " + links.size() + " links to follow");
                 break;
             default:
@@ -47,7 +47,7 @@ public class AlbumList extends AbstractPageProcessor {
     }
 
     public static void main(String[] args){
-        Spider.create(new AlbumList()).setScheduler(new StackScheduler()).addUrl("http://album.examples.com/dq/book/").run();
+        Spider.create(new AlbumList()).setScheduler(new StackScheduler()).addUrl("http://album.ximalaya.com/dq/book/").run();
     }
 
 }
