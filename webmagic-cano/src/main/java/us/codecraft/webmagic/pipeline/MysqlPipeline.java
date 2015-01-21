@@ -16,24 +16,29 @@ public class MysqlPipeline implements Pipeline{
     public static int DBStatusNotStarted = -1;
 
     private int status = DBStatusNotStarted;
+    private BaseDAO dao = BaseDAO.getInstance();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void process(ResultItems resultItems, Task task) {
+        if(status == MysqlPipeline.DBStatusFailure){
+            logger.error("not able to create db table,stop processing");
+            return;
+        }
+
         if(status == MysqlPipeline.DBStatusNotStarted){
-            boolean succ = createDB();
-            if(!succ){
-                return;
+            if(dao.createTable(resultItems, task.getSite().getDomain().replace(".",""))) {
+                status = MysqlPipeline.DBStatusSuccess;
+                logger.info("create db table successfully");
+            }else{
+                status = MysqlPipeline.DBStatusFailure;
+                logger.error("create db table fails");
+                return ;
             }
         }
 
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
-            System.out.println(entry.getKey() + ":\t" + entry.getValue());
+            System.out.println(entry.getKey() + " is :\t" + entry.getValue());
         }
-    }
-
-    private boolean createDB(){
-        logger.info("create db successfully");
-        return true;
     }
 }

@@ -3,6 +3,8 @@ package us.codecraft.webmagic.pipeline;
 /**
  * Created by cano on 2015/1/20.
  */
+import us.codecraft.webmagic.ResultItems;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,10 +56,7 @@ public class BaseDAO {
         }
     }
 
-    /**
-     * 关闭数据库连接
-     */
-    public void close() {
+    public void close(){
         if (conn != null) {
             try {
                 conn.close();
@@ -67,9 +66,9 @@ public class BaseDAO {
         }
     }
 
-    @Override
     protected void finalize() throws Throwable {
         instance.close();
+        instance = null;
     }
 
     /**
@@ -89,9 +88,11 @@ public class BaseDAO {
                 prsts.setObject(i, param[i - 1], type[i - 1]);
             }
             rows = prsts.executeUpdate();
+            prsts.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return rows;
     }
 
@@ -122,10 +123,15 @@ public class BaseDAO {
                 }
                 list.add(map);
             }
+            rs.close();
+            prsts.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
     }
 
+    public boolean createTable(ResultItems resultItems, String tableName){
+        return true;
+    }
 }
