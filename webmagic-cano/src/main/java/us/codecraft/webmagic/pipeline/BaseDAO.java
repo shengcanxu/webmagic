@@ -15,10 +15,25 @@ import java.util.List;
 import java.util.Map;
 
 public class BaseDAO {
-    public final static String DRIVER = "com.mysql.jdbc.Driver";
-    public final static String URL = "jdbc:mysql://127.0.0.1:3306/cano";
-    public final static String USERNAME = "root";
-    public final static String PASSWORD = "";
+    private final static String DRIVER = "com.mysql.jdbc.Driver";
+    private final static String URL = "jdbc:mysql://127.0.0.1:3306/cano";
+    private final static String USERNAME = "root";
+    private final static String PASSWORD = "";
+
+    private static BaseDAO instance = null;
+    private Connection conn = null;
+
+    private void BaseDAO(){ }
+
+    public static BaseDAO getInstance(){
+        if(instance == null){
+            instance = new BaseDAO();
+            instance.getConn();
+            return instance;
+        }else{
+            return instance;
+        }
+    }
 
     /**
      *
@@ -26,8 +41,7 @@ public class BaseDAO {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public Connection getConn() {
-        Connection conn = null;
+    private void getConn() {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
@@ -38,30 +52,12 @@ public class BaseDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return conn;
     }
 
     /**
      * 关闭数据库连接
-     * @param conn 数据库连接
-     * @param prsts  PreparedStatement 对象
-     * @param rs 结果集
      */
-    public void closeAll(Connection conn, PreparedStatement prsts, ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (prsts != null) {
-            try {
-                prsts.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public void close() {
         if (conn != null) {
             try {
                 conn.close();
@@ -69,6 +65,11 @@ public class BaseDAO {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        instance.close();
     }
 
     /**
@@ -81,7 +82,6 @@ public class BaseDAO {
     public int executeUpdate(String sql, Object[] param, int[] type) {
 
         int rows = 0;
-        Connection conn = this.getConn();
         PreparedStatement prsts = null;
         try {
             prsts = conn.prepareStatement(sql);
@@ -91,8 +91,6 @@ public class BaseDAO {
             rows = prsts.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            this.closeAll(conn, prsts, null);
         }
         return rows;
     }
@@ -107,7 +105,6 @@ public class BaseDAO {
     public List executeQuery(String sql, Object[] param, int[] type) {
         ResultSet rs = null;
         List list = null;
-        Connection conn = this.getConn();
         PreparedStatement prsts = null;
         try {
             prsts = conn.prepareStatement(sql);
@@ -127,8 +124,6 @@ public class BaseDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            this.closeAll(conn, prsts, rs);
         }
         return list;
     }

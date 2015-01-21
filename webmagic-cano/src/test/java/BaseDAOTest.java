@@ -1,3 +1,4 @@
+import org.jsoup.Connection;
 import org.junit.Test;
 import us.codecraft.webmagic.pipeline.BaseDAO;
 
@@ -12,7 +13,7 @@ public class BaseDAOTest {
 
     @Test
     public void executeQueryTest(){
-        BaseDAO baseDao=new BaseDAO();
+        BaseDAO baseDao=BaseDAO.getInstance();
 
         String sql="SELECT * FROM testjava where id=?";
         Object[] param= new Object[]{1};
@@ -28,7 +29,7 @@ public class BaseDAOTest {
 
     @Test
     public void executeUpdateTest(){
-        BaseDAO baseDao=new BaseDAO();
+        BaseDAO baseDao = BaseDAO.getInstance();
 
         String sql="insert into testjava (`title`,`num`) values (?,?)";
         Object[] param= new Object[]{"hello",323};
