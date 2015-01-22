@@ -31,7 +31,7 @@ public abstract class AbstractPageProcessor implements PageProcessor {
         }
 
         int level = page.getLevel();
-        if(level >= pageModel.getLinksModel().size()) {  //add links
+        if(level < pageModel.getLinksModel().size()) {  //add links
             Map<String, String> link = pageModel.getLinksModel().get(level);
             String regrex = link.get(PageModel.linksModelRegrex);
             String sourceRegion = link.get(PageModel.linksModelSourceRegionXpath);

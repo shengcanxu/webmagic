@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.Model;
 
+import us.codecraft.webmagic.Page;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,8 @@ public class PageModel{
 
     public void addLink(String linkRegrex, String sourceRegionXpath){
         Map<String, String> item = new HashMap<String, String>();
-        item.put(linkRegrex, sourceRegionXpath);
+        item.put(PageModel.linksModelRegrex,linkRegrex);
+        item.put(PageModel.linksModelSourceRegionXpath,sourceRegionXpath);
         linksModel.add(item);
     }
 

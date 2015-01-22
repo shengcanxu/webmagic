@@ -6,6 +6,7 @@ import us.codecraft.webmagic.Model.PageModel;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.processor.AbstractPageProcessor;
 import us.codecraft.webmagic.scheduler.StackScheduler;
@@ -28,7 +29,7 @@ public class AlbumList extends AbstractPageProcessor {
         Spider.create(new AlbumList())
                 .setScheduler(new StackScheduler())
                 .addUrl("http://album.ximalaya.com/dq/book/")
-                .addPipeline(new MysqlPipeline())
+                .addPipeline(new ConsolePipeline())
                 .run();
     }
 
