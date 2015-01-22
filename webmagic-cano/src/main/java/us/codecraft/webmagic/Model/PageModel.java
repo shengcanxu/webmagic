@@ -9,10 +9,14 @@ import java.util.Map;
  * Created by canoxu on 2015/1/22.
  */
 public class PageModel{
-    public static String linksModelRegrex = "regrex";
-    public static String linksModelSourceRegionXpath = "sourceXpath";
-    public static String itemModelName = "name";
-    public static String itemModelXpath = "xpath";
+    public static final String linksModelRegrex = "regrex";
+    public static final String linksModelSourceRegionXpath = "sourceXpath";
+    public static final String itemModelName = "name";
+    public static final String itemModelXpath = "xpath";
+    public static final String itemModeItemType = "itemType";
+    public static final String itemTextTypeInt = "float";
+    public static final String itemTextTypeText = "varchar(200)";
+    public static final String itemTextTypeLongText = "text";
 
     private List<Map<String,String>> linksModel = new ArrayList<Map<String, String>>();
     private List<Map<String,String>> itemsModel = new ArrayList<Map<String, String>>();
@@ -41,10 +45,15 @@ public class PageModel{
         linksModel.add(link);
     }
 
-    public void addItem(String itemName, String itemXpath){
+    public void addItem(String itemName, String itemXpath,String itemType){
         Map<String, String> item = new HashMap<String, String>();
         item.put(PageModel.itemModelName,itemName);
         item.put(PageModel.itemModelXpath, itemXpath);
+        item.put(PageModel.itemModeItemType, itemType);
         itemsModel.add(item);
+    }
+
+    public void addItem(String itemName, String itemXpath){
+        addItem(itemName, itemXpath, PageModel.itemTextTypeText);
     }
 }

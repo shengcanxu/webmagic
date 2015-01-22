@@ -11,9 +11,9 @@ import java.util.Map;
  * Created by canoxu on 2015/1/20.
  */
 public class MysqlPipeline implements Pipeline{
-    public static int DBStatusSuccess = 1;
-    public static int DBStatusFailure = 0;
-    public static int DBStatusNotStarted = -1;
+    public static final int DBStatusSuccess = 1;
+    public static final int DBStatusFailure = 0;
+    public static final int DBStatusNotStarted = -1;
 
     private int status = DBStatusNotStarted;
     private BaseDAO dao = BaseDAO.getInstance();
@@ -27,7 +27,7 @@ public class MysqlPipeline implements Pipeline{
         }
 
         if(status == MysqlPipeline.DBStatusNotStarted){
-            if(dao.createTable(resultItems, task.getSite().getDomain().replace(".",""))) {
+            if(createTable(resultItems)) {
                 status = MysqlPipeline.DBStatusSuccess;
                 logger.info("create db table successfully");
             }else{
@@ -40,5 +40,9 @@ public class MysqlPipeline implements Pipeline{
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
             System.out.println(entry.getKey() + " is :\t" + entry.getValue());
         }
+    }
+
+    private boolean createTable(ResultItems resultItems){
+        return true;
     }
 }

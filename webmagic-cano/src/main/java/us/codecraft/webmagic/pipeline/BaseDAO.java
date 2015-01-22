@@ -3,14 +3,7 @@ package us.codecraft.webmagic.pipeline;
 /**
  * Created by cano on 2015/1/20.
  */
-import us.codecraft.webmagic.ResultItems;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -129,9 +122,5 @@ public class BaseDAO {
             e.printStackTrace();
         }
         return list;
-    }
-
-    public boolean createTable(ResultItems resultItems, String tableName){
-        return true;
     }
 }
