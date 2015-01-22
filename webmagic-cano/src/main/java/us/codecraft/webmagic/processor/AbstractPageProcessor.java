@@ -1,62 +1,56 @@
 package us.codecraft.webmagic.processor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.Model.PageModel;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cano on 2015/1/17.
  */
 public abstract class AbstractPageProcessor implements PageProcessor {
+    Logger logger = LoggerFactory.getLogger(getClass());
+    private PageModel pageModel = null;
 
     /**
-     * extract links from page and add to parsing list
-     * return null means no next links
-     * @param page
+     * extend class should overrite this method to add the page Model
      */
-    public abstract List<String> extractLinks(Page page);
-
-    /**
-     * extract content from page
-     * @param page
-     */
-    public abstract void extractContent(Page page);
+    public abstract PageModel buildPageModel();
 
     @Override
     public void process(Page page){
-        List<String> nextURLs = this.extractLinks(page);
-        if(nextURLs == null){
-            this.extractContent(page);
-        }else{
-            page.addTargetRequests(nextURLs);
+        pageModel = buildPageModel();
+        if(pageModel == null){
+            logger.error("pageMode is not set!");
+            return;
         }
-    }
 
-    /**
-     * get links from regrex expression , and limit to sourceregion
-     * @param page
-     * @param regrex input regrex string
-     * @param sourceRegion input xpath string
-     * @return
-     */
-    public List<String> getLinksFromRegrex(Page page, String regrex, String sourceRegion){
-        if(sourceRegion == null) {
-            regrex = regrex.replace(".", "\\.").replace("*", "[^\"'#]*");
-            return page.getHtml().links().regex(regrex).all();
-        }else{
-            Selector sourceRegionSelector = new XpathSelector(sourceRegion);
-            return page.getHtml().selectList(sourceRegionSelector).links().regex(regrex).all();
+        int level = page.getLevel();
+        if(level >= pageModel.getLinksModel().size()) {  //add links
+            Map<String, String> link = pageModel.getLinksModel().get(level);
+            String regrex = link.get(PageModel.linksModelRegrex);
+            String sourceRegion = link.get(PageModel.linksModelSourceRegionXpath);
+            List<String> nextLinks = null;
+            if (sourceRegion == null) {
+                regrex = regrex.replace(".", "\\.").replace("*", "[^\"'#]*");
+                nextLinks = page.getHtml().links().regex(regrex).all();
+            } else {
+                Selector sourceRegionSelector = new XpathSelector(sourceRegion);
+                nextLinks = page.getHtml().selectList(sourceRegionSelector).links().regex(regrex).all();
+            }
+            page.addTargetRequests(nextLinks);
+            logger.info("get " + nextLinks.size() + " links to follow in level " + level);
+        }else{ //parse content
+            page.setSkip(true);
+            Map<String, String> items = pageModel.getItemsModel();
+            for(Map.Entry<String,String> name : items.entrySet()) {
+                page.putField(name.getKey(), page.getHtml().xpath(name.getValue()).toString());
+            }
         }
-    }
-
-    /**
-     * @param page
-     * @param name item name
-     * @param xpath xpath of the item
-     */
-    public void getContentFromXpath(Page page, String name, String xpath){
-        page.putField(name,page.getHtml().xpath(xpath).toString());
     }
 }

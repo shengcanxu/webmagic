@@ -2,6 +2,7 @@ package us.codecraft.webmagic.examples;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.Model.PageModel;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -23,32 +24,6 @@ public class AlbumList extends AbstractPageProcessor {
         return site;
     }
 
-    @Override
-    public List<String> extractLinks(Page page) {
-        List<String> links  = null;
-        int level = page.getLevel();
-        switch (level){
-            case 0:
-                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
-                links = links.subList(0,2);
-                logger.info("get " + links.size() + " links to follow");
-                break;
-            case 1:
-                links =  this.getLinksFromRegrex(page,"http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
-                logger.info("get " + links.size() + " links to follow");
-                break;
-            default:
-                break;
-        }
-        return links;
-    }
-
-    @Override
-    public void extractContent(Page page) {
-        this.getContentFromXpath(page,"title", "//*[@id=\"timelinePage\"]//h1/text()");
-        this.getContentFromXpath(page,"sounds","//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()");
-    }
-
     public static void main(String[] args){
         Spider.create(new AlbumList())
                 .setScheduler(new StackScheduler())
@@ -57,4 +32,14 @@ public class AlbumList extends AbstractPageProcessor {
                 .run();
     }
 
+    @Override
+    public PageModel buildPageModel() {
+        PageModel pageModel = new PageModel();
+        pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
+        pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
+
+        pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");
+        pageModel.addItem("sounds","//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()");
+        return pageModel;
+    }
 }
