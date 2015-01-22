@@ -3,15 +3,11 @@ package us.codecraft.webmagic.examples;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Model.PageModel;
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.processor.AbstractPageProcessor;
 import us.codecraft.webmagic.scheduler.StackScheduler;
-
-import java.util.List;
 
 /**
  * Created by cano on 2015/1/17.
@@ -29,14 +25,16 @@ public class AlbumList extends AbstractPageProcessor {
         Spider.create(new AlbumList())
                 .setScheduler(new StackScheduler())
                 .addUrl("http://album.ximalaya.com/dq/book/")
-                .addPipeline(new ConsolePipeline())
+                .addPipeline(new MysqlPipeline())
                 .run();
     }
 
     @Override
     public PageModel buildPageModel() {
         PageModel pageModel = new PageModel();
-        pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+","//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
+        pageModel.setName("ximalaya");
+
+        pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+", "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
         pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
 
         pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");

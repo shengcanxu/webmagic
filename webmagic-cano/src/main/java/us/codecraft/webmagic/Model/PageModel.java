@@ -1,7 +1,5 @@
 package us.codecraft.webmagic.Model;
 
-import us.codecraft.webmagic.Page;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,26 +11,40 @@ import java.util.Map;
 public class PageModel{
     public static String linksModelRegrex = "regrex";
     public static String linksModelSourceRegionXpath = "sourceXpath";
+    public static String itemModelName = "name";
+    public static String itemModelXpath = "xpath";
 
     private List<Map<String,String>> linksModel = new ArrayList<Map<String, String>>();
-    private Map<String,String> itemsModel = new HashMap<String, String>();
+    private List<Map<String,String>> itemsModel = new ArrayList<Map<String, String>>();
+    private String name = null;
 
     public List<Map<String,String>> getLinksModel() {
         return linksModel;
     }
 
-    public Map<String, String> getItemsModel() {
+    public List<Map<String, String>> getItemsModel() {
         return itemsModel;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void addLink(String linkRegrex, String sourceRegionXpath){
-        Map<String, String> item = new HashMap<String, String>();
-        item.put(PageModel.linksModelRegrex,linkRegrex);
-        item.put(PageModel.linksModelSourceRegionXpath,sourceRegionXpath);
-        linksModel.add(item);
+        Map<String, String> link = new HashMap<String, String>();
+        link.put(PageModel.linksModelRegrex, linkRegrex);
+        link.put(PageModel.linksModelSourceRegionXpath, sourceRegionXpath);
+        linksModel.add(link);
     }
 
     public void addItem(String itemName, String itemXpath){
-        itemsModel.put(itemName,itemXpath);
+        Map<String, String> item = new HashMap<String, String>();
+        item.put(PageModel.itemModelName,itemName);
+        item.put(PageModel.itemModelXpath, itemXpath);
+        itemsModel.add(item);
     }
 }

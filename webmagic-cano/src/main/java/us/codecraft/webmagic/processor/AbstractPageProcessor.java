@@ -26,7 +26,11 @@ public abstract class AbstractPageProcessor implements PageProcessor {
     public void process(Page page){
         pageModel = buildPageModel();
         if(pageModel == null){
-            logger.error("pageMode is not set!");
+            logger.error("pageModel is not set!");
+            return;
+        }
+        if(pageModel.getName() == null){
+            logger.error("pageModel name is not set");
             return;
         }
 
@@ -44,12 +48,16 @@ public abstract class AbstractPageProcessor implements PageProcessor {
                 nextLinks = page.getHtml().selectList(sourceRegionSelector).links().regex(regrex).all();
             }
             page.addTargetRequests(nextLinks);
+            page.setSkip(true);
             logger.info("get " + nextLinks.size() + " links to follow in level " + level);
         }else{ //parse content
-            page.setSkip(true);
-            Map<String, String> items = pageModel.getItemsModel();
-            for(Map.Entry<String,String> name : items.entrySet()) {
-                page.putField(name.getKey(), page.getHtml().xpath(name.getValue()).toString());
+            page.setSkip(false);
+            List<Map<String, String>> items = pageModel.getItemsModel();
+            for(int i=0;i<items.size(); i++) {
+                Map<String,String> item = items.get(i);
+                String name = item.get(PageModel.itemModelName);
+                String xpath = item.get(PageModel.itemModelXpath);
+                page.putField(name, page.getHtml().xpath(xpath).toString());
             }
         }
     }
