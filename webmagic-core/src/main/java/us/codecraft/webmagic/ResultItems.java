@@ -16,6 +16,7 @@ import java.util.Map;
 public class ResultItems {
 
     private Map<String, Object> fields = new LinkedHashMap<String, Object>();
+    private Map<String, String> itemTypes = new HashMap<String, String>();
 
     private Request request;
 
@@ -31,6 +32,16 @@ public class ResultItems {
 
     public Map<String, Object> getAll() {
         return fields;
+    }
+
+    public Map<String, String> getAllItemTypes(){
+        return itemTypes;
+    }
+
+    public <T> ResultItems put(String key, T value, String itemType) {
+        fields.put(key, value);
+        itemTypes.put(key,itemType);
+        return this;
     }
 
     public <T> ResultItems put(String key, T value) {

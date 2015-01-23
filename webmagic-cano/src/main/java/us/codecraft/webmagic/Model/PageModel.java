@@ -20,7 +20,6 @@ public class PageModel{
 
     private List<Map<String,String>> linksModel = new ArrayList<Map<String, String>>();
     private List<Map<String,String>> itemsModel = new ArrayList<Map<String, String>>();
-    private String name = null;
 
     public List<Map<String,String>> getLinksModel() {
         return linksModel;
@@ -28,14 +27,6 @@ public class PageModel{
 
     public List<Map<String, String>> getItemsModel() {
         return itemsModel;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void addLink(String linkRegrex, String sourceRegionXpath){

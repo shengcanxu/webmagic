@@ -24,7 +24,8 @@ public class AlbumList extends AbstractPageProcessor {
     public static void main(String[] args){
         Spider.create(new AlbumList())
                 .setScheduler(new StackScheduler())
-                .addUrl("http://album.ximalaya.com/dq/book/")
+                //.addUrl("http://album.ximalaya.com/dq/book/")
+                .addUrl("http://www.ximalaya.com/14675060/album/280961")
                 .addPipeline(new MysqlPipeline())
                 .run();
     }
@@ -32,9 +33,8 @@ public class AlbumList extends AbstractPageProcessor {
     @Override
     public PageModel buildPageModel() {
         PageModel pageModel = new PageModel();
-        pageModel.setName("ximalaya");
 
-        pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+", "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
+        //pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+", "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
         pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
 
         pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");

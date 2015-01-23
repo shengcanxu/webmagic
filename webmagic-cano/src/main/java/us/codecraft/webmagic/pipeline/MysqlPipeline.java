@@ -3,6 +3,7 @@ package us.codecraft.webmagic.pipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
 
 import java.util.Map;
@@ -27,9 +28,10 @@ public class MysqlPipeline implements Pipeline{
         }
 
         if(status == MysqlPipeline.DBStatusNotStarted){
-            if(createTable(resultItems)) {
+            Spider spider = (Spider)task;
+            String tableName = spider.getSite().getDomain().replace(".","");
+            if(createTable(resultItems,tableName)) {
                 status = MysqlPipeline.DBStatusSuccess;
-                logger.info("create db table successfully");
             }else{
                 status = MysqlPipeline.DBStatusFailure;
                 logger.error("create db table fails");
@@ -42,7 +44,19 @@ public class MysqlPipeline implements Pipeline{
         }
     }
 
-    private boolean createTable(ResultItems resultItems){
+    private boolean createTable(ResultItems resultItems, String tableName){
+        logger.info("creating table " + tableName + " successfully.");
+        String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
+        for(Map.Entry<String,Object> entry : resultItems.getAll().entrySet()){
+            String itemType = resultItems.getAllItemTypes().get(entry.getKey());
+            sql = sql + ", `" + entry.getKey() + "` " + itemType + " NULL";
+        }
+        sql = sql + "PRIMARY KEY (`id`)) ENGINE=InnoDB;";
+        logger.info(sql);
+
+        logger.info("create table " + tableName + " successfully");
+
+        logger.info("fail to create table " + tableName);
         return true;
     }
 }

@@ -29,8 +29,8 @@ public abstract class AbstractPageProcessor implements PageProcessor {
             logger.error("pageModel is not set!");
             return;
         }
-        if(pageModel.getName() == null){
-            logger.error("pageModel name is not set");
+        if(getSite().getDomain() == null || getSite().getDomain()==""){
+            logger.error("site domain is not set");
             return;
         }
 
@@ -57,7 +57,8 @@ public abstract class AbstractPageProcessor implements PageProcessor {
                 Map<String,String> item = items.get(i);
                 String name = item.get(PageModel.itemModelName);
                 String xpath = item.get(PageModel.itemModelXpath);
-                page.putField(name, page.getHtml().xpath(xpath).toString());
+                String itemType = item.get(PageModel.itemModeItemType);
+                page.putField(name, page.getHtml().xpath(xpath).toString(), itemType);
             }
         }
     }
