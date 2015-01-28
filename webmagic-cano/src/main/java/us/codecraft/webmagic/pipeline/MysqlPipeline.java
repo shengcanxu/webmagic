@@ -52,19 +52,26 @@ public class MysqlPipeline implements Pipeline{
         String sql = "DROP TABLE IF EXISTS `" + tableName +"`";
         dao.executeUpdate(sql);
 
+        PageModel pageModel = resultItems.getPageModel();
+        if(pageModel == null){
+            logger.error("fail to create table " + tableName + ", page Model is null.");
+            return false; 
+        }
+        List<Map<String, String>> itemsModel = pageModel.getItemsModel();
+        if(itemsModel == null){
+            logger.error("fail to create table " + tableName + ", items model is not set.");
+            return false;
+        }
+
         sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
-        List<Map<String, String>> itemsModel = resultItems.getPageModel().getItemsModel();
         for(int i=0; i<itemsModel.size(); i++){
             Map<String,String> itemModel = itemsModel.get(i);
             sql = sql + ", `" + itemModel.get(PageModel.itemModelName) + "` " + itemModel.get(PageModel.itemModelItemType) + " NULL";
         }
         sql = sql + ", PRIMARY KEY (`id`)) ENGINE=InnoDB;";
-        logger.info(sql);
+        //logger.info(sql);
         dao.executeUpdate(sql);
-
         logger.info("create table " + tableName + " successfully");
-
-        logger.info("fail to create table " + tableName);
         return true;
     }
 }
