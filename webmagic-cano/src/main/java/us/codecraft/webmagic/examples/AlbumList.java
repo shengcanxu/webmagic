@@ -13,7 +13,7 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
  * Created by cano on 2015/1/17.
  */
 public class AlbumList extends AbstractPageProcessor {
-    private Site site = Site.me().setDomain("www.ximalaya.com");
+    private Site site = Site.me().setDomain("www.ximalaya.com").setTimeOut(10000);
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -25,7 +25,8 @@ public class AlbumList extends AbstractPageProcessor {
         Spider.create(new AlbumList())
                 .setScheduler(new StackScheduler())
                 //.addUrl("http://album.ximalaya.com/dq/book/")
-                .addUrl("http://www.ximalaya.com/14675060/album/280961")
+                //.addUrl("http://www.ximalaya.com/14675060/album/280961")
+                .addUrl("http://www.ximalaya.com/zhubo/14675060")
                 .addPipeline(new MysqlPipeline())
                 .run();
     }
@@ -35,7 +36,7 @@ public class AlbumList extends AbstractPageProcessor {
         PageModel pageModel = new PageModel();
 
         //pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+", "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
-        pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
+        //pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
 
         pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");
         pageModel.addItem("sounds","//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()");

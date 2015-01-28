@@ -89,6 +89,12 @@ public class BaseDAO {
         return rows;
     }
 
+    public int executeUpdate(String sql){
+        Object[] param = new Object[0];
+        int[] type = new int[0];
+        return executeUpdate(sql,param, type);
+    }
+
     /**
      * 执行查询SQL语句
      * @param sql sql语句
