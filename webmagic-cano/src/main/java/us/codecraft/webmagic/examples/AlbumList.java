@@ -34,6 +34,7 @@ public class AlbumList extends AbstractPageProcessor {
     @Override
     public PageModel buildPageModel() {
         PageModel pageModel = new PageModel();
+        pageModel.setModelName("ximalaya");
 
         //pageModel.addLink("http://www.ximalaya.com/\\d+/album/\\d+", "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]");
         //pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");

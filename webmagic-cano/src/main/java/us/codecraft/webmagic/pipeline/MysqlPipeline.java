@@ -30,10 +30,19 @@ public class MysqlPipeline implements Pipeline{
             return;
         }
 
+        PageModel pageModel = resultItems.getPageModel();
+        if(pageModel == null){
+            status = MysqlPipeline.DBStatusFailure;
+            logger.error("page Model is null.");
+            return;
+        }
+        String tableName = pageModel.getModelName();
+        if(tableName == null) {
+            Spider spider = (Spider) task;
+            tableName = spider.getSite().getDomain().replace(".", "");
+        }
         if(status == MysqlPipeline.DBStatusNotStarted){
-            Spider spider = (Spider)task;
-            String tableName = spider.getSite().getDomain().replace(".","");
-            if(createTable(resultItems,tableName)) {
+            if(createTable(pageModel,tableName)) {
                 status = MysqlPipeline.DBStatusSuccess;
             }else{
                 status = MysqlPipeline.DBStatusFailure;
@@ -42,27 +51,28 @@ public class MysqlPipeline implements Pipeline{
             }
         }
 
+        String sql = "INSERT INTO `" + tableName + "` (";
+        String keys = "`id`";
+        String values = "NULL";
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
-            System.out.println(entry.getKey() + " is :\t" + entry.getValue());
+            keys = keys + ", `" + entry.getKey() + "`";
+            values = values + ", '" + entry.getValue() + "'";
         }
+        sql = sql + keys + ") VALUES (" + values + ");";
+        logger.info(sql);
+        dao.executeUpdate(sql);
     }
 
-    private boolean createTable(ResultItems resultItems, String tableName){
-        logger.info("creating table " + tableName + " successfully.");
-        String sql = "DROP TABLE IF EXISTS `" + tableName +"`";
-        dao.executeUpdate(sql);
-
-        PageModel pageModel = resultItems.getPageModel();
-        if(pageModel == null){
-            logger.error("fail to create table " + tableName + ", page Model is null.");
-            return false; 
-        }
+    private boolean createTable(PageModel pageModel, String tableName){
         List<Map<String, String>> itemsModel = pageModel.getItemsModel();
         if(itemsModel == null){
             logger.error("fail to create table " + tableName + ", items model is not set.");
             return false;
         }
 
+        logger.info("creating table " + tableName + " successfully.");
+        String sql = "DROP TABLE IF EXISTS `" + tableName +"`";
+        dao.executeUpdate(sql);
         sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
         for(int i=0; i<itemsModel.size(); i++){
             Map<String,String> itemModel = itemsModel.get(i);
