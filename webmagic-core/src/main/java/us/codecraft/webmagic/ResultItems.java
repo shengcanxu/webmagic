@@ -16,7 +16,7 @@ import java.util.Map;
 public class ResultItems {
 
     private Map<String, Object> fields = new LinkedHashMap<String, Object>();
-    private Map<String, String> itemTypes = new HashMap<String, String>();
+    private PageModel pageModel = null;
 
     private Request request;
 
@@ -34,16 +34,6 @@ public class ResultItems {
         return fields;
     }
 
-    public Map<String, String> getAllItemTypes(){
-        return itemTypes;
-    }
-
-    public <T> ResultItems put(String key, T value, String itemType) {
-        fields.put(key, value);
-        itemTypes.put(key,itemType);
-        return this;
-    }
-
     public <T> ResultItems put(String key, T value) {
         fields.put(key, value);
         return this;
@@ -56,6 +46,14 @@ public class ResultItems {
     public ResultItems setRequest(Request request) {
         this.request = request;
         return this;
+    }
+
+    public PageModel getPageModel() {
+        return pageModel;
+    }
+
+    public void setPageModel(PageModel pageModel) {
+        this.pageModel = pageModel;
     }
 
     /**

@@ -2,7 +2,7 @@ package us.codecraft.webmagic.examples;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Model.PageModel;
+import us.codecraft.webmagic.PageModel;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;

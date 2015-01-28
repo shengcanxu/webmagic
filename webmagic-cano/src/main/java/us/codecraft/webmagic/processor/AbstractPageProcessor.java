@@ -2,7 +2,7 @@ package us.codecraft.webmagic.processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.Model.PageModel;
+import us.codecraft.webmagic.PageModel;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
@@ -57,9 +57,10 @@ public abstract class AbstractPageProcessor implements PageProcessor {
                 Map<String,String> item = items.get(i);
                 String name = item.get(PageModel.itemModelName);
                 String xpath = item.get(PageModel.itemModelXpath);
-                String itemType = item.get(PageModel.itemModeItemType);
-                page.putField(name, page.getHtml().xpath(xpath).toString(), itemType);
+                String itemType = item.get(PageModel.itemModelItemType);
+                page.putField(name, page.getHtml().xpath(xpath).toString());
             }
+            page.putPageModel(pageModel);
         }
     }
 }

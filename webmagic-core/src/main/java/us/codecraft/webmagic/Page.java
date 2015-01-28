@@ -73,12 +73,12 @@ public class Page {
      * @param key
      * @param field
      */
-    public void putField(String key, Object field, String itemType) {
-        resultItems.put(key, field,itemType);
+    public void putField(String key, Object field) {
+        resultItems.put(key, field);
     }
 
-    public void putField(String key, Object field) {
-        resultItems.put(key, field,"text");
+    public void putPageModel(PageModel pageModel) {
+        resultItems.setPageModel(pageModel);
     }
 
     /**

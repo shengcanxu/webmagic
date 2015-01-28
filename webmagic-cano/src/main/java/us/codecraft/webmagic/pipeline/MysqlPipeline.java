@@ -2,10 +2,12 @@ package us.codecraft.webmagic.pipeline;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.PageModel;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.Task;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,12 +48,14 @@ public class MysqlPipeline implements Pipeline{
 
     private boolean createTable(ResultItems resultItems, String tableName){
         logger.info("creating table " + tableName + " successfully.");
-        String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
-        for(Map.Entry<String,Object> entry : resultItems.getAll().entrySet()){
-            String itemType = resultItems.getAllItemTypes().get(entry.getKey());
-            sql = sql + ", `" + entry.getKey() + "` " + itemType + " NULL";
+        String sql = "DROP TABLE IF EXISTS `" + tableName +"`; CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
+
+        List<Map<String, String>> itemsModel = resultItems.getPageModel().getItemsModel();
+        for(int i=0; i<itemsModel.size(); i++){
+            Map<String,String> itemModel = itemsModel.get(i);
+            sql = sql + ", `" + itemModel.get(PageModel.itemModelName) + "` " + itemModel.get(PageModel.itemModelItemType) + " NULL";
         }
-        sql = sql + "PRIMARY KEY (`id`)) ENGINE=InnoDB;";
+        sql = sql + " PRIMARY KEY (`id`)) ENGINE=InnoDB;";
         logger.info(sql);
 
         logger.info("create table " + tableName + " successfully");
