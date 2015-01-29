@@ -2,7 +2,9 @@ package us.codecraft.webmagic.processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.PageModel;
+import us.codecraft.webmagic.model.ItemModel;
+import us.codecraft.webmagic.model.LinkModel;
+import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
@@ -36,9 +38,9 @@ public abstract class AbstractPageProcessor implements PageProcessor {
 
         int level = page.getLevel();
         if(level < pageModel.getLinksModel().size()) {  //add links
-            Map<String, String> link = pageModel.getLinksModel().get(level);
-            String regrex = link.get(PageModel.linksModelRegrex);
-            String sourceRegion = link.get(PageModel.linksModelSourceRegionXpath);
+            LinkModel link = pageModel.getLinksModel().get(level);
+            String regrex = link.getRegrex();
+            String sourceRegion = link.getSourceRegion();
             List<String> nextLinks = null;
             if (sourceRegion == null) {
                 regrex = regrex.replace(".", "\\.").replace("*", "[^\"'#]*");
@@ -52,12 +54,12 @@ public abstract class AbstractPageProcessor implements PageProcessor {
             logger.info("get " + nextLinks.size() + " links to follow in level " + level);
         }else{ //parse content
             page.setSkip(false);
-            List<Map<String, String>> items = pageModel.getItemsModel();
+            List<ItemModel> items = pageModel.getItemsModel();
             for(int i=0;i<items.size(); i++) {
-                Map<String,String> item = items.get(i);
-                String name = item.get(PageModel.itemModelName);
-                String xpath = item.get(PageModel.itemModelXpath);
-                String itemType = item.get(PageModel.itemModelItemType);
+                ItemModel item = items.get(i);
+                String name = item.getName();
+                String xpath = item.getXpath();
+                String itemType = item.getItemType();
                 page.putField(name, page.getHtml().xpath(xpath).toString());
             }
             page.putPageModel(pageModel);

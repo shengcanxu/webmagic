@@ -1,6 +1,7 @@
 package us.codecraft.webmagic;
 
-import java.util.HashMap;
+import us.codecraft.webmagic.model.PageModel;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 

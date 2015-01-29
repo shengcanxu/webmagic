@@ -1,6 +1,7 @@
 package us.codecraft.webmagic;
 
 import org.apache.commons.lang3.StringUtils;
+import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
