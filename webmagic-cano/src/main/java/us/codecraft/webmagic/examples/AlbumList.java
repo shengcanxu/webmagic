@@ -2,9 +2,10 @@ package us.codecraft.webmagic.examples;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.model.ItemModel;
+import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.pipeline.ItemContentOpPipeline;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.processor.AbstractPageProcessor;
@@ -42,7 +43,9 @@ public class AlbumList extends AbstractPageProcessor {
         //pageModel.addLink("http://www.ximalaya.com/zhubo/\\d+","//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]");
 
         pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");
-        pageModel.addItem("sounds","//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()");
+        pageModel.addItem("sounds",
+                "//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()",
+                ItemModel.ItemOpTrim);
         return pageModel;
     }
 }
