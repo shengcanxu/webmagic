@@ -1,15 +1,21 @@
 package us.codecraft.webmagic.model;
 
-import java.util.List;
-
 /**
  * Created by canoxu on 2015/1/29.
  */
 public class ItemModel  {
+    //item types
+    public static final String TypeInt = "float";
+    public static final String TypeText = "varchar(200)";
+    public static final String TypeLongText = "text";
+
+    //item operations
+    public static final int ItemOpTrim = 1;
+
     private String name;
     private String xpath;
     private String itemType;
-    private List<String> itemOperations;
+    private int[] itemOperations = null;
 
     public String getName() {
         return name;
@@ -35,11 +41,15 @@ public class ItemModel  {
         this.itemType = itemType;
     }
 
-    public List<String> getItemOperations() {
+    public void setItemOperations(int[] itemOperations) {
+        this.itemOperations = itemOperations;
+    }
+
+    public int[] getItemOperations() {
         return itemOperations;
     }
 
-    public void setItemOperations(List<String> itemOperations) {
-        this.itemOperations = itemOperations;
+    public boolean hasOperation(){
+        return itemOperations != null && itemOperations.length != 0;
     }
 }

@@ -1,23 +1,12 @@
 package us.codecraft.webmagic.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by canoxu on 2015/1/22.
  */
 public class PageModel{
-    public static final String itemModelName = "name";
-
-    //item operations
-    public static final String itemModelItemOpTrim = "opTrim";
-
-    //item types
-    public static final String itemTextTypeInt = "float";
-    public static final String itemTextTypeText = "varchar(200)";
-    public static final String itemTextTypeLongText = "text";
 
     private List<LinkModel> linksModel = new ArrayList<LinkModel>();
     private List<ItemModel> itemsModel = new ArrayList<ItemModel>();
@@ -29,6 +18,21 @@ public class PageModel{
 
     public List<ItemModel> getItemsModel() {
         return itemsModel;
+    }
+
+    /**
+     * get ItemModel with name, return null if not found
+     * @param name
+     * @return
+     */
+    public ItemModel getItemModelByName(String name){
+        for(int i=0; i<itemsModel.size(); i++){
+            ItemModel itemModel = itemsModel.get(i);
+            if(itemModel.getName().compareTo(name) == 0){
+               return itemModel;
+            }
+        }
+        return null;
     }
 
     public String getModelName() {
@@ -46,15 +50,25 @@ public class PageModel{
         linksModel.add(linkModel);
     }
 
+
+    public void addItem(String itemName, String itemXpath,int... operations){
+        addItem(itemName,itemXpath,ItemModel.TypeText,operations);
+    }
+
+    public void addItem(String itemName, String itemXpath){
+        addItem(itemName, itemXpath, ItemModel.TypeText,null);
+    }
+
     public void addItem(String itemName, String itemXpath,String itemType){
+        addItem(itemName,itemXpath,itemType,null);
+    }
+
+    private void addItem(String itemName, String itemXpath,String itemType,int... operations){
         ItemModel itemModel = new ItemModel();
         itemModel.setName(itemName);
         itemModel.setXpath(itemXpath);
         itemModel.setItemType(itemType);
+        itemModel.setItemOperations(operations);
         itemsModel.add(itemModel);
-    }
-
-    public void addItem(String itemName, String itemXpath){
-        addItem(itemName, itemXpath, PageModel.itemTextTypeText);
     }
 }
