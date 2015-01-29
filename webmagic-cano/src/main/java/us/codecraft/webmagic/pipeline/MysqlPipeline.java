@@ -71,9 +71,7 @@ public class MysqlPipeline implements Pipeline{
         }
 
         logger.info("creating table " + tableName + " successfully.");
-        String sql = "DROP TABLE IF EXISTS `" + tableName +"`";
-        dao.executeUpdate(sql);
-        sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
+        String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
         for(int i=0; i<itemsModel.size(); i++){
             Map<String,String> itemModel = itemsModel.get(i);
             sql = sql + ", `" + itemModel.get(PageModel.itemModelName) + "` " + itemModel.get(PageModel.itemModelItemType) + " NULL";

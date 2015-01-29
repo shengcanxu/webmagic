@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class BaseDAO {
     private final static String DRIVER = "com.mysql.jdbc.Driver";
-    private final static String URL = "jdbc:mysql://127.0.0.1:3306/cano";
+    private final static String URL = "jdbc:mysql://127.0.0.1:3306/cano?characterEncoding=UTF-8";
     private final static String USERNAME = "root";
     private final static String PASSWORD = "";
 
