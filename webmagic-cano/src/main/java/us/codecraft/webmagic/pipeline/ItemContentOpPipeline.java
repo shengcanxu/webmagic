@@ -40,6 +40,10 @@ public class ItemContentOpPipeline implements Pipeline {
                             value = doTrimLN(value);
                             resultItems.put(name,value);
                             break;
+                        case ItemModel.ItemOpRemoveTap:
+                            value = doRemoveTap(value);
+                            resultItems.put(name,value);
+                            break;
                         default:
                             break;
                     }
@@ -58,5 +62,9 @@ public class ItemContentOpPipeline implements Pipeline {
 
     private String doTrimLN(String value){
         return value.replace("\n","").replace("\r","");
+    }
+
+    public String doRemoveTap(String value){
+        return value.replaceAll("<*>","");
     }
 }
