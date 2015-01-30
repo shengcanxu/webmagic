@@ -45,7 +45,7 @@ public class AlbumList extends AbstractPageProcessor {
         pageModel.addItem("title", "//*[@id=\"timelinePage\"]//h1/text()");
         pageModel.addItem("sounds",
                 "//*[@id=\"timelinePage\"]//div[@class=\"timelinepersonPanel\"]//div[@class=\"count\"]//a/text()",
-                ItemModel.ItemOpTrim);
+                ItemModel.ItemOpTrim,ItemModel.ItemOpTrimLN);
         return pageModel;
     }
 }

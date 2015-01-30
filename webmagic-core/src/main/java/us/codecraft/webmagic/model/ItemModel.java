@@ -11,6 +11,7 @@ public class ItemModel  {
 
     //item operations
     public static final int ItemOpTrim = 1;
+    public static final int ItemOpTrimLN = 2;
 
     private String name;
     private String xpath;

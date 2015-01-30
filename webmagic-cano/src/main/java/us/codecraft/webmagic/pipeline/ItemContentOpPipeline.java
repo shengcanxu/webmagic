@@ -36,6 +36,10 @@ public class ItemContentOpPipeline implements Pipeline {
                             value = doTrim(value);
                             resultItems.put(name,value);
                             break;
+                        case ItemModel.ItemOpTrimLN:
+                            value = doTrimLN(value);
+                            resultItems.put(name,value);
+                            break;
                         default:
                             break;
                     }
@@ -50,5 +54,9 @@ public class ItemContentOpPipeline implements Pipeline {
 
     private String doTrim(String value){
         return value.trim();
+    }
+
+    private String doTrimLN(String value){
+        return value.replace("\n","").replace("\r","");
     }
 }
