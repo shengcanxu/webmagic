@@ -10,9 +10,12 @@ public class ItemModel  {
     public static final String TypeLongText = "text";
 
     //item operations
+    //remove the leading and tailing space
     public static final int ItemOpTrim = 1;
+    //remove new-lines
     public static final int ItemOpTrimLN = 2;
-    public static final int ItemOpRemoveTap = 3;
+    //remove tag like "<a>"
+    public static final int ItemOpRemoveTag = 3;
 
     private String name;
     private String xpath;

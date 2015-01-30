@@ -40,7 +40,7 @@ public class ItemContentOpPipeline implements Pipeline {
                             value = doTrimLN(value);
                             resultItems.put(name,value);
                             break;
-                        case ItemModel.ItemOpRemoveTap:
+                        case ItemModel.ItemOpRemoveTag:
                             value = doRemoveTap(value);
                             resultItems.put(name,value);
                             break;
