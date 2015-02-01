@@ -19,8 +19,10 @@ public class ItemModel  {
 
     private String name;
     private String xpath;
+    private String baseXpath;
     private String itemType;
     private int[] itemOperations = null;
+    private boolean isMultipleMatch = false;
 
     public String getName() {
         return name;
@@ -36,6 +38,14 @@ public class ItemModel  {
 
     public void setXpath(String xpath) {
         this.xpath = xpath;
+    }
+
+    public String getBaseXpath() {
+        return baseXpath;
+    }
+
+    public void setBaseXpath(String baseXpath) {
+        this.baseXpath = baseXpath;
     }
 
     public String getItemType() {
@@ -56,5 +66,13 @@ public class ItemModel  {
 
     public boolean hasOperation(){
         return itemOperations != null && itemOperations.length != 0;
+    }
+
+    public boolean isMultipleMatch() {
+        return isMultipleMatch;
+    }
+
+    public void setMultipleMatch(boolean isMultipleMatch) {
+        this.isMultipleMatch = isMultipleMatch;
     }
 }

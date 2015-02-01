@@ -63,10 +63,33 @@ public class PageModel{
         addItem(itemName,itemXpath,itemType,null);
     }
 
-    private void addItem(String itemName, String itemXpath,String itemType,int... operations){
+    public void addItem(String itemName, String itemXpath,String itemType,int... operations){
         ItemModel itemModel = new ItemModel();
         itemModel.setName(itemName);
         itemModel.setXpath(itemXpath);
+        itemModel.setItemType(itemType);
+        itemModel.setItemOperations(operations);
+        itemsModel.add(itemModel);
+    }
+
+    public void addMultipleItems(String itemName, String baseItemXpath, String itemXpath){
+        addMultipleItems(itemName,baseItemXpath,itemXpath,ItemModel.TypeText,null);
+    }
+
+    public void addMultipleItems(String itemName, String baseItemXpath, String itemXpath, int... operations){
+        addMultipleItems(itemName, baseItemXpath,itemXpath,ItemModel.TypeText,operations);
+    }
+
+    public void addMultipleItems(String itemName, String baseItemXpath, String itemXpath, String itemType){
+        addMultipleItems(itemName,baseItemXpath,itemXpath, itemType,null);
+    }
+
+    public void addMultipleItems(String itemName, String baseItemXpath, String itemXpath, String itemType, int... operations){
+        ItemModel itemModel = new ItemModel();
+        itemModel.setName(itemName);
+        itemModel.setXpath(itemXpath);
+        itemModel.setBaseXpath(baseItemXpath);
+        itemModel.setMultipleMatch(true);
         itemModel.setItemType(itemType);
         itemModel.setItemOperations(operations);
         itemsModel.add(itemModel);
