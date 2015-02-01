@@ -1,6 +1,7 @@
-import org.jsoup.Connection;
+package us.codecraft.webmagic.utils;
+
 import org.junit.Test;
-import us.codecraft.webmagic.pipeline.BaseDAO;
+import us.codecraft.webmagic.utils.BaseDAO;
 
 import java.sql.Types;
 import java.util.List;
