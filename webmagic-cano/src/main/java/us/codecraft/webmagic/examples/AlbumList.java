@@ -8,7 +8,7 @@ import us.codecraft.webmagic.model.ItemModel;
 import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.ItemContentOpPipeline;
-import us.codecraft.webmagic.pipeline.MysqlPipeline;
+import us.codecraft.webmagic.pipeline.MysqlPageModelPipeline;
 import us.codecraft.webmagic.processor.AbstractPageProcessor;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
@@ -31,7 +31,7 @@ public class AlbumList extends AbstractPageProcessor {
                 //.addUrl("http://www.ximalaya.com/14675060/album/280961")
                 //.addUrl("http://www.ximalaya.com/zhubo/14675060")
                 .addPipeline(new ItemContentOpPipeline())
-                .addPipeline(new MysqlPipeline())
+                .addPipeline(new MysqlPageModelPipeline())
                 .addPipeline(new ConsolePipeline())
                 .thread(10)
                 .run();

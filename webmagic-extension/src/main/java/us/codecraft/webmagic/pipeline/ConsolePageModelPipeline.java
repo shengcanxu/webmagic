@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.model;
+package us.codecraft.webmagic.pipeline;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.builder.ToStringBuilder;
