@@ -12,27 +12,25 @@ import java.lang.reflect.Field;
  * Created by canoxu on 2015/1/20.
  */
 public class MysqlPageModelPipeline implements PageModelPipeline{
-    public static final int DBStatusSuccess = 1;
-    public static final int DBStatusFailure = 0;
-    public static final int DBStatusNotStarted = -1;
+    public static enum STATUS {Success,Failure,NotStarted}
 
-    private int status = DBStatusNotStarted;
+    private STATUS status = STATUS.NotStarted;
     private BaseDAO dao = BaseDAO.getInstance();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void process(Object o, Task task) {
-        if(status == MysqlPageModelPipeline.DBStatusFailure){
+        if(status == STATUS.Failure){
             logger.error("not able to create db table,stop processing");
             return;
         }
 
         Class<?> clazz = o.getClass();
-        if(status == MysqlPageModelPipeline.DBStatusNotStarted){
+        if(status == STATUS.NotStarted){
             if(createTable(clazz)) {
-                status = MysqlPageModelPipeline.DBStatusSuccess;
+                status = STATUS.Success;
             }else{
-                status = MysqlPageModelPipeline.DBStatusFailure;
+                status = STATUS.Failure;
                 logger.error("create db table fails");
                 return ;
             }
