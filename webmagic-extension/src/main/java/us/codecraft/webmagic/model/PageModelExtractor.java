@@ -36,6 +36,10 @@ class PageModelExtractor {
 
     private Selector helpUrlRegionSelector;
 
+    private List<Pattern> parseUrlPatterns = new ArrayList<Pattern>();
+
+    private Selector parseUrlRegionSelector;
+
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
@@ -229,6 +233,21 @@ class PageModelExtractor {
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
             objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+        }
+
+        //add ParseUrl annotation
+        Annotation[] annotations = clazz.getAnnotationsByType(ParseUrl.class);
+        if(annotations != null && annotations.length > 0){
+            for(Annotation a : annotations){
+                ParseUrl parseUrl = (ParseUrl) a;
+                String[] values = parseUrl.value();
+                for(String s : values){
+                    parseUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                }
+                if (!parseUrl.sourceRegion().equals("")) {
+                    parseUrlRegionSelector = new XpathSelector(parseUrl.sourceRegion());
+                }
+            }
         }
     }
 
