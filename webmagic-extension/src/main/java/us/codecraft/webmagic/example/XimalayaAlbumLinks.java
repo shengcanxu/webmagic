@@ -12,8 +12,7 @@ import us.codecraft.webmagic.model.annotation.TargetUrl;
 
 //@TargetUrl(value = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_wrapper\"]", sourceRegion = "//div[@class=\"discoverAlbum_item\"]")
 public class XimalayaAlbumLinks {
-
-    @ExtractBy(value = "//*[@id=\"discoverAlbum\"]//div[@class=\"albumfaceOutter\"]/a")
+    @ExtractBy(value = "//*[@id=\"discoverAlbum\"]//div[@class=\"albumfaceOutter\"]/a/@href")
     private String albumURL;
 
     public String getAlbumURL() {
@@ -21,8 +20,8 @@ public class XimalayaAlbumLinks {
     }
 
     public static void main(String[] args) {
-        //results will be saved to "/data/webmagic/" in json format
-        OOSpider.create(Site.me(), new ConsolePageModelPipeline(), XimalayaAlbumLinks.class)
+        Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
+        OOSpider.create(site, new ConsolePageModelPipeline(), XimalayaAlbumLinks.class)
                 .addUrl("http://album.ximalaya.com/dq/book/").run();
     }
 }

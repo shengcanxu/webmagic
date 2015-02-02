@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.model;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.PageModelPipeline;
@@ -13,6 +14,7 @@ import us.codecraft.webmagic.pipeline.PageModelPipeline;
 public class ConsolePageModelPipeline implements PageModelPipeline {
     @Override
     public void process(Object o, Task task) {
-        System.out.println(ToStringBuilder.reflectionToString(o));
+        //System.out.println(ToStringBuilder.reflectionToString(o));
+        System.out.println(JSON.toJSONString(o));
     }
 }
