@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.model.annotation;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -13,6 +14,7 @@ import java.lang.annotation.Target;
  */
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
+@Repeatable(ParseUrls.class)
 public @interface ParseUrl {
 
     /**

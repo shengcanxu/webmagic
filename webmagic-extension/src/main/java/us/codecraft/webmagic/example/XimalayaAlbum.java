@@ -11,6 +11,7 @@ import us.codecraft.webmagic.pipeline.MysqlPageModelPipeline;
 
 @ResetDB(value = false)
 @ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
+@ParseUrl(value = "http://www.ximalaya.com/\\d+/album1/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right1\"]")
 public class XimalayaAlbum {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//h1/text()")
     private String title;
