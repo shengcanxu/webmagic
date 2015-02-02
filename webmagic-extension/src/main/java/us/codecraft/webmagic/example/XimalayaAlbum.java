@@ -3,6 +3,7 @@ package us.codecraft.webmagic.example;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
+import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
 import us.codecraft.webmagic.pipeline.MysqlPageModelPipeline;
 
@@ -15,9 +16,11 @@ public class XimalayaAlbum {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//h1/text()")
     private String title;
 
-    public String getTitle() {
-        return title;
-    }
+    @ExtractBy(value = "//*[@id=\"mainbox\"]//div[@class=\"detailContent_category\"]//a/text()")
+    private String category;
+
+    @ExtractByUrl
+    private String PageURL;
 
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");

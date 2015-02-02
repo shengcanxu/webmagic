@@ -58,6 +58,11 @@ public class MysqlPageModelPipeline implements PageModelPipeline{
         dao.executeUpdate(sql);
     }
 
+    /**
+     * create table with the definition of class
+     * @param clazz
+     * @return
+     */
     public boolean createTable(Class<?> clazz) {
         String tableName = clazz.getSimpleName();
         logger.info("creating table " + tableName);
@@ -68,7 +73,7 @@ public class MysqlPageModelPipeline implements PageModelPipeline{
         for (Field field : fields) {
             String fieldName = field.getName();
             Class<?> fieldType = field.getType();
-            String type = "varchar(200)";
+            String type = "varchar(1000)";
             if(fieldType.getName().equalsIgnoreCase("int")){
                 type = "int(11)";
             }
