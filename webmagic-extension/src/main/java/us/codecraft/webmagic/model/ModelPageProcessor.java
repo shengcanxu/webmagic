@@ -60,6 +60,8 @@ class ModelPageProcessor implements PageProcessor {
     }
 
     private void extractLinks(Page page, Selector urlRegionSelector, List<Pattern> urlPatterns) {
+        if(urlPatterns.size() == 0) return;
+
         List<String> links;
         if (urlRegionSelector == null) {
             links = page.getHtml().links().all();

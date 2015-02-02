@@ -1,7 +1,5 @@
 package us.codecraft.webmagic;
 
-import us.codecraft.webmagic.model.PageModel;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,7 +15,6 @@ import java.util.Map;
 public class ResultItems {
 
     private Map<String, Object> fields = new LinkedHashMap<String, Object>();
-    private PageModel pageModel = null;
 
     private Request request;
 
@@ -47,14 +44,6 @@ public class ResultItems {
     public ResultItems setRequest(Request request) {
         this.request = request;
         return this;
-    }
-
-    public PageModel getPageModel() {
-        return pageModel;
-    }
-
-    public void setPageModel(PageModel pageModel) {
-        this.pageModel = pageModel;
     }
 
     /**

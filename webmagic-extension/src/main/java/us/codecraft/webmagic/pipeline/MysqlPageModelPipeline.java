@@ -3,6 +3,7 @@ package us.codecraft.webmagic.pipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.model.annotation.ResetDB;
 import us.codecraft.webmagic.utils.BaseDAO;
 
 import java.lang.reflect.AccessibleObject;
@@ -63,8 +64,14 @@ public class MysqlPageModelPipeline implements PageModelPipeline{
      */
     public boolean createTable(Class<?> clazz) {
         String tableName = clazz.getSimpleName();
-        logger.info("creating table " + tableName);
+        ResetDB resetDB =  clazz.getDeclaredAnnotation(ResetDB.class);
+        if(resetDB != null && resetDB.value()){
+            String sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
+            dao.executeUpdate(sql);
+            logger.info("drop table " + tableName + " and re-recrate again.");
+        }
 
+        logger.info("creating table " + tableName);
         String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
         Field[] fields = clazz.getDeclaredFields();
         AccessibleObject.setAccessible(fields, true);

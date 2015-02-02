@@ -2,16 +2,15 @@ package us.codecraft.webmagic.example;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.pipeline.MysqlPageModelPipeline;
 
 /**
  * Created by canoxu on 2015/2/1.
  */
 
-@TargetUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
+@ResetDB(value = false)
+@ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
 public class XimalayaAlbum {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//h1/text()")
     private String title;
@@ -19,7 +18,7 @@ public class XimalayaAlbum {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//div[@class=\"detailContent_category\"]//a/text()")
     private String category;
 
-    @ExtractByUrl
+    @ExtractByUrl(value = "")
     private String PageURL;
 
     public static void main(String[] args) {

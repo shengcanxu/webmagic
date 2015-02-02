@@ -1,7 +1,6 @@
 package us.codecraft.webmagic;
 
 import org.apache.commons.lang3.StringUtils;
-import us.codecraft.webmagic.model.PageModel;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Json;
 import us.codecraft.webmagic.selector.Selectable;
@@ -45,7 +44,7 @@ public class Page {
 
     private List<Request> targetRequests = new ArrayList<Request>();
 
-    private int level =0;
+    private int depth =0;
 
     public Page() {
     }
@@ -60,12 +59,12 @@ public class Page {
      * depth of the page in parsing list
      * @return
      */
-    public int getLevel(){
-        return this.level;
+    public int getDepth(){
+        return this.depth;
     }
 
-    public void setLevel(int level){
-        this.level = level;
+    public void setDepth(int depth){
+        this.depth = depth;
     }
 
     /**
@@ -76,10 +75,6 @@ public class Page {
      */
     public void putField(String key, Object field) {
         resultItems.put(key, field);
-    }
-
-    public void putPageModel(PageModel pageModel) {
-        resultItems.setPageModel(pageModel);
     }
 
     /**
@@ -138,7 +133,7 @@ public class Page {
     }
 
     /**
-     * add urls to fetch in level
+     * add urls to fetch in depth
      *
      * @param requests
      * @param level

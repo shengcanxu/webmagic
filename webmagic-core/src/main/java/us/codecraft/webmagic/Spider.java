@@ -411,7 +411,7 @@ public class Spider implements Runnable, Task {
             onError(request);
             return;
         }
-        page.setLevel(request.getLevel());  //add the level
+        page.setDepth(request.getLevel());  //add the level
 
         // for cycle retry
         if (page.isNeedCycleRetry()) {
@@ -442,7 +442,7 @@ public class Spider implements Runnable, Task {
     protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
             for (Request request : page.getTargetRequests()) {
-                request.setLevel(page.getLevel()+1);
+                request.setLevel(page.getDepth()+1);
                 addRequest(request);
             }
         }
