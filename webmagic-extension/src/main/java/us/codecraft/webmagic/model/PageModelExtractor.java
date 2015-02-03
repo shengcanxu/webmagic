@@ -36,9 +36,9 @@ class PageModelExtractor {
 
     private Selector helpUrlRegionSelector;
 
-    private List<Pattern> parseUrlPatterns = new ArrayList<Pattern>();
+    private List<Pattern[]> parseUrlPatterns = new ArrayList<Pattern[]>();
 
-    private Selector parseUrlRegionSelector;
+    private List<Selector> parseUrlRegionSelectors = new ArrayList<Selector>();
 
     private Class clazz;
 
@@ -241,11 +241,14 @@ class PageModelExtractor {
             for(Annotation a : annotations){
                 ParseUrl parseUrl = (ParseUrl) a;
                 String[] values = parseUrl.value();
-                for(String s : values){
-                    parseUrlPatterns.add(Pattern.compile("(" + s.replace(".", "\\.").replace("*", "[^\"'#]*") + ")"));
+                Pattern[] patterns = new Pattern[values.length];
+                for(int i=0; i<values.length; i++){
+                    patterns[i] = Pattern.compile("(" + values[i].replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
                 }
+                parseUrlPatterns.add(patterns);
                 if (!parseUrl.sourceRegion().equals("")) {
-                    parseUrlRegionSelector = new XpathSelector(parseUrl.sourceRegion());
+                    Selector region = new XpathSelector(parseUrl.sourceRegion());
+                    parseUrlRegionSelectors.add(region);
                 }
             }
         }
@@ -405,11 +408,34 @@ class PageModelExtractor {
         return helpUrlPatterns;
     }
 
+    /**
+     * return null array if depth more than pattern list
+     * @param depth
+     * @return
+     */
+    Pattern[] getParseUrlPatterns(int depth) {
+        if(depth >= parseUrlPatterns.size()) return new Pattern[0];
+        else return parseUrlPatterns.get(depth);
+    }
+
+    int getParseUrlDepth(){
+        return parseUrlPatterns.size();
+    }
+
     Selector getTargetUrlRegionSelector() {
         return targetUrlRegionSelector;
     }
 
     Selector getHelpUrlRegionSelector() {
         return helpUrlRegionSelector;
+    }
+
+    /**
+     * return null if depth exceed selector list
+     * @return
+     */
+    Selector getParseUrlRegionSelector(int depth) {
+        if (depth >= parseUrlRegionSelectors.size()) return null;
+        else return parseUrlRegionSelectors.get(depth);
     }
 }

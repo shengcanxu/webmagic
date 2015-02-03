@@ -45,8 +45,17 @@ class ModelPageProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-            extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
-            extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
+            //process parseurls, if urls found, skip extract content
+            int depth = page.getDepth();
+            if( depth < pageModelExtractor.getParseUrlDepth() &&
+                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth))){
+                page.getResultItems().setSkip(true);
+                continue;
+            }
+
+            //extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
+            //extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
+
             Object process = pageModelExtractor.process(page);
             if (process == null || (process instanceof List && ((List) process).size() == 0)) {
                 continue;
@@ -54,9 +63,36 @@ class ModelPageProcessor implements PageProcessor {
             postProcessPageModel(pageModelExtractor.getClazz(), process);
             page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
         }
-        if (page.getResultItems().getAll().size() == 0) {
-            page.getResultItems().setSkip(true);
+    }
+
+    /**
+     * extract parseurls from page
+     * @param page
+     * @param urlRegionSelector
+     * @param urlPatterns
+     * @return true if any url is extracted, else false;
+     */
+    private boolean extractParseUrls(Page page, Selector urlRegionSelector, Pattern[] urlPatterns){
+        if(urlPatterns.length == 0) return false;
+
+        List<String> links;
+        if(urlRegionSelector == null){
+            links = page.getHtml().links().all();
+        }else{
+            links = page.getHtml().selectList(urlRegionSelector).links().all();
         }
+
+        boolean found = false;
+        for(String link : links){
+            for(int i=0; i<urlPatterns.length; i++){
+                Matcher matcher = urlPatterns[i].matcher(link);
+                if(matcher.find()){
+                    found = true;
+                    page.addTargetRequest(new Request(matcher.group(1)));
+                }
+            }
+        }
+        return found;
     }
 
     private void extractLinks(Page page, Selector urlRegionSelector, List<Pattern> urlPatterns) {
