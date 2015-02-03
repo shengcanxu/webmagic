@@ -40,6 +40,8 @@ class PageModelExtractor {
 
     private List<Selector> parseUrlRegionSelectors = new ArrayList<Selector>();
 
+    private List<Selector> parseUrlNextPageSelectors = new ArrayList<Selector>();
+
     private Class clazz;
 
     private List<FieldExtractor> fieldExtractors;
@@ -413,7 +415,7 @@ class PageModelExtractor {
      * @param depth
      * @return
      */
-    Pattern[] getParseUrlPatterns(int depth) {
+    public Pattern[] getParseUrlPatterns(int depth) {
         if(depth >= parseUrlPatterns.size()) return new Pattern[0];
         else return parseUrlPatterns.get(depth);
     }
@@ -434,8 +436,17 @@ class PageModelExtractor {
      * return null if depth exceed selector list
      * @return
      */
-    Selector getParseUrlRegionSelector(int depth) {
+    public Selector getParseUrlRegionSelector(int depth) {
         if (depth >= parseUrlRegionSelectors.size()) return null;
         else return parseUrlRegionSelectors.get(depth);
+    }
+
+    /**
+     * return null if depth exceed selector list
+     * @return
+     */
+    public Selector getParseUrlNextPageSelectors(int depth) {
+        if(depth >= parseUrlNextPageSelectors.size()) return null;
+        else return parseUrlNextPageSelectors.get(depth);
     }
 }

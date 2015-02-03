@@ -37,8 +37,8 @@ public @interface ParseUrl {
     String sourceRegion() default "";
 
     /**
-     * the depth of the page in parsing tree
+     * the next page xpath
      * @return
      */
-    int depth() default 0;
+    String nextPage() default "";
 }

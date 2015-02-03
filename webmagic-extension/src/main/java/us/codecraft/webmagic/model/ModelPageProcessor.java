@@ -48,7 +48,7 @@ class ModelPageProcessor implements PageProcessor {
             //process parseurls, if urls found, skip extract content
             int depth = page.getDepth();
             if( depth < pageModelExtractor.getParseUrlDepth() &&
-                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth))){
+                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth),pageModelExtractor.getParseUrlNextPageSelectors(depth))){
                 page.getResultItems().setSkip(true);
                 continue;
             }
@@ -72,7 +72,7 @@ class ModelPageProcessor implements PageProcessor {
      * @param urlPatterns
      * @return true if any url is extracted, else false;
      */
-    private boolean extractParseUrls(Page page, Selector urlRegionSelector, Pattern[] urlPatterns){
+    private boolean extractParseUrls(Page page, Selector urlRegionSelector, Pattern[] urlPatterns, Selector nextPageSelector){
         if(urlPatterns.length == 0) return false;
 
         List<String> links;
@@ -92,6 +92,13 @@ class ModelPageProcessor implements PageProcessor {
                 }
             }
         }
+
+        //next page
+        if(nextPageSelector != null){
+            String link = page.getHtml().selectList(nextPageSelector).links().get();
+
+        }
+
         return found;
     }
 

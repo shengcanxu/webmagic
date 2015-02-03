@@ -13,7 +13,7 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
  * Created by canoxu on 2015/2/1.
  */
 
-@ResetDB(value = false)
+@ResetDB(value = true)
 @ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
 @ParseUrl(value = "http://www.ximalaya.com/zhubo/\\d+/", sourceRegion = "//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]")
 public class XimalayaZhubo {
