@@ -55,4 +55,5 @@ class FieldExtractor extends Extractor {
     void setObjectFormatter(ObjectFormatter objectFormatter) {
         this.objectFormatter = objectFormatter;
     }
+
 }

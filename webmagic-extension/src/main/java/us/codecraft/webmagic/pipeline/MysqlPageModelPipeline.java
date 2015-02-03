@@ -3,11 +3,13 @@ package us.codecraft.webmagic.pipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.model.annotation.ExpandField;
 import us.codecraft.webmagic.model.annotation.ResetDB;
 import us.codecraft.webmagic.utils.BaseDAO;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * Created by canoxu on 2015/1/20.
@@ -37,24 +39,83 @@ public class MysqlPageModelPipeline implements PageModelPipeline{
             }
         }
 
+        String separator = "@#$";
+        boolean shouldExpand = false;
+        ExpandField expandField = o.getClass().getAnnotation(ExpandField.class);
+        if(expandField != null){
+            separator = expandField.seperator();
+            shouldExpand = expandField.shouldExpand();
+        }
+
+        //insert field content to db based on ExpandField setting
         String tableName = clazz.getSimpleName();
-        String sql = "INSERT INTO `" + tableName + "` (";
-        String keys = "`id`";
-        String values = "NULL";
         Field[] fields = clazz.getDeclaredFields();
         AccessibleObject.setAccessible(fields, true);
 
+        if(shouldExpand){
+            insertToDbExpand(tableName,fields,o);
+        }else {
+            insertToDbNotExpand(tableName,fields,o,separator);
+        }
+    }
+
+    private void insertToDbExpand(String tableName, Field[] fields, Object o) {
         try {
-            for (Field field : fields) {
-                keys = keys + ", `" + field.getName() + "`";
-                values = values + ", '" + field.get(o) + "'";
-            }
+            int i=0;
+            int multiSize = 0;
+            do {
+                String sql = "INSERT INTO `" + tableName + "` (";
+                String keys = "`id`";
+                String values = "NULL";
+                for (Field field : fields) {
+                    keys = keys + ", `" + field.getName() + "`";
+                    if (field.getType().equals(List.class)) {
+                        List<String> fieldValues = (List<String>) field.get(o);
+                        if(fieldValues.size() == 0 || i >= fieldValues.size()){
+                            values = values + ", 'NULL'";
+                        }else {
+                            values = values + ", '" + fieldValues.get(i) + "'";
+                        }
+                        if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
+                    } else {
+                        values = values + ", '" + field.get(o) + "'";
+                    }
+                }
+                sql = sql + keys + ") VALUES (" + values + ");";
+                logger.info(sql);
+                dao.executeUpdate(sql);
+                i++;
+            }while(i<multiSize);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        sql = sql + keys + ") VALUES (" + values + ");";
-        logger.info(sql);
-        dao.executeUpdate(sql);
+    }
+
+    private void insertToDbNotExpand(String tableName, Field[] fields, Object o,String separator) {
+        try {
+            String sql = "INSERT INTO `" + tableName + "` (";
+            String keys = "`id`";
+            String values = "NULL";
+            for (Field field : fields) {
+                keys = keys + ", `" + field.getName() + "`";
+                if (field.getType().equals(List.class)) {
+                    List<String> fieldValues = (List<String>) field.get(o);
+                    String fvs = "";
+                    for (String v : fieldValues) {
+                        if (fvs.length() == 0) fvs = v;
+                        else fvs = fvs + separator + v;
+                    }
+                    values = values + ", '" + fvs + "'";
+                } else {
+                    values = values + ", '" + field.get(o) + "'";
+                }
+            }
+            sql = sql + keys + ") VALUES (" + values + ");";
+            logger.info(sql);
+            dao.executeUpdate(sql);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
