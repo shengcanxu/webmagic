@@ -1,9 +1,9 @@
 package us.codecraft.webmagic.pipeline;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
+
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
 
 /**
  * Print page model in console.<br>
@@ -14,7 +14,16 @@ import us.codecraft.webmagic.pipeline.PageModelPipeline;
 public class ConsolePageModelPipeline implements PageModelPipeline {
     @Override
     public void process(Object o, Task task) {
-        //System.out.println(ToStringBuilder.reflectionToString(o));
-        System.out.println(JSON.toJSONString(o));
+        Class<?> clazz = o.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        AccessibleObject.setAccessible(fields, true);
+
+        try {
+            for (Field field : fields) {
+                System.out.println(field.getName() + ": " + field.get(o));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
