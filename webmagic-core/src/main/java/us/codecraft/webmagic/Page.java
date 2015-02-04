@@ -193,6 +193,13 @@ public class Page {
         }
     }
 
+    public void addNextPageRequest(Request request){
+        synchronized (targetRequests) {
+            request.setNextPageRequest(true);
+            targetRequests.add(request);
+        }
+    }
+
     /**
      * get url of current page
      *

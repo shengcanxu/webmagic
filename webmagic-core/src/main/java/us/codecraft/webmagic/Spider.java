@@ -441,8 +441,13 @@ public class Spider implements Runnable, Task {
 
     protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
+            logger.info("get " + page.getTargetRequests().size() + " links to follow.");
             for (Request request : page.getTargetRequests()) {
-                request.setDepth(page.getDepth() + 1);
+                if(request.isNextPageRequest()){
+                    request.setDepth(page.getDepth());
+                }else{
+                    request.setDepth(page.getDepth()+1);
+                }
                 addRequest(request);
             }
         }

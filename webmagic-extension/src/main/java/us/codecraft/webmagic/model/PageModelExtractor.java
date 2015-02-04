@@ -252,6 +252,10 @@ class PageModelExtractor {
                     Selector region = new XpathSelector(parseUrl.sourceRegion());
                     parseUrlRegionSelectors.add(region);
                 }
+                if(!parseUrl.nextPage().equals("")) {
+                    Selector nextPage = new XpathSelector(parseUrl.nextPage());
+                    parseUrlNextPageSelectors.add(nextPage);
+                }
             }
         }
     }

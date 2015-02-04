@@ -96,7 +96,7 @@ class ModelPageProcessor implements PageProcessor {
         //next page
         if(nextPageSelector != null){
             String link = page.getHtml().selectList(nextPageSelector).links().get();
-
+            page.addNextPageRequest(new Request(link));
         }
 
         return found;

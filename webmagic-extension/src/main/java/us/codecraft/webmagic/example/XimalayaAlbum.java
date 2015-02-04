@@ -31,6 +31,6 @@ public class XimalayaAlbum {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         OOSpider.create(site, new ConsolePageModelPipeline(), XimalayaAlbum.class)
                 .scheduler(new StackScheduler())
-                .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
+                .addUrl("http://album.ximalaya.com/dq/book/").thread(10).run();
     }
 }

@@ -27,6 +27,8 @@ public class Request implements Serializable {
 
     private int depth = 0;
 
+    private boolean isNextPageRequest = false;
+
     /**
      * Store additional information in extras.
      */
@@ -65,6 +67,14 @@ public class Request implements Serializable {
 
     public long getPriority() {
         return priority;
+    }
+
+    public boolean isNextPageRequest() {
+        return isNextPageRequest;
+    }
+
+    public void setNextPageRequest(boolean isNextPageRequest) {
+        this.isNextPageRequest = isNextPageRequest;
     }
 
     /**
