@@ -54,6 +54,7 @@
         <module>webmagic-selenium</module>
         <module>webmagic-saxon</module>
         <module>webmagic-samples</module>
+        <module>webmagic-projects</module>
         <!--<module>webmagic-avalon</module>-->
     </modules>
 
