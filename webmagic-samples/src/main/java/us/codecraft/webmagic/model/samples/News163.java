@@ -5,10 +5,9 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.model.annotation.TargetUrl;
+import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MultiPagePipeline;
-import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * @author code4crafter@gmail.com <br>
  */
-@TargetUrl("http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
+@ParseUrl(value = "http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
 public class News163 implements MultiPageModel {
 
     @ExtractByUrl("http://news\\.163\\.com/\\d+/\\d+/\\d+/([^_]*).*\\.html")
@@ -73,7 +72,9 @@ public class News163 implements MultiPageModel {
 
     public static void main(String[] args) {
         OOSpider.create(Site.me(), News163.class).addUrl("http://news.163.com/13/0802/05/958I1E330001124J_2.html")
-                .scheduler(new RedisScheduler("localhost")).addPipeline(new MultiPagePipeline()).addPipeline(new ConsolePipeline()).run();
+                //.scheduler(new RedisScheduler("localhost"))
+                .addPipeline(new MultiPagePipeline())
+                .addPipeline(new ConsolePipeline()).run();
     }
 
 }
