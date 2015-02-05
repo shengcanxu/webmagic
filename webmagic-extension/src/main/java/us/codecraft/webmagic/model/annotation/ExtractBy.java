@@ -73,4 +73,10 @@ public @interface ExtractBy {
      */
     boolean multi() default false;
 
+    /**
+     * the next page xpath
+     * @return
+     */
+    String nextPage() default "";
+
 }
