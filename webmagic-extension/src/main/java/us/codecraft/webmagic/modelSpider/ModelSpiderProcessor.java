@@ -29,6 +29,9 @@ public class ModelSpiderProcessor implements PageProcessor {
     public static ModelSpiderProcessor create(Site site, PageModel pageModel) {
         ModelSpiderProcessor modelPageProcessor = new ModelSpiderProcessor(site);
         modelPageProcessor.setPageModel(pageModel);
+
+        //create the page Model
+        pageModel.createModel();
         return modelPageProcessor;
     }
 

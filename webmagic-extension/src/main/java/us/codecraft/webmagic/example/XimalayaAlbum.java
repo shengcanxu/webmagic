@@ -14,9 +14,10 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
  */
 
 @ResetDB(value = false)
-@ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+",
+@ParseUrl(urlPattern = "http://www.ximalaya.com/\\d+/album/\\d+",
         sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]",
-        nextPage = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
+        nextPageRegion = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
+@ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
 public class XimalayaAlbum extends PageModel {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//h1/text()")
     private String title;

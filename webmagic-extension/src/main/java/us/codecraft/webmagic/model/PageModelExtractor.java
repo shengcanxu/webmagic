@@ -242,7 +242,7 @@ public class PageModelExtractor {
         if(annotations != null && annotations.length > 0){
             for(Annotation a : annotations){
                 ParseUrl parseUrl = (ParseUrl) a;
-                String[] values = parseUrl.value();
+                String[] values = parseUrl.urlPattern();
                 Pattern[] patterns = new Pattern[values.length];
                 for(int i=0; i<values.length; i++){
                     patterns[i] = Pattern.compile("(" + values[i].replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
@@ -252,8 +252,8 @@ public class PageModelExtractor {
                     Selector region = new XpathSelector(parseUrl.sourceRegion());
                     parseUrlRegionSelectors.add(region);
                 }
-                if(!parseUrl.nextPage().equals("")) {
-                    Selector nextPage = new XpathSelector(parseUrl.nextPage());
+                if(!parseUrl.nextPageRegion().equals("")) {
+                    Selector nextPage = new XpathSelector(parseUrl.nextPageRegion());
                     parseUrlNextPageSelectors.add(nextPage);
                 }
             }

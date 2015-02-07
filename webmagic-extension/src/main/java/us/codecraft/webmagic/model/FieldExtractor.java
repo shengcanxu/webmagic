@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-class FieldExtractor extends Extractor {
+public class FieldExtractor extends Extractor {
 
     private final Field field;
 

@@ -25,7 +25,7 @@ public @interface ParseUrl {
      *
      * @return the url patterns for class
      */
-    String[] value();
+    String[] urlPattern();
 
     /**
      * Define the region for url extracting. <br>
@@ -40,5 +40,5 @@ public @interface ParseUrl {
      * the next page xpath
      * @return
      */
-    String nextPage() default "";
+    String nextPageRegion() default "";
 }

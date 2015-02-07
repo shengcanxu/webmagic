@@ -14,8 +14,8 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
  */
 
 @ResetDB(value = true)
-@ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
-@ParseUrl(value = "http://www.ximalaya.com/zhubo/\\d+/", sourceRegion = "//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]")
+@ParseUrl(urlPattern = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
+@ParseUrl(urlPattern = "http://www.ximalaya.com/zhubo/\\d+/", sourceRegion = "//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]")
 public class XimalayaZhubo {
     @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
     private String name;

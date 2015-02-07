@@ -7,7 +7,7 @@ import us.codecraft.webmagic.selector.Selector;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-class Extractor {
+public class Extractor {
 
     protected Selector selector;
 
@@ -17,7 +17,7 @@ class Extractor {
 
     protected final boolean multi;
 
-    static enum Source {Html, Url, RawHtml}
+    public static enum Source {Html, Url, RawHtml}
 
     public Extractor(Selector selector, Source source, boolean notNull, boolean multi) {
         this.selector = selector;
