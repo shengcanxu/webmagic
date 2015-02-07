@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-class PageModelExtractor {
+public class PageModelExtractor {
 
     private List<Pattern> targetUrlPatterns = new ArrayList<Pattern>();
 
@@ -402,7 +402,7 @@ class PageModelExtractor {
         fieldExtractor.getField().set(o, value);
     }
 
-    Class getClazz() {
+    public Class getClazz() {
         return clazz;
     }
 
@@ -424,7 +424,7 @@ class PageModelExtractor {
         else return parseUrlPatterns.get(depth);
     }
 
-    int getParseUrlDepth(){
+    public int getParseUrlDepth(){
         return parseUrlPatterns.size();
     }
 

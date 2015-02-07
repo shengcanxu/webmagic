@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-class ModelPipeline implements Pipeline {
+public class ModelPipeline implements Pipeline {
 
     private Map<Class, PageModelPipeline> pageModelPipelines = new ConcurrentHashMap<Class, PageModelPipeline>();
 

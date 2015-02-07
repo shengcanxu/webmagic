@@ -1,8 +1,9 @@
-package us.codecraft.webmagic.model;
+package us.codecraft.webmagic.modelSpider;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.model.PageModelExtractor;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
 
@@ -17,28 +18,22 @@ import java.util.regex.Pattern;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class ModelPageProcessor implements PageProcessor {
+public class ModelSpiderProcessor implements PageProcessor {
 
     private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 
     private Site site;
 
-    public static ModelPageProcessor create(Site site, Class... clazzs) {
-        ModelPageProcessor modelPageProcessor = new ModelPageProcessor(site);
-        for (Class clazz : clazzs) {
-            modelPageProcessor.addPageModel(clazz);
-        }
+    private PageModel pageModel;
+
+    public static ModelSpiderProcessor create(Site site, PageModel pageModel) {
+        ModelSpiderProcessor modelPageProcessor = new ModelSpiderProcessor(site);
+        modelPageProcessor.setPageModel(pageModel);
         return modelPageProcessor;
     }
 
 
-    public ModelPageProcessor addPageModel(Class clazz) {
-        PageModelExtractor pageModelExtractor = PageModelExtractor.create(clazz);
-        pageModelExtractorList.add(pageModelExtractor);
-        return this;
-    }
-
-    private ModelPageProcessor(Site site) {
+    private ModelSpiderProcessor(Site site) {
         this.site = site;
     }
 
@@ -52,9 +47,6 @@ public class ModelPageProcessor implements PageProcessor {
                 page.getResultItems().setSkip(true);
                 continue;
             }
-
-            //extractLinks(page, pageModelExtractor.getHelpUrlRegionSelector(), pageModelExtractor.getHelpUrlPatterns());
-            //extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
 
             Object process = pageModelExtractor.process(page);
             if (process == null || (process instanceof List && ((List) process).size() == 0)) {
@@ -102,30 +94,19 @@ public class ModelPageProcessor implements PageProcessor {
         return found;
     }
 
-    private void extractLinks(Page page, Selector urlRegionSelector, List<Pattern> urlPatterns) {
-        if(urlPatterns.size() == 0) return;
-
-        List<String> links;
-        if (urlRegionSelector == null) {
-            links = page.getHtml().links().all();
-        } else {
-            links = page.getHtml().selectList(urlRegionSelector).links().all();
-        }
-        for (String link : links) {
-            for (Pattern targetUrlPattern : urlPatterns) {
-                Matcher matcher = targetUrlPattern.matcher(link);
-                if (matcher.find()) {
-                    page.addTargetRequest(new Request(matcher.group(1)));
-                }
-            }
-        }
-    }
-
     protected void postProcessPageModel(Class clazz, Object object) {
     }
 
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public PageModel getPageModel() {
+        return pageModel;
+    }
+
+    public void setPageModel(PageModel pageModel) {
+        this.pageModel = pageModel;
     }
 }

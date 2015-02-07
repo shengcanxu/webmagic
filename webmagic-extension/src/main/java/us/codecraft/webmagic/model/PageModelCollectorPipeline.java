@@ -13,13 +13,13 @@ import java.util.List;
  * @author code4crafter@gmail.com
  * @since 0.4.0
  */
-class PageModelCollectorPipeline<T> implements CollectorPipeline<T> {
+public class PageModelCollectorPipeline<T> implements CollectorPipeline<T> {
 
     private final CollectorPageModelPipeline<T> classPipeline = new CollectorPageModelPipeline<T>();
 
     private final Class<?> clazz;
 
-    PageModelCollectorPipeline(Class<?> clazz) {
+    public PageModelCollectorPipeline(Class<?> clazz) {
         this.clazz = clazz;
     }
 

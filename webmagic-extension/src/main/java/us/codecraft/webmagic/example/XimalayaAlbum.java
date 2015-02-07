@@ -1,12 +1,12 @@
 package us.codecraft.webmagic.example;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.model.annotation.ResetDB;
-import us.codecraft.webmagic.pipeline.ConsolePageModelPipeline;
+import us.codecraft.webmagic.modelSpider.ModelSpider;
+import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**
@@ -17,7 +17,7 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
 @ParseUrl(value = "http://www.ximalaya.com/\\d+/album/\\d+",
         sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]",
         nextPage = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
-public class XimalayaAlbum {
+public class XimalayaAlbum extends PageModel {
     @ExtractBy(value = "//*[@id=\"mainbox\"]//h1/text()")
     private String title;
 
@@ -29,7 +29,7 @@ public class XimalayaAlbum {
 
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
-        OOSpider.create(site, new ConsolePageModelPipeline(), XimalayaAlbum.class)
+        ModelSpider.create(site,new XimalayaAlbum())
                 .scheduler(new StackScheduler())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(10).run();
     }
