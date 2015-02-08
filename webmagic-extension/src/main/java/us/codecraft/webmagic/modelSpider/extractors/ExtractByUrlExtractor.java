@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
 /**
  * Created by cano on 2015/2/7.
  */
-public class ExtractByUrlExtractor implements FieldExtractor {
+public class ExtractByUrlExtractor implements FieldValueExtractor {
 
     protected Field field;
+
+    private String name;
 
     protected Pattern urlPattern;
 
@@ -23,11 +25,17 @@ public class ExtractByUrlExtractor implements FieldExtractor {
         notNull = extractByUrl.notNull();
         multi = extractByUrl.multi();
         this.field = field;
+        this.name = field.getName();
     }
 
 
     @Override
-    public void extract() {
+    public String extract() {
+        return null;
+    }
 
+    @Override
+    public String getName() {
+        return this.name;
     }
 }

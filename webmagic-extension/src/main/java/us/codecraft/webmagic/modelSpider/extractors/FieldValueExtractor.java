@@ -3,7 +3,9 @@ package us.codecraft.webmagic.modelSpider.extractors;
 /**
  * Created by cano on 2015/2/8.
  */
-public interface FieldExtractor {
+public interface FieldValueExtractor {
 
-    public void extract();
+    public String extract();
+
+    public String getName();
 }

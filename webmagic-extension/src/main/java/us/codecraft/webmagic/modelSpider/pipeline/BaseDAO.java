@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.utils;
+package us.codecraft.webmagic.modelSpider.pipeline;
 
 /**
  * Created by cano on 2015/1/20.

@@ -3,13 +3,11 @@ package us.codecraft.webmagic.modelSpider;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
 import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.selector.Selector;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The extension to PageProcessor for page model extractor.
@@ -40,83 +38,31 @@ public class ModelSpiderProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         int depth = page.getDepth();
-        List<Object> linkExtractors = pageModel.getLinkExtractors();
+        List<ParseUrlExtractor> linkExtractors = pageModel.getLinkExtractors();
         if ( depth < linkExtractors.size()){
             Object linkExtractor = linkExtractors.get(depth);
-            if(linkExtractor instanceof ParseUrlExtractor){
-                ParseUrlExtractor parseUrlExtractor = (ParseUrlExtractor) linkExtractor;
-                List<String> links = parseUrlExtractor.extract(page);
-                for(String link : links){
-                    page.addTargetRequest(new Request(link));
-                    System.out.println(link);
-                }
-                //next page links
-                String nextPageLink = parseUrlExtractor.extractNextPageLinks(page);
-                if(nextPageLink != null){
-                    page.addNextPageRequest(new Request(nextPageLink));
-                }
+            ParseUrlExtractor parseUrlExtractor = (ParseUrlExtractor) linkExtractor;
+            List<String> links = parseUrlExtractor.extract(page);
+            for(String link : links){
+                page.addTargetRequest(new Request(link));
+                System.out.println(link);
+            }
 
-                page.getResultItems().setSkip(true);
-                return;
+            //next page links
+            String nextPageLink = parseUrlExtractor.extractNextPageLinks(page);
+            if(nextPageLink != null){
+                page.addNextPageRequest(new Request(nextPageLink));
+            }
+
+            page.getResultItems().setSkip(true);
+            return;
+
+        }else{ // parse content
+            for (FieldValueExtractor extractor : pageModel.getFieldExtractors()){
+                String fieldValue = extractor.extract();
+                page.putField(extractor.getName(), fieldValue);
             }
         }
-
-//        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-//            //process parseurls, if urls found, skip extract content
-//            int depth = page.getDepth();
-//            if( depth < pageModelExtractor.getParseUrlDepth() &&
-//                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth),pageModelExtractor.getParseUrlNextPageSelectors(depth))){
-//                page.getResultItems().setSkip(true);
-//                continue;
-//            }
-//
-//            Object process = pageModelExtractor.process(page);
-//            if (process == null || (process instanceof List && ((List) process).size() == 0)) {
-//                continue;
-//            }
-//            postProcessPageModel(pageModelExtractor.getClazz(), process);
-//            page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
-//        }
-    }
-
-    /**
-     * extract parseurls from page
-     * @param page
-     * @param urlRegionSelector
-     * @param urlPatterns
-     * @return true if any url is extracted, else false;
-     */
-    private boolean extractParseUrls(Page page, Selector urlRegionSelector, Pattern[] urlPatterns, Selector nextPageSelector){
-        if(urlPatterns.length == 0) return false;
-
-        List<String> links;
-        if(urlRegionSelector == null){
-            links = page.getHtml().links().all();
-        }else{
-            links = page.getHtml().selectList(urlRegionSelector).links().all();
-        }
-
-        boolean found = false;
-        for(String link : links){
-            for(int i=0; i<urlPatterns.length; i++){
-                Matcher matcher = urlPatterns[i].matcher(link);
-                if(matcher.find()){
-                    found = true;
-                    page.addTargetRequest(new Request(matcher.group(1)));
-                }
-            }
-        }
-
-        //next page
-        if(nextPageSelector != null){
-            String link = page.getHtml().selectList(nextPageSelector).links().get();
-            page.addNextPageRequest(new Request(link));
-        }
-
-        return found;
-    }
-
-    protected void postProcessPageModel(Class clazz, Object object) {
     }
 
     @Override

@@ -6,7 +6,7 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.model.annotation.ResetDB;
-import us.codecraft.webmagic.pipeline.ConsolePageModelPipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.ConsolePageModelPipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**

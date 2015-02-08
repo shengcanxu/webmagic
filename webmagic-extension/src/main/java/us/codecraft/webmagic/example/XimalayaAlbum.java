@@ -7,6 +7,7 @@ import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.model.annotation.ResetDB;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**
@@ -32,6 +33,7 @@ public class XimalayaAlbum extends PageModel {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbum())
                 .scheduler(new StackScheduler())
+                .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }
 }

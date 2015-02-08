@@ -5,6 +5,7 @@ import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByUrlExtractor;
+import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
 import us.codecraft.webmagic.utils.ClassUtils;
 
@@ -19,8 +20,8 @@ import java.util.Set;
  */
 public class PageModel {
 
-    private List<Object> linkExtractors = new ArrayList<>();
-    private List<Object> fieldExtractors = new ArrayList<>();
+    private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
+    private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
 
     public void createModel(){
         init(this.getClass());
@@ -32,8 +33,8 @@ public class PageModel {
         Set<Field> fields = ClassUtils.getFieldsIncludeSuperClass(clazz);
         for (Field field : fields) {
             field.setAccessible(true);
-            Object extractor = getAnnotationExtractBy(field);
-            Object extractorTmp = getAnnotationExtractByUrl(field);
+            FieldValueExtractor extractor = getAnnotationExtractBy(field);
+            FieldValueExtractor extractorTmp = getAnnotationExtractByUrl(field);
             if (extractor != null && extractorTmp != null) {
                 throw new IllegalStateException("Only one of 'ExtractBy ExtractByUrl' can be added to a field!");
             } else if (extractor == null && extractorTmp != null) {
@@ -66,7 +67,7 @@ public class PageModel {
         //TODO: add ResetDB annotation
     }
 
-    private Object getAnnotationExtractBy(Field field) {
+    private FieldValueExtractor getAnnotationExtractBy(Field field) {
         ExtractByExtractor extractor = null;
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
@@ -76,7 +77,7 @@ public class PageModel {
     }
 
 
-    private Object getAnnotationExtractByUrl(Field field) {
+    private FieldValueExtractor getAnnotationExtractByUrl(Field field) {
         ExtractByUrlExtractor extractor = null;
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
         if (extractByUrl != null) {
@@ -85,11 +86,11 @@ public class PageModel {
         return extractor;
     }
 
-    public List<Object> getLinkExtractors() {
+    public List<ParseUrlExtractor> getLinkExtractors() {
         return linkExtractors;
     }
 
-    public List<Object> getFieldExtractors() {
+    public List<FieldValueExtractor> getFieldExtractors() {
         return fieldExtractors;
     }
 }

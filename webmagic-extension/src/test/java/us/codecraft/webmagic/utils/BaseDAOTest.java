@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.utils;
 
 import org.junit.Test;
-import us.codecraft.webmagic.utils.BaseDAO;
+import us.codecraft.webmagic.modelSpider.pipeline.BaseDAO;
 
 import java.sql.Types;
 import java.util.List;

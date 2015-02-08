@@ -9,9 +9,11 @@ import java.lang.reflect.Field;
 /**
  * Created by cano on 2015/2/7.
  */
-public class ExtractByExtractor implements FieldExtractor {
+public class ExtractByExtractor implements FieldValueExtractor {
 
     protected Field field;
+
+    protected String name;
 
     protected Selector xPathSelector;
 
@@ -33,11 +35,19 @@ public class ExtractByExtractor implements FieldExtractor {
         multi = extractBy.multi();
         nextPageRegion = new XpathSelector(extractBy.nextPage());
         this.field = field;
+        this.name = field.getName();
     }
 
 
     @Override
-    public void extract() {
-
+    public String extract() {
+        return null;
     }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+
 }
