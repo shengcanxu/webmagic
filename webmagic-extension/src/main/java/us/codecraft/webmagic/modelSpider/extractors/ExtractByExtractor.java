@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 /**
  * Created by cano on 2015/2/7.
  */
-public class ExtractByExtractor implements ModelExtractor {
+public class ExtractByExtractor implements FieldExtractor {
 
     protected Field field;
 

@@ -32,6 +32,6 @@ public class XimalayaAlbum extends PageModel {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbum())
                 .scheduler(new StackScheduler())
-                .addUrl("http://album.ximalaya.com/dq/book/").thread(10).run();
+                .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }
 }

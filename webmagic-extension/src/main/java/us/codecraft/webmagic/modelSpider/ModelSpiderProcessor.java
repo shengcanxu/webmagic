@@ -3,11 +3,10 @@ package us.codecraft.webmagic.modelSpider;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.PageModelExtractor;
+import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,8 +18,6 @@ import java.util.regex.Pattern;
  * @since 0.2.0
  */
 public class ModelSpiderProcessor implements PageProcessor {
-
-    private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 
     private Site site;
 
@@ -42,22 +39,44 @@ public class ModelSpiderProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
-            //process parseurls, if urls found, skip extract content
-            int depth = page.getDepth();
-            if( depth < pageModelExtractor.getParseUrlDepth() &&
-                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth),pageModelExtractor.getParseUrlNextPageSelectors(depth))){
-                page.getResultItems().setSkip(true);
-                continue;
-            }
+        int depth = page.getDepth();
+        List<Object> linkExtractors = pageModel.getLinkExtractors();
+        if ( depth < linkExtractors.size()){
+            Object linkExtractor = linkExtractors.get(depth);
+            if(linkExtractor instanceof ParseUrlExtractor){
+                ParseUrlExtractor parseUrlExtractor = (ParseUrlExtractor) linkExtractor;
+                List<String> links = parseUrlExtractor.extract(page);
+                for(String link : links){
+                    page.addTargetRequest(new Request(link));
+                    System.out.println(link);
+                }
+                //next page links
+                String nextPageLink = parseUrlExtractor.extractNextPageLinks(page);
+                if(nextPageLink != null){
+                    page.addNextPageRequest(new Request(nextPageLink));
+                }
 
-            Object process = pageModelExtractor.process(page);
-            if (process == null || (process instanceof List && ((List) process).size() == 0)) {
-                continue;
+                page.getResultItems().setSkip(true);
+                return;
             }
-            postProcessPageModel(pageModelExtractor.getClazz(), process);
-            page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
         }
+
+//        for (PageModelExtractor pageModelExtractor : pageModelExtractorList) {
+//            //process parseurls, if urls found, skip extract content
+//            int depth = page.getDepth();
+//            if( depth < pageModelExtractor.getParseUrlDepth() &&
+//                    extractParseUrls(page,pageModelExtractor.getParseUrlRegionSelector(depth),pageModelExtractor.getParseUrlPatterns(depth),pageModelExtractor.getParseUrlNextPageSelectors(depth))){
+//                page.getResultItems().setSkip(true);
+//                continue;
+//            }
+//
+//            Object process = pageModelExtractor.process(page);
+//            if (process == null || (process instanceof List && ((List) process).size() == 0)) {
+//                continue;
+//            }
+//            postProcessPageModel(pageModelExtractor.getClazz(), process);
+//            page.putField(pageModelExtractor.getClazz().getCanonicalName(), process);
+//        }
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Created by cano on 2015/2/7.
  */
-public class ExtractByUrlExtractor implements ModelExtractor {
+public class ExtractByUrlExtractor implements FieldExtractor {
 
     protected Field field;
 
