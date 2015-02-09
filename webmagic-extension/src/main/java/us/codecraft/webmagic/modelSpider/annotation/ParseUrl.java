@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.model.annotation;
+package us.codecraft.webmagic.modelSpider.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;

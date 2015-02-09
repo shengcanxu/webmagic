@@ -1,8 +1,7 @@
 package us.codecraft.webmagic.modelSpider.extractors;
 
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.model.annotation.ParseUrl;
+import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
 

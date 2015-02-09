@@ -2,7 +2,7 @@ package us.codecraft.webmagic.modelSpider;
 
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.model.annotation.ParseUrl;
+import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByUrlExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
@@ -69,7 +69,6 @@ public class PageModel {
             }
         }
 
-        //TODO: add ResetDB annotation
     }
 
     private FieldValueExtractor getAnnotationExtractBy(Field field) {
