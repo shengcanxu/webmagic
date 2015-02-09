@@ -46,6 +46,8 @@ public class Page {
 
     private int depth =0;
 
+    private Object pageModel;
+
     public Page() {
     }
 
@@ -254,6 +256,11 @@ public class Page {
     public Page setRawText(String rawText) {
         this.rawText = rawText;
         return this;
+    }
+
+    public void setPageModel(Object pageModel) {
+        this.pageModel = pageModel;
+        this.resultItems.setPageModel(pageModel);
     }
 
     @Override

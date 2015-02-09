@@ -44,24 +44,24 @@ public class MysqlPipeline implements Pipeline {
             }
         }
 
-        String separator = "@#$";
-        boolean shouldExpand = false;
-        ExpandField expandField = clazz.getAnnotation(ExpandField.class);
-        if(expandField != null){
-            separator = expandField.seperator();
-            shouldExpand = expandField.shouldExpand();
-        }
-
-        //insert field content to db based on ExpandField setting
-        String tableName = clazz.getSimpleName();
-        Field[] fields = clazz.getDeclaredFields();
-        AccessibleObject.setAccessible(fields, true);
-
-        if(shouldExpand){
-            insertToDbExpand(tableName,fields,o);
-        }else {
-            insertToDbNotExpand(tableName,fields,o,separator);
-        }
+//        String separator = "@#$";
+//        boolean shouldExpand = false;
+//        ExpandField expandField = clazz.getAnnotation(ExpandField.class);
+//        if(expandField != null){
+//            separator = expandField.seperator();
+//            shouldExpand = expandField.shouldExpand();
+//        }
+//
+//        //insert field content to db based on ExpandField setting
+//        String tableName = clazz.getSimpleName();
+//        Field[] fields = clazz.getDeclaredFields();
+//        AccessibleObject.setAccessible(fields, true);
+//
+//        if(shouldExpand){
+//            insertToDbExpand(tableName,fields,o);
+//        }else {
+//            insertToDbNotExpand(tableName,fields,o,separator);
+//        }
     }
 
     public void process(Object o, Task task) {
@@ -81,24 +81,24 @@ public class MysqlPipeline implements Pipeline {
             }
         }
 
-        String separator = "@#$";
-        boolean shouldExpand = false;
-        ExpandField expandField = o.getClass().getAnnotation(ExpandField.class);
-        if(expandField != null){
-            separator = expandField.seperator();
-            shouldExpand = expandField.shouldExpand();
-        }
-
-        //insert field content to db based on ExpandField setting
-        String tableName = clazz.getSimpleName();
-        Field[] fields = clazz.getDeclaredFields();
-        AccessibleObject.setAccessible(fields, true);
-
-        if(shouldExpand){
-            insertToDbExpand(tableName,fields,o);
-        }else {
-            insertToDbNotExpand(tableName,fields,o,separator);
-        }
+//        String separator = "@#$";
+//        boolean shouldExpand = false;
+//        ExpandField expandField = o.getClass().getAnnotation(ExpandField.class);
+//        if(expandField != null){
+//            separator = expandField.seperator();
+//            shouldExpand = expandField.shouldExpand();
+//        }
+//
+//        //insert field content to db based on ExpandField setting
+//        String tableName = clazz.getSimpleName();
+//        Field[] fields = clazz.getDeclaredFields();
+//        AccessibleObject.setAccessible(fields, true);
+//
+//        if(shouldExpand){
+//            insertToDbExpand(tableName,fields,o);
+//        }else {
+//            insertToDbNotExpand(tableName,fields,o,separator);
+//        }
     }
 
     private void insertToDbExpand(String tableName, Field[] fields, Object o) {

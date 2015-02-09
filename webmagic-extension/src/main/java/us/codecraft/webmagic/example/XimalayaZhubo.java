@@ -6,7 +6,7 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.model.annotation.ParseUrl;
 import us.codecraft.webmagic.model.annotation.ResetDB;
-import us.codecraft.webmagic.modelSpider.pipeline.MysqlPageModelPipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**
@@ -25,8 +25,8 @@ public class XimalayaZhubo {
 
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
-        OOSpider.create(site, new MysqlPageModelPipeline(), XimalayaZhubo.class)
-                .scheduler(new StackScheduler())
-                .addUrl("http://album.ximalaya.com/dq/book/").run();
+//        OOSpider.create(site, new MysqlPipeline(), XimalayaZhubo.class)
+//                .scheduler(new StackScheduler())
+//                .addUrl("http://album.ximalaya.com/dq/book/").run();
     }
 }

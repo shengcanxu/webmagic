@@ -20,11 +20,14 @@ import java.util.Set;
  */
 public class PageModel {
 
+    private Class<?> clazz;
+
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
 
     public void createModel(){
-        init(this.getClass());
+        this.clazz = this.getClass();
+        init(clazz);
     }
 
     private void init(Class clazz) {
@@ -92,5 +95,9 @@ public class PageModel {
 
     public List<FieldValueExtractor> getFieldExtractors() {
         return fieldExtractors;
+    }
+
+    public Class<?> getClazz() {
+        return clazz;
     }
 }

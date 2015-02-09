@@ -37,6 +37,8 @@ public class ModelSpiderProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+        page.setPageModel(pageModel);
+
         int depth = page.getDepth();
         List<ParseUrlExtractor> linkExtractors = pageModel.getLinkExtractors();
         if ( depth < linkExtractors.size()){

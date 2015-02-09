@@ -18,6 +18,8 @@ public class ResultItems {
 
     private Request request;
 
+    private Object pageModel;
+
     private boolean skip;
 
     public <T> T get(String key) {
@@ -67,6 +69,14 @@ public class ResultItems {
     public ResultItems setSkip(boolean skip) {
         this.skip = skip;
         return this;
+    }
+
+    public Object getPageModel() {
+        return pageModel;
+    }
+
+    public void setPageModel(Object pageModel) {
+        this.pageModel = pageModel;
     }
 
     @Override
