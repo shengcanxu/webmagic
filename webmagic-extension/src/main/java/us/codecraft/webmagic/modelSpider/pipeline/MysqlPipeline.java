@@ -4,15 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.model.annotation.ExpandField;
-import us.codecraft.webmagic.model.annotation.ResetDB;
 import us.codecraft.webmagic.modelSpider.PageModel;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by canoxu on 2015/1/20.
@@ -24,6 +22,22 @@ public class MysqlPipeline implements Pipeline {
     private STATUS status = STATUS.NotStarted;
     private BaseDAO dao = BaseDAO.getInstance();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private boolean shouldResetDb = false;
+    private boolean shouldExpandFields = false;
+    private String separator = "@#$";
+
+    public MysqlPipeline(boolean shouldResetDb,boolean shouldExpandFields, String separator){
+        this.shouldResetDb = shouldResetDb;
+        this.shouldExpandFields = shouldExpandFields;
+        this.separator = separator;
+    }
+
+    public MysqlPipeline(boolean shouldResetDb){
+        this.shouldResetDb = shouldResetDb;
+    }
+
+    public MysqlPipeline(){}
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -44,120 +58,71 @@ public class MysqlPipeline implements Pipeline {
             }
         }
 
-//        String separator = "@#$";
-//        boolean shouldExpand = false;
-//        ExpandField expandField = clazz.getAnnotation(ExpandField.class);
-//        if(expandField != null){
-//            separator = expandField.seperator();
-//            shouldExpand = expandField.shouldExpand();
-//        }
-//
-//        //insert field content to db based on ExpandField setting
-//        String tableName = clazz.getSimpleName();
-//        Field[] fields = clazz.getDeclaredFields();
-//        AccessibleObject.setAccessible(fields, true);
-//
-//        if(shouldExpand){
-//            insertToDbExpand(tableName,fields,o);
-//        }else {
-//            insertToDbNotExpand(tableName,fields,o,separator);
-//        }
-    }
-
-    public void process(Object o, Task task) {
-        if(status == STATUS.Failure){
-            logger.error("not able to create db table,stop processing");
-            return;
-        }
-
-        Class<?> clazz = o.getClass();
-        if(status == STATUS.NotStarted){
-            if(createTable(clazz)) {
-                status = STATUS.Success;
-            }else{
-                status = STATUS.Failure;
-                logger.error("create db table fails");
-                return ;
-            }
-        }
-
-//        String separator = "@#$";
-//        boolean shouldExpand = false;
-//        ExpandField expandField = o.getClass().getAnnotation(ExpandField.class);
-//        if(expandField != null){
-//            separator = expandField.seperator();
-//            shouldExpand = expandField.shouldExpand();
-//        }
-//
-//        //insert field content to db based on ExpandField setting
-//        String tableName = clazz.getSimpleName();
-//        Field[] fields = clazz.getDeclaredFields();
-//        AccessibleObject.setAccessible(fields, true);
-//
-//        if(shouldExpand){
-//            insertToDbExpand(tableName,fields,o);
-//        }else {
-//            insertToDbNotExpand(tableName,fields,o,separator);
-//        }
-    }
-
-    private void insertToDbExpand(String tableName, Field[] fields, Object o) {
-        try {
-            int i=0;
-            int multiSize = 0;
-            do {
-                String sql = "INSERT INTO `" + tableName + "` (";
-                String keys = "`id`";
-                String values = "NULL";
-                for (Field field : fields) {
-                    keys = keys + ", `" + field.getName() + "`";
-                    if (field.getType().equals(List.class)) {
-                        List<String> fieldValues = (List<String>) field.get(o);
-                        if(fieldValues.size() == 0 || i >= fieldValues.size()){
-                            values = values + ", 'NULL'";
-                        }else {
-                            values = values + ", '" + fieldValues.get(i) + "'";
-                        }
-                        if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
-                    } else {
-                        values = values + ", '" + field.get(o) + "'";
-                    }
-                }
-                sql = sql + keys + ") VALUES (" + values + ");";
-                logger.info(sql);
-                dao.executeUpdate(sql);
-                i++;
-            }while(i<multiSize);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        //insert field content to db based on ExpandField setting
+        String tableName = pageModel.getModelName();
+        if(this.shouldExpandFields){
+            insertToDbExpand(tableName,resultItems);
+        }else {
+            insertToDbNotExpand(tableName,resultItems,separator);
         }
     }
 
-    private void insertToDbNotExpand(String tableName, Field[] fields, Object o,String separator) {
-        try {
+    private void insertToDbExpand(String tableName, ResultItems resultItems) {
+        int i=0;
+        int multiSize = 0;
+        do {
             String sql = "INSERT INTO `" + tableName + "` (";
             String keys = "`id`";
             String values = "NULL";
-            for (Field field : fields) {
-                keys = keys + ", `" + field.getName() + "`";
-                if (field.getType().equals(List.class)) {
-                    List<String> fieldValues = (List<String>) field.get(o);
-                    String fvs = "";
-                    for (String v : fieldValues) {
-                        if (fvs.length() == 0) fvs = v;
-                        else fvs = fvs + separator + v;
+
+            for (Map.Entry<String,Object> entry: resultItems.getAll().entrySet()) {
+                keys = keys + ", `" + entry.getKey() + "`";
+                Object value = entry.getValue();
+                if (value instanceof List) {
+                    List<String> fieldValues = (List<String>) value;
+                    if(fieldValues.size() == 0 || i >= fieldValues.size()){
+                        values = values + ", 'NULL'";
+                    }else {
+                        values = values + ", '" + fieldValues.get(i) + "'";
                     }
-                    values = values + ", '" + fvs + "'";
+                    if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
                 } else {
-                    values = values + ", '" + field.get(o) + "'";
+                    String fieldValue = (String) value;
+                    values = values + ", '" + fieldValue + "'";
                 }
             }
             sql = sql + keys + ") VALUES (" + values + ");";
             logger.info(sql);
             dao.executeUpdate(sql);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            i++;
+        }while(i<multiSize);
+    }
+
+    private void insertToDbNotExpand(String tableName, ResultItems resultItems,String separator) {
+        String sql = "INSERT INTO `" + tableName + "` (";
+        String keys = "`id`";
+        String values = "NULL";
+
+
+        for (Map.Entry<String,Object> entry: resultItems.getAll().entrySet()) {
+            keys = keys + ", `" + entry.getKey() + "`";
+            Object value = entry.getValue();
+            if (value instanceof List) {
+                List<String> fieldValues = (List<String>) value;
+                String fvs = "";
+                for (String v : fieldValues) {
+                    if (fvs.length() == 0) fvs = v;
+                    else fvs = fvs + separator + v;
+                }
+                values = values + ", '" + fvs + "'";
+            } else {
+                String fieldValue = (String) value;
+                values = values + ", '" + fieldValue + "'";
+            }
         }
+        sql = sql + keys + ") VALUES (" + values + ");";
+        logger.info(sql);
+        dao.executeUpdate(sql);
     }
 
     /**
@@ -167,8 +132,7 @@ public class MysqlPipeline implements Pipeline {
      */
     public boolean createTable(Class<?> clazz) {
         String tableName = clazz.getSimpleName();
-        ResetDB resetDB =  clazz.getDeclaredAnnotation(ResetDB.class);
-        if(resetDB != null && resetDB.value()){
+        if(this.shouldResetDb){
             String sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
             dao.executeUpdate(sql);
             logger.info("drop table " + tableName + " and re-recrate again.");
