@@ -9,6 +9,7 @@ import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static us.codecraft.webmagic.model.annotation.ExtractBy.Source;
@@ -44,32 +45,24 @@ public class ExtractByExtractor implements FieldValueExtractor {
 
 
     @Override
-    public String extract(Page page) {
+    public List<String> extract(Page page) {
         if (this.multi) {
             List<String> value;
             value = page.getHtml().selectDocumentForList(this.selector);
             if ((value == null || value.size() == 0) && this.notNull) {
                 return null;
             }
-            setField(o, fieldExtractor, value);
+            return value;
         } else {
             String value;
             value = page.getHtml().selectDocument(this.selector);
             if (value == null && this.notNull) {
                 return null;
             }
-            setField(o, fieldExtractor, value);
+            List<String> values = new ArrayList<>();
+            values.add(value);
+            return values;
         }
-    }
-
-    private void setField(Object o, FieldExtractor fieldExtractor, Object value) throws IllegalAccessException, InvocationTargetException {
-        if (value == null) {
-            return;
-        }
-        if (fieldExtractor.getSetterMethod() != null) {
-            fieldExtractor.getSetterMethod().invoke(o, value);
-        }
-        fieldExtractor.getField().set(o, value);
     }
 
     @Override

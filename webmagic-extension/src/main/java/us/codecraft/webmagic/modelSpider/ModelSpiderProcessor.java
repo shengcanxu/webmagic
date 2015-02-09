@@ -45,7 +45,6 @@ public class ModelSpiderProcessor implements PageProcessor {
             List<String> links = parseUrlExtractor.extract(page);
             for(String link : links){
                 page.addTargetRequest(new Request(link));
-                System.out.println(link);
             }
 
             //next page links
@@ -59,8 +58,14 @@ public class ModelSpiderProcessor implements PageProcessor {
 
         }else{ // parse content
             for (FieldValueExtractor extractor : pageModel.getFieldExtractors()){
-                String fieldValue = extractor.extract();
-                page.putField(extractor.getName(), fieldValue);
+                List<String> fieldValues = extractor.extract(page);
+                if(fieldValues == null){
+                    page.putField(extractor.getName(), "");
+                }else if(fieldValues.size() == 1){
+                    page.putField(extractor.getName(),fieldValues.get(0));
+                }else {
+                    page.putField(extractor.getName(), fieldValues);
+                }
             }
         }
     }
