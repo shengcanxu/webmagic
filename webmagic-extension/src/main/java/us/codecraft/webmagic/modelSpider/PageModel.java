@@ -24,6 +24,7 @@ public class PageModel {
 
     private Class<?> clazz;
     private String modelName;
+    private boolean fieldHasNextPage = false;
 
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
@@ -41,14 +42,19 @@ public class PageModel {
         Set<Field> fields = ClassUtils.getFieldsIncludeSuperClass(clazz);
         for (Field field : fields) {
             field.setAccessible(true);
-            FieldValueExtractor extractor = getAnnotationExtractBy(field);
-            FieldValueExtractor extractorTmp = getAnnotationExtractByUrl(field);
+            ExtractByExtractor extractor = getAnnotationExtractBy(field);
+            ExtractByUrlExtractor extractorTmp = getAnnotationExtractByUrl(field);
             if (extractor != null && extractorTmp != null) {
                 throw new IllegalStateException("Only one of 'ExtractBy ExtractByUrl' can be added to a field!");
             } else if (extractor == null && extractorTmp != null) {
                 fieldExtractors.add(extractorTmp);
             }else if (extractor != null && extractorTmp == null){
                 fieldExtractors.add(extractor);
+            }
+
+            //check next page
+            if(extractor != null && extractor.isHasNextPage()){
+                fieldHasNextPage = true;
             }
 
             //get text formatter
@@ -104,7 +110,7 @@ public class PageModel {
 
     }
 
-    private FieldValueExtractor getAnnotationExtractBy(Field field) {
+    private ExtractByExtractor getAnnotationExtractBy(Field field) {
         ExtractByExtractor extractor = null;
         ExtractBy extractBy = field.getAnnotation(ExtractBy.class);
         if (extractBy != null) {
@@ -114,7 +120,7 @@ public class PageModel {
     }
 
 
-    private FieldValueExtractor getAnnotationExtractByUrl(Field field) {
+    private ExtractByUrlExtractor getAnnotationExtractByUrl(Field field) {
         ExtractByUrlExtractor extractor = null;
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
         if (extractByUrl != null) {
@@ -133,6 +139,10 @@ public class PageModel {
 
     public Map<String, List<Formatter>> getFormatterMap() {
         return formatterMap;
+    }
+
+    public boolean isFieldHasNextPage() {
+        return fieldHasNextPage;
     }
 
     public Class<?> getClazz() {

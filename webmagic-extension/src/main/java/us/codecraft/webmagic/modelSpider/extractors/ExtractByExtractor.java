@@ -34,11 +34,16 @@ public class ExtractByExtractor implements FieldValueExtractor {
 
     protected Selector nextPageRegion;
 
+    protected boolean hasNextPage = false;
+
     public ExtractByExtractor(ExtractBy extractBy, Field field){
         selector = ExtractorUtils.getSelector(extractBy);
         notNull = extractBy.notNull();
         multi = extractBy.multi() || List.class.isAssignableFrom(field.getType());
-        nextPageRegion = new XpathSelector(extractBy.nextPage());
+        if(extractBy.nextPage().length() > 0) {
+            nextPageRegion = new XpathSelector(extractBy.nextPage());
+            hasNextPage = true;
+        }
         this.field = field;
         this.name = field.getName();
     }
@@ -63,6 +68,10 @@ public class ExtractByExtractor implements FieldValueExtractor {
             values.add(value);
             return values;
         }
+    }
+
+    public boolean isHasNextPage() {
+        return hasNextPage;
     }
 
     @Override
