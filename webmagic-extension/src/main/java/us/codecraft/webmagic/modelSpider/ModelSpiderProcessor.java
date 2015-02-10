@@ -5,6 +5,7 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
+import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.List;
@@ -61,12 +62,22 @@ public class ModelSpiderProcessor implements PageProcessor {
         }else{ // parse content
             for (FieldValueExtractor extractor : pageModel.getFieldExtractors()){
                 List<String> fieldValues = extractor.extract(page);
+                String name = extractor.getName();
+
+                //do formatter
+                List<Formatter> formatters = pageModel.getFormatterMap().get(name);
+                if(formatters != null){
+                    for(Formatter formatter : formatters){
+                        fieldValues = formatter.format(fieldValues);
+                    }
+                }
+
                 if(fieldValues == null){
-                    page.putField(extractor.getName(), "");
+                    page.putField(name, "");
                 }else if(fieldValues.size() == 1){
-                    page.putField(extractor.getName(),fieldValues.get(0));
+                    page.putField(name,fieldValues.get(0));
                 }else {
-                    page.putField(extractor.getName(), fieldValues);
+                    page.putField(name, fieldValues);
                 }
             }
         }

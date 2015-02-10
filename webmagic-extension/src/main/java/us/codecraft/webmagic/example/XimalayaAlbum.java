@@ -6,9 +6,12 @@ import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
+import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
+
+import javax.xml.soap.Text;
 
 /**
  * Created by canoxu on 2015/2/1.
@@ -24,6 +27,7 @@ public class XimalayaAlbum extends PageModel {
     private String title;
 
     @ExtractBy(value = "//*[@id=\"mainbox\"]//div[@class=\"detailContent_category\"]//a/text()")
+    @TextFormatter(types={TextFormatter.Type.TRIM, TextFormatter.Type.REMOVETAG})
     private String category;
 
     @ExtractByUrl(value = "")
@@ -33,7 +37,7 @@ public class XimalayaAlbum extends PageModel {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbum())
                 .scheduler(new StackScheduler())
-                .addPipeline(new MysqlPipeline())
+                //.addPipeline(new MysqlPipeline())
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }
