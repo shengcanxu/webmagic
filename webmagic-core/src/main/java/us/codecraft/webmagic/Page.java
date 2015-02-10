@@ -202,6 +202,13 @@ public class Page {
         }
     }
 
+    public void addContentNextPageRequest(Request request, Page fatherPage){
+        synchronized (targetRequests){
+            request.setFatherPage(fatherPage);
+            targetRequests.add(request);
+        }
+    }
+
     /**
      * get url of current page
      *

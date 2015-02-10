@@ -11,6 +11,7 @@ import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
 import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.modelSpider.formatter.RemoveTagFormatter;
 import us.codecraft.webmagic.modelSpider.formatter.TrimFormatter;
+import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
@@ -24,7 +25,9 @@ public class PageModel {
 
     private Class<?> clazz;
     private String modelName;
-    private boolean fieldHasNextPage = false;
+
+    private Selector nextPageSelector = null;
+    private Field nextPageField = null;
 
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
@@ -54,7 +57,8 @@ public class PageModel {
 
             //check next page
             if(extractor != null && extractor.isHasNextPage()){
-                fieldHasNextPage = true;
+                nextPageSelector = extractor.getNextPageSelector();
+                nextPageField = field;
             }
 
             //get text formatter
@@ -141,8 +145,12 @@ public class PageModel {
         return formatterMap;
     }
 
-    public boolean isFieldHasNextPage() {
-        return fieldHasNextPage;
+    public Selector getNextPageSelector() {
+        return nextPageSelector;
+    }
+
+    public Field getNextPageField() {
+        return nextPageField;
     }
 
     public Class<?> getClazz() {

@@ -29,6 +29,8 @@ public class Request implements Serializable {
 
     private boolean isNextPageRequest = false;
 
+    private Page fatherPage;
+
     /**
      * Store additional information in extras.
      */
@@ -75,6 +77,18 @@ public class Request implements Serializable {
 
     public void setNextPageRequest(boolean isNextPageRequest) {
         this.isNextPageRequest = isNextPageRequest;
+    }
+
+    public boolean hasFatherPage() {
+        return fatherPage != null;
+    }
+
+    public Page getFatherPage() {
+        return fatherPage;
+    }
+
+    public void setFatherPage(Page fatherPage) {
+        this.fatherPage = fatherPage;
     }
 
     /**
