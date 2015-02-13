@@ -2,6 +2,7 @@ package us.codecraft.webmagic.modelSpider;
 
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
+import us.codecraft.webmagic.modelSpider.annotation.ExpandFieldValues;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
@@ -32,6 +33,8 @@ public class PageModel {
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
     private Map<String, List<Formatter>> formatterMap = new HashMap<>();
+
+    private boolean shouldExpand = false;
 
     public void createModel(){
         this.clazz = this.getClass();
@@ -112,6 +115,12 @@ public class PageModel {
             }
         }
 
+        //if should expand field values
+        annotation = clazz.getAnnotation(ExpandFieldValues.class);
+        if(annotation != null){
+            shouldExpand = true;
+        }
+
     }
 
     private ExtractByExtractor getAnnotationExtractBy(Field field) {
@@ -159,5 +168,9 @@ public class PageModel {
 
     public String getModelName() {
         return modelName;
+    }
+
+    public boolean isShouldExpand() {
+        return shouldExpand;
     }
 }

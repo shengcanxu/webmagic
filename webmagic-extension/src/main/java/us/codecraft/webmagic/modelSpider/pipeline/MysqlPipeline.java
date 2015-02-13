@@ -24,28 +24,13 @@ public class MysqlPipeline implements Pipeline {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean shouldResetDb = false;
-    private boolean shouldExpandFields = false;
-    private String separator = "@#$";
 
     /**
      *
      * @param shouldResetDb true to drop table and recreate again, false to use the existing table if exists
-     * @param shouldExpandFields true to insert N records if extract item returns array with N values
-     * @param separator the separator to separate the N values if shouldExpandFields = true;
      */
-    public MysqlPipeline(boolean shouldResetDb,boolean shouldExpandFields, String separator){
-        this.shouldResetDb = shouldResetDb;
-        this.shouldExpandFields = shouldExpandFields;
-        this.separator = separator;
-    }
-
     public MysqlPipeline(boolean shouldResetDb){
         this.shouldResetDb = shouldResetDb;
-    }
-
-    public MysqlPipeline(boolean shouldExpandFields, String separator){
-        this.shouldExpandFields = shouldExpandFields;
-        this.separator = separator;
     }
 
     public MysqlPipeline(){}
@@ -71,11 +56,7 @@ public class MysqlPipeline implements Pipeline {
 
         //insert field content to db based on shouldExpandFields setting
         String tableName = pageModel.getModelName();
-        if(this.shouldExpandFields){
-            insertToDbExpand(tableName,resultItems);
-        }else {
-            insertToDbNotExpand(tableName,resultItems,separator);
-        }
+        insertToDbNotExpand(tableName,resultItems,"@#$");
     }
 
     private void insertToDbExpand(String tableName, ResultItems resultItems) {

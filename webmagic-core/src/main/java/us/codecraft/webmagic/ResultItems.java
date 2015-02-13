@@ -22,6 +22,14 @@ public class ResultItems {
 
     private boolean skip;
 
+    public ResultItems cloneValue(){
+        ResultItems resultItems = new ResultItems();
+        resultItems.setRequest(request);
+        resultItems.setSkip(skip);
+        resultItems.setPageModel(pageModel);
+        return resultItems;
+    }
+
     public <T> T get(String key) {
         Object o = fields.get(key);
         if (o == null) {

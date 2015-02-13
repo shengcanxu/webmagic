@@ -68,12 +68,33 @@ public class ModelSpiderProcessor implements PageProcessor {
             return;
 
         }else{ // parse content
-            if(checkAndAddContentNextPage(page)){
-                processFatherPage(page);
-            }else if(page.getRequest().hasFatherPage()) {
-                getNextPageContent(page);
-            }else {
-                getNormalPageContent(page);
+//            if(checkAndAddContentNextPage(page)){
+//                processFatherPage(page);
+//            }else if(page.getRequest().hasFatherPage()) {
+//                getNextPageContent(page);
+//            }else {
+//                getNormalPageContent(page);
+//            }
+
+            for (FieldValueExtractor extractor : pageModel.getFieldExtractors()) {
+                List<String> fieldValues = extractor.extract(page);
+
+                //do formatter
+                String name = extractor.getName();
+                List<Formatter> formatters = pageModel.getFormatterMap().get(name);
+                if (formatters != null) {
+                    for (Formatter formatter : formatters) {
+                        fieldValues = formatter.format(fieldValues);
+                    }
+                }
+
+                if (fieldValues == null) {
+                    page.putField(name, "");
+                } else if (fieldValues.size() == 1) {
+                    page.putField(name, fieldValues.get(0));
+                } else {
+                    page.putField(name, fieldValues);
+                }
             }
         }
     }
