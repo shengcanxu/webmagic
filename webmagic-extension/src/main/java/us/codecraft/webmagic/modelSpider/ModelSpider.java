@@ -2,6 +2,7 @@ package us.codecraft.webmagic.modelSpider;
 
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.model.ModelPageProcessor;
+import us.codecraft.webmagic.modelSpider.pipeline.FormatterPipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -57,6 +58,7 @@ public class ModelSpider<T> extends Spider {
     public ModelSpider(Site site, PageModel pageModel) {
         this(ModelSpiderProcessor.create(site, pageModel));
         this.pageModel = pageModel;
+        this.addPipeline(new FormatterPipeline()); 
     }
 
     public static ModelSpider create(Site site, PageModel pageModel) {

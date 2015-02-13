@@ -1,7 +1,6 @@
-package us.codecraft.webmagic.modelSpider.pipeline;
+package us.codecraft.webmagic.pipeline;
 
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;

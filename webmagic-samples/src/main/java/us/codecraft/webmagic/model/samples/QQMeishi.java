@@ -1,7 +1,7 @@
 package us.codecraft.webmagic.model.samples;
 
 import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.modelSpider.pipeline.ConsolePageModelPipeline;
+import us.codecraft.webmagic.pipeline.ConsolePageModelPipeline;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.TargetUrl;

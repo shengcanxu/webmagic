@@ -5,7 +5,6 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
-import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.utils.DoubleKeyMap;
@@ -79,15 +78,7 @@ public class ModelSpiderProcessor implements PageProcessor {
             for (FieldValueExtractor extractor : pageModel.getFieldExtractors()) {
                 List<String> fieldValues = extractor.extract(page);
 
-                //do formatter
                 String name = extractor.getName();
-                List<Formatter> formatters = pageModel.getFormatterMap().get(name);
-                if (formatters != null) {
-                    for (Formatter formatter : formatters) {
-                        fieldValues = formatter.format(fieldValues);
-                    }
-                }
-
                 if (fieldValues == null) {
                     page.putField(name, "");
                 } else if (fieldValues.size() == 1) {
@@ -205,15 +196,16 @@ public class ModelSpiderProcessor implements PageProcessor {
         for (FieldValueExtractor extractor : pageModel.getFieldExtractors()) {
             List<String> fieldValues = extractor.extract(page);
 
-            //do formatter
-            String name = extractor.getName();
-            List<Formatter> formatters = pageModel.getFormatterMap().get(name);
-            if (formatters != null) {
-                for (Formatter formatter : formatters) {
-                    fieldValues = formatter.format(fieldValues);
-                }
-            }
+//            //do formatter
+//            String name = extractor.getName();
+//            List<Formatter> formatters = pageModel.getFormatterMap().get(name);
+//            if (formatters != null) {
+//                for (Formatter formatter : formatters) {
+//                    fieldValues = formatter.format(fieldValues);
+//                }
+//            }
 
+            String name = extractor.getName();
             if (fieldValues == null) {
                 page.putField(name, "");
             } else if (fieldValues.size() == 1) {

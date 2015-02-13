@@ -24,6 +24,7 @@ public class MysqlPipeline implements Pipeline {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean shouldResetDb = false;
+    private String separator = "@#$";
 
     /**
      *
@@ -34,6 +35,11 @@ public class MysqlPipeline implements Pipeline {
     }
 
     public MysqlPipeline(){}
+
+    public MysqlPipeline setSeparator(String separator){
+        this.separator = separator;
+        return this;
+    }
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -56,41 +62,41 @@ public class MysqlPipeline implements Pipeline {
 
         //insert field content to db based on shouldExpandFields setting
         String tableName = pageModel.getModelName();
-        insertToDbNotExpand(tableName,resultItems,"@#$");
+        insertToDbNotExpand(tableName,resultItems);
     }
 
-    private void insertToDbExpand(String tableName, ResultItems resultItems) {
-        int i=0;
-        int multiSize = 0;
-        do {
-            String sql = "INSERT INTO `" + tableName + "` (";
-            String keys = "`id`";
-            String values = "NULL";
+//    private void insertToDbExpand(String tableName, ResultItems resultItems) {
+//        int i=0;
+//        int multiSize = 0;
+//        do {
+//            String sql = "INSERT INTO `" + tableName + "` (";
+//            String keys = "`id`";
+//            String values = "NULL";
+//
+//            for (Map.Entry<String,Object> entry: resultItems.getAll().entrySet()) {
+//                keys = keys + ", `" + entry.getKey() + "`";
+//                Object value = entry.getValue();
+//                if (value instanceof List) {
+//                    List<String> fieldValues = (List<String>) value;
+//                    if(fieldValues.size() == 0 || i >= fieldValues.size()){
+//                        values = values + ", 'NULL'";
+//                    }else {
+//                        values = values + ", '" + fieldValues.get(i) + "'";
+//                    }
+//                    if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
+//                } else {
+//                    String fieldValue = (String) value;
+//                    values = values + ", '" + fieldValue + "'";
+//                }
+//            }
+//            sql = sql + keys + ") VALUES (" + values + ");";
+//            logger.info(sql);
+//            dao.executeUpdate(sql);
+//            i++;
+//        }while(i<multiSize);
+//    }
 
-            for (Map.Entry<String,Object> entry: resultItems.getAll().entrySet()) {
-                keys = keys + ", `" + entry.getKey() + "`";
-                Object value = entry.getValue();
-                if (value instanceof List) {
-                    List<String> fieldValues = (List<String>) value;
-                    if(fieldValues.size() == 0 || i >= fieldValues.size()){
-                        values = values + ", 'NULL'";
-                    }else {
-                        values = values + ", '" + fieldValues.get(i) + "'";
-                    }
-                    if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
-                } else {
-                    String fieldValue = (String) value;
-                    values = values + ", '" + fieldValue + "'";
-                }
-            }
-            sql = sql + keys + ") VALUES (" + values + ");";
-            logger.info(sql);
-            dao.executeUpdate(sql);
-            i++;
-        }while(i<multiSize);
-    }
-
-    private void insertToDbNotExpand(String tableName, ResultItems resultItems,String separator) {
+    private void insertToDbNotExpand(String tableName, ResultItems resultItems) {
         String sql = "INSERT INTO `" + tableName + "` (";
         String keys = "`id`";
         String values = "NULL";

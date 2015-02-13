@@ -4,7 +4,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.HelpUrl;
 import us.codecraft.webmagic.model.annotation.TargetUrl;
-import us.codecraft.webmagic.modelSpider.pipeline.ConsolePageModelPipeline;
+import us.codecraft.webmagic.pipeline.ConsolePageModelPipeline;
 
 /**
  * @author code4crafter@gmail.com <br>
