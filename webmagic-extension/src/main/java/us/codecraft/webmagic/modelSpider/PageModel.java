@@ -1,8 +1,11 @@
 package us.codecraft.webmagic.modelSpider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.annotation.ExpandFieldValues;
+import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
@@ -13,6 +16,7 @@ import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.modelSpider.formatter.RemoveTagFormatter;
 import us.codecraft.webmagic.modelSpider.formatter.TrimFormatter;
 import us.codecraft.webmagic.selector.Selector;
+import us.codecraft.webmagic.selector.XpathSelector;
 import us.codecraft.webmagic.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
@@ -23,12 +27,13 @@ import java.util.*;
  * Created by cano on 2015/2/7.
  */
 public class PageModel {
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Class<?> clazz;
     private String modelName;
 
-    private Selector nextPageSelector = null;
-    private Field nextPageField = null;
+    private Selector multiPageSelector = null;
+    private String multiPageFieldName = null;
 
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
@@ -58,17 +63,27 @@ public class PageModel {
                 fieldExtractors.add(extractor);
             }
 
-            //check next page
-            if(extractor != null && extractor.isHasNextPage()){
-                nextPageSelector = extractor.getNextPageSelector();
-                nextPageField = field;
-            }
-
             //get text formatter
             List<Formatter> formatters = getAnnotationFormatter(field);
             if(formatters.size() != 0){
                 formatterMap.put(field.getName(),formatters);
             }
+
+            //get if current field has multiple pages
+            getAnnotationMultiplePagesRegion(field);
+        }
+    }
+
+    private void getAnnotationMultiplePagesRegion(Field field){
+        if(List.class.isAssignableFrom(field.getType())){
+            logger.error("MultiplePagesRegion can't be assigned to a List field");
+            return;
+        }
+
+        MultiplePagesField multiplePagesField = field.getAnnotation(MultiplePagesField.class);
+        if(multiplePagesField != null){
+            multiPageSelector = new XpathSelector(multiplePagesField.multiPageRegion());
+            multiPageFieldName = field.getName();
         }
     }
 
@@ -154,12 +169,12 @@ public class PageModel {
         return formatterMap;
     }
 
-    public Selector getNextPageSelector() {
-        return nextPageSelector;
+    public Selector getMultiPageSelector() {
+        return multiPageSelector;
     }
 
-    public Field getNextPageField() {
-        return nextPageField;
+    public String getMultiPageFieldName() {
+        return multiPageFieldName;
     }
 
     public Class<?> getClazz() {

@@ -3,6 +3,7 @@ package us.codecraft.webmagic.modelSpider;
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.model.ModelPageProcessor;
 import us.codecraft.webmagic.modelSpider.pipeline.FormatterPipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.MultiplePagesPipeline;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -58,7 +59,8 @@ public class ModelSpider<T> extends Spider {
     public ModelSpider(Site site, PageModel pageModel) {
         this(ModelSpiderProcessor.create(site, pageModel));
         this.pageModel = pageModel;
-        this.addPipeline(new FormatterPipeline()); 
+        this.addPipeline(new FormatterPipeline());
+        this.addPipeline(new MultiplePagesPipeline());
     }
 
     public static ModelSpider create(Site site, PageModel pageModel) {
@@ -82,7 +84,6 @@ public class ModelSpider<T> extends Spider {
             return;
         }
         pageProcessor.process(page);
-        extractAndAddRequests(page, spawnUrl);
 
         if (!page.getResultItems().isSkip()) {
             ResultItems resultItems = page.getResultItems();
@@ -100,6 +101,9 @@ public class ModelSpider<T> extends Spider {
                 }
             }
         }
+
+        extractAndAddRequests(page, spawnUrl);
+
         //for proxy status management
         request.putExtra(Request.STATUS_CODE, page.getStatusCode());
         sleep(site.getSleepTime());

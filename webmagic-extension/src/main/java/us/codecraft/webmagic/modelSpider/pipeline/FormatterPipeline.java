@@ -19,6 +19,8 @@ public class FormatterPipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
+        if(resultItems.isSkip()) return;
+
         PageModel pageModel = (PageModel)resultItems.getPageModel();
         if(pageModel.getFormatterMap().size() == 0) return;
 

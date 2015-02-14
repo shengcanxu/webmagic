@@ -3,7 +3,6 @@ package us.codecraft.webmagic.modelSpider.extractors;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.selector.Selector;
-import us.codecraft.webmagic.selector.XpathSelector;
 import us.codecraft.webmagic.utils.ExtractorUtils;
 
 import java.lang.reflect.Field;
@@ -25,15 +24,11 @@ public class ExtractByExtractor implements FieldValueExtractor {
 
     protected boolean multi = false;
 
-    protected Selector nextPageSelector;
 
     public ExtractByExtractor(ExtractBy extractBy, Field field){
         selector = ExtractorUtils.getSelector(extractBy);
         notNull = extractBy.notNull();
         multi = extractBy.multi() || List.class.isAssignableFrom(field.getType());
-        if(extractBy.nextPage().length() > 0) {
-            nextPageSelector = new XpathSelector(extractBy.nextPage());
-        }
         this.field = field;
         this.name = field.getName();
     }
@@ -58,14 +53,6 @@ public class ExtractByExtractor implements FieldValueExtractor {
             values.add(value);
             return values;
         }
-    }
-
-    public boolean isHasNextPage() {
-        return nextPageSelector != null;
-    }
-
-    public Selector getNextPageSelector() {
-        return nextPageSelector;
     }
 
     @Override

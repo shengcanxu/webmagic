@@ -22,11 +22,14 @@ public class ResultItems {
 
     private boolean skip;
 
+    private Page page;
+
     public ResultItems cloneValue(){
         ResultItems resultItems = new ResultItems();
         resultItems.setRequest(request);
         resultItems.setSkip(skip);
         resultItems.setPageModel(pageModel);
+        resultItems.setPage(page);
         return resultItems;
     }
 
@@ -85,6 +88,14 @@ public class ResultItems {
 
     public void setPageModel(Object pageModel) {
         this.pageModel = pageModel;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 
     @Override

@@ -43,6 +43,8 @@ public class MysqlPipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
+        if(resultItems.isSkip()) return;
+
         if(status == STATUS.Failure){
             logger.error("not able to create db table,stop processing");
             return;

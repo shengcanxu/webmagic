@@ -49,6 +49,7 @@ public class Page {
     private Object pageModel;
 
     public Page() {
+        resultItems.setPage(this);
     }
 
     public Page setSkip(boolean skip) {
