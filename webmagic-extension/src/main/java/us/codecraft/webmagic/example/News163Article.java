@@ -6,6 +6,7 @@ import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
+import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
@@ -16,6 +17,7 @@ import us.codecraft.webmagic.scheduler.StackScheduler;
 public class News163Article extends PageModel{
     @MultiplePagesField(multiPageRegion = "//*[@id=\"epContentLeft\"]/div[@class=\"ep-pages\"]/a[@class!=\"ep-pages-all\"]/@href")
     @ExtractBy("//div[@id=\"endText\"]")
+    @TextFormatter(types = TextFormatter.Type.REMOVETAG)
     private String content;
 
     @ExtractByUrl(value = "")

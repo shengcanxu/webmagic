@@ -59,8 +59,8 @@ public class ModelSpider<T> extends Spider {
     public ModelSpider(Site site, PageModel pageModel) {
         this(ModelSpiderProcessor.create(site, pageModel));
         this.pageModel = pageModel;
-        this.addPipeline(new FormatterPipeline());
         this.addPipeline(new MultiplePagesPipeline());
+        this.addPipeline(new FormatterPipeline());
     }
 
     public static ModelSpider create(Site site, PageModel pageModel) {

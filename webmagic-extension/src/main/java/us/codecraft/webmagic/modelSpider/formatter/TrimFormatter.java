@@ -22,7 +22,5 @@ public class TrimFormatter implements Formatter {
             String s = (String) value;
             return s.trim();
         }
-
-
     }
 }
