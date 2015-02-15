@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.example;
+package us.codecraft.webmagic.modelSpider.examples;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
@@ -7,11 +7,8 @@ import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
-import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by canoxu on 2015/2/1.

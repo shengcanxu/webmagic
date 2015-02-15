@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.example;
+package us.codecraft.webmagic.modelSpider.examples;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
