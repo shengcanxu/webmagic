@@ -32,8 +32,6 @@ import java.util.Map;
 public class FileDownloadPipeline implements Pipeline {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final int tryTimes = 3;
-
     @Override
     public void process(ResultItems resultItems, Task task) {
         if(resultItems.isSkip()) return;
@@ -42,6 +40,7 @@ public class FileDownloadPipeline implements Pipeline {
         if(!pageModel.hasFileToDownload()) return;
 
         Map<String, DownloadFile> fileDownloadMap = pageModel.getFileDownloadMap();
+        int tryTimes = task.getSite().getRetryTimes() == 0 ? 1 : task.getSite().getRetryTimes();
         for(Map.Entry<String, DownloadFile> entry : fileDownloadMap.entrySet()){
             DownloadFile downloadFile = entry.getValue();
             switch (downloadFile.type()){
