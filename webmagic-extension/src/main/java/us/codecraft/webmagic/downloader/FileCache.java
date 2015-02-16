@@ -32,7 +32,7 @@ public class FileCache extends FilePersistentBase implements Downloader, Pipelin
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public FileCache(String startUrl, String urlPattern) {
-        this(startUrl, urlPattern, "/data/webmagic/temp/");
+        this(startUrl, urlPattern, "E:/test/");
     }
 
     public FileCache(String startUrl, String urlPattern, String path) {

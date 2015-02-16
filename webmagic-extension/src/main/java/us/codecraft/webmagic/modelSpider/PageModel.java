@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.modelSpider.annotation.ExpandFieldValues;
-import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
-import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
-import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
+import us.codecraft.webmagic.modelSpider.annotation.*;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.ExtractByUrlExtractor;
 import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
@@ -32,8 +29,12 @@ public class PageModel {
     private Class<?> clazz;
     private String modelName;
 
+    //for getting multiple pages
     private Selector multiPageSelector = null;
     private String multiPageFieldName = null;
+
+    //for download files <Fieldname, DownloadFile>
+    private Map<String,DownloadFile> fileDownloadMap = new HashMap<>();
 
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
@@ -71,6 +72,18 @@ public class PageModel {
 
             //get if current field has multiple pages
             getAnnotationMultiplePagesRegion(field);
+
+            //get if current field has file to download
+            getAnnotationFileUrls(field);
+
+        }
+    }
+
+    private void getAnnotationFileUrls(Field field){
+        DownloadFile downloadFile = field.getAnnotation(DownloadFile.class);
+        if(downloadFile != null){
+            String fileName = field.getName();
+            fileDownloadMap.put(fileName, downloadFile);
         }
     }
 
@@ -187,5 +200,13 @@ public class PageModel {
 
     public boolean isShouldExpand() {
         return shouldExpand;
+    }
+
+    public boolean hasFileToDownload(){
+        return fileDownloadMap.size() != 0;
+    }
+
+    public Map<String, DownloadFile> getFileDownloadMap() {
+        return fileDownloadMap;
     }
 }
