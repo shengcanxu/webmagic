@@ -9,41 +9,32 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.utils.DoubleKeyMap;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
- * get multiple pages into one resultitems, usually used in article that is splitted into multiple pages
+ * parse subpages and conbine the valueas into one resultitems.<br>
  */
-public class MultiplePagesPipeline implements Pipeline {
+public class SubpagePipeline implements Pipeline {
 
-    //<fatherpageurl, currentpageurl,extractedvalues>
+    //<fatherpageurl, subpageurl,extractedvalues>
     private DoubleKeyMap<String,String,ResultItems> referalExtractedValues = new DoubleKeyMap<>();
-    // <fatherpageurl, currentpagerul, ifcurrentpageisparsed>
+    // <fatherpageurl, subpagerul, ifcurrentpageisparsed>
     private DoubleKeyMap<String,String,Boolean> pageMap = new DoubleKeyMap<>();
-    //page orders
-    private List<String> pageOrderedUrls = new ArrayList<>();
 
     @Override
     public void process(ResultItems resultItems, Task task) {
         PageModel pageModel = (PageModel)resultItems.getPageModel();
-        Selector multiPagesSelector = pageModel.getMultiPageSelector();
-        if(multiPagesSelector == null) return;
+        if(!pageModel.hasSubpage() && !resultItems.getRequest().isSubPage()) return;
 
-        //popup requests for other pages
+        //popup requests for sub-pages
         Page page = resultItems.getPage();
-        List<String> multiPageUrls = page.getHtml().selectList(multiPagesSelector).all();
+        Map<String, Selector> subpageMap = pageModel.getSubpageMap();
         String currentUrl = page.getUrl().toString();
-        String fatherUrl = resultItems.getRequest().hasFatherPage() ? resultItems.getRequest().getFatherPage().getUrl().toString() : currentUrl;
-        if(multiPageUrls != null && multiPageUrls.size() != 0){
-            for(String link : multiPageUrls){
-                if(pageMap.get(fatherUrl,link) == null) {
-                    page.addContentNextPageRequest(new Request(link), page);
-                    pageMap.put(fatherUrl, link, Boolean.FALSE);
-                    pageOrderedUrls.add(link);
-                }
-            }
+        String fatherUrl = resultItems.getRequest().isSubPage() ? resultItems.getRequest().getSubPageFatherPage().getUrl().toString() : currentUrl;
+        for(Map.Entry<String, Selector> entry : subpageMap.entrySet()){
+            String subpageUrl = page.getHtml().selectList(entry.getValue()).links().get();
+            page.addSubPageRequest(new Request(subpageUrl),page, entry.getKey());
+            pageMap.put(fatherUrl, subpageUrl, Boolean.FALSE);
         }
 
         //referal extract values
@@ -62,13 +53,14 @@ public class MultiplePagesPipeline implements Pipeline {
 
         //combine multiple pages' values
         if(allExtracted){
-            String fieldName = pageModel.getMultiPageFieldName();
             Map<String,ResultItems> resultItemsMap = referalExtractedValues.get(fatherUrl);
-            String value = "";
-            for(String link : pageOrderedUrls){
-                value = value + (String)resultItemsMap.get(link).get(fieldName);
+            for(Map.Entry<String, ResultItems> entry : resultItemsMap.entrySet()){
+                if(entry.getKey().equals(currentUrl)) continue;
+                ResultItems r = entry.getValue();
+                for(Map.Entry<String, Object> entry1 : r.getAll().entrySet()){
+                    resultItems.put(entry1.getKey(),entry1.getValue());
+                }
             }
-            resultItems.put(fieldName,value);
 
             referalExtractedValues.remove(fatherUrl);
             pageMap.remove(fatherUrl);
