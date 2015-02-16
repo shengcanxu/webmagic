@@ -88,13 +88,13 @@ public class PageModel {
     }
 
     private void getAnnotationMultiplePagesRegion(Field field){
-        if(List.class.isAssignableFrom(field.getType())){
-            logger.error("MultiplePagesRegion can't be assigned to a List field");
-            return;
-        }
-
         MultiplePagesField multiplePagesField = field.getAnnotation(MultiplePagesField.class);
         if(multiplePagesField != null){
+            if(List.class.isAssignableFrom(field.getType())){
+                logger.error("MultiplePagesRegion can't be assigned to a List field");
+                return;
+            }
+
             multiPageSelector = new XpathSelector(multiplePagesField.multiPageRegion());
             multiPageFieldName = field.getName();
         }
