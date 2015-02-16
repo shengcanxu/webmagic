@@ -30,8 +30,6 @@ public class MultiplePagesPipeline implements Pipeline {
 
     @Override
     public void process(ResultItems resultItems, Task task) {
-        if(resultItems.isSkip()) return;
-
         PageModel pageModel = (PageModel)resultItems.getPageModel();
         Selector multiPagesSelector = pageModel.getMultiPageSelector();
         if(multiPagesSelector == null) return;
@@ -74,6 +72,9 @@ public class MultiplePagesPipeline implements Pipeline {
                 value = value + (String)resultItemsMap.get(link).get(fieldName);
             }
             resultItems.put(fieldName,value);
+
+            referalExtractedValues.remove(fatherUrl);
+            pageMap.remove(fatherUrl);
         }else{
             resultItems.setSkip(true);
         }

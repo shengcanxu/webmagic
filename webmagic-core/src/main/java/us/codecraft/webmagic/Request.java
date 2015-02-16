@@ -29,6 +29,9 @@ public class Request implements Serializable {
 
     private boolean isNextPageRequest = false;
 
+    private Page subPageFatherPage;
+    private String subPageName;
+
     private Page fatherPage;
 
     /**
@@ -77,6 +80,23 @@ public class Request implements Serializable {
 
     public void setNextPageRequest(boolean isNextPageRequest) {
         this.isNextPageRequest = isNextPageRequest;
+    }
+
+    public  boolean isSubPage(){
+        return subPageFatherPage != null;
+    }
+
+    public void  setSubPageFatherPage(Page fatherPage,String name){
+        this.subPageFatherPage = fatherPage;
+        this.subPageName = name;
+    }
+
+    public String getSubPageName() {
+        return subPageName;
+    }
+
+    public Page getSubPageFatherPage(){
+        return subPageFatherPage;
     }
 
     public boolean hasFatherPage() {

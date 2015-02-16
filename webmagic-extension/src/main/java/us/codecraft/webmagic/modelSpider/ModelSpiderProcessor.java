@@ -37,6 +37,10 @@ public class ModelSpiderProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+        if(page.getRequest().isSubPage()){
+            String subpageName = page.getRequest().getSubPageName();
+            pageModel = pageModel.getSubpageModel(subpageName);
+        }
         page.setPageModel(pageModel);
 
         int depth = page.getDepth();

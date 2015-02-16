@@ -36,11 +36,27 @@ public class PageModel {
     //for download files <Fieldname, DownloadFile>
     private Map<String,DownloadFile> fileDownloadMap = new HashMap<>();
 
+    //for getting sub-pages
+    private Map<String,Selector> subpageMap = new HashMap<>();
+    private Map<String,PageModel> subpageModelMap = new HashMap<>();
+
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
     private Map<String, List<Formatter>> formatterMap = new HashMap<>();
 
     private boolean shouldExpand = false;
+
+    public static PageModel createModelFromClass(Class<?> clazz){
+        PageModel pageModel = new PageModel();
+        pageModel.createModel(clazz);
+        return pageModel;
+    }
+
+    public void createModel(Class<?> clazz){
+        this.clazz = clazz;
+        this.modelName = clazz.getSimpleName();
+        init(clazz);
+    }
 
     public void createModel(){
         this.clazz = this.getClass();
@@ -76,6 +92,23 @@ public class PageModel {
             //get if current field has file to download
             getAnnotationFileUrls(field);
 
+            //get subpage fields
+            getAnnotationSubPage(field);
+
+        }
+    }
+
+    private void getAnnotationSubPage(Field field){
+        SubPageField subPageField = field.getAnnotation(SubPageField.class);
+        if(subPageField != null){
+            Selector selector = new XpathSelector(subPageField.SubPageRegion());
+            subpageMap.put(field.getName(), selector);
+
+            Class<?> type = field.getType();
+            if(PageModel.class.isAssignableFrom(type)){
+                PageModel subpagePageModel = PageModel.createModelFromClass(type);
+                subpageModelMap.put(field.getName(), subpagePageModel);
+            }
         }
     }
 
@@ -204,6 +237,18 @@ public class PageModel {
 
     public boolean hasFileToDownload(){
         return fileDownloadMap.size() != 0;
+    }
+
+    public boolean hasSubpage(){
+        return subpageMap.size() != 0;
+    }
+
+    public Map<String, Selector> getSubpageMap() {
+        return subpageMap;
+    }
+
+    public PageModel getSubpageModel(String name) {
+        return subpageModelMap.get(name);
     }
 
     public Map<String, DownloadFile> getFileDownloadMap() {
