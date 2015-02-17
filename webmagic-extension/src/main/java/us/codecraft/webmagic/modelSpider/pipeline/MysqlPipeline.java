@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.modelSpider.annotation.DownloadFile;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,9 +53,8 @@ public class MysqlPipeline implements Pipeline {
         }
 
         PageModel pageModel = (PageModel) resultItems.getPageModel();
-        Class<?> clazz = pageModel.getClazz();
         if(status == STATUS.NotStarted){
-            if(createTable(clazz)) {
+            if(createTable(pageModel)) {
                 status = STATUS.Success;
             }else{
                 status = STATUS.Failure;
@@ -64,41 +65,10 @@ public class MysqlPipeline implements Pipeline {
 
         //insert field content to db based on shouldExpandFields setting
         String tableName = pageModel.getModelName();
-        insertToDbNotExpand(tableName,resultItems);
+        insertToDb(tableName, resultItems);
     }
 
-//    private void insertToDbExpand(String tableName, ResultItems resultItems) {
-//        int i=0;
-//        int multiSize = 0;
-//        do {
-//            String sql = "INSERT INTO `" + tableName + "` (";
-//            String keys = "`id`";
-//            String values = "NULL";
-//
-//            for (Map.Entry<String,Object> entry: resultItems.getAll().entrySet()) {
-//                keys = keys + ", `" + entry.getKey() + "`";
-//                Object value = entry.getValue();
-//                if (value instanceof List) {
-//                    List<String> fieldValues = (List<String>) value;
-//                    if(fieldValues.size() == 0 || i >= fieldValues.size()){
-//                        values = values + ", 'NULL'";
-//                    }else {
-//                        values = values + ", '" + fieldValues.get(i) + "'";
-//                    }
-//                    if(multiSize < fieldValues.size()) multiSize = fieldValues.size();
-//                } else {
-//                    String fieldValue = (String) value;
-//                    values = values + ", '" + fieldValue + "'";
-//                }
-//            }
-//            sql = sql + keys + ") VALUES (" + values + ");";
-//            logger.info(sql);
-//            dao.executeUpdate(sql);
-//            i++;
-//        }while(i<multiSize);
-//    }
-
-    private void insertToDbNotExpand(String tableName, ResultItems resultItems) {
+    private void insertToDb(String tableName, ResultItems resultItems) {
         String sql = "INSERT INTO `" + tableName + "` (";
         String keys = "`id`";
         String values = "NULL";
@@ -127,10 +97,11 @@ public class MysqlPipeline implements Pipeline {
 
     /**
      * create table with the definition of class
-     * @param clazz
+     * @param pageModel
      * @return
      */
-    public boolean createTable(Class<?> clazz) {
+    private boolean createTable(PageModel pageModel) {
+        Class<?> clazz = pageModel.getClass();
         String tableName = clazz.getSimpleName();
         if(this.shouldResetDb){
             String sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
@@ -140,16 +111,9 @@ public class MysqlPipeline implements Pipeline {
 
         logger.info("creating table " + tableName);
         String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT";
-        Field[] fields = clazz.getDeclaredFields();
-        AccessibleObject.setAccessible(fields, true);
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            Class<?> fieldType = field.getType();
-            String type = "varchar(1000)";
-            if(fieldType.getName().equalsIgnoreCase("int")){
-                type = "int(11)";
-            }
-            sql = sql + ", `" + fieldName + "` " + type + " NULL";
+        Map<String,String> map = getTableFieldsFromPageModel(clazz);
+        for (Map.Entry<String,String> entry : map.entrySet()) {
+            sql = sql + ", `" + entry.getKey() + "` " + entry.getValue() + " NULL";
         }
         sql = sql + ", PRIMARY KEY (`id`)) ENGINE=InnoDB;";
         logger.info(sql);
@@ -157,6 +121,28 @@ public class MysqlPipeline implements Pipeline {
 
         logger.info("create table " + tableName + " successfully");
         return true;
+    }
 
+    /**
+     * create the <tablefieldname, tablefieldtype> from pagemodel's class
+     */
+    private Map<String,String> getTableFieldsFromPageModel(Class<?> clazz){
+        Map<String, String> map = new HashMap<>();
+        Field[] fields = clazz.getDeclaredFields();
+        AccessibleObject.setAccessible(fields, true);
+        for(Field field : fields){
+            if(field.getName().startsWith("this")) { //this is field for inner-Class, so need to ignore it
+                continue;
+            }else if(PageModel.class.isAssignableFrom(field.getType())){
+                Map<String, String> subpageMap = getTableFieldsFromPageModel(field.getType());
+                map.putAll(subpageMap);
+            }else if(field.getAnnotation(DownloadFile.class) != null){
+                map.put(field.getName(),"varchar(1000)");
+                map.put(field.getName()+"File", "varchar(1000)");
+            }else{
+                map.put(field.getName(), "varchar(1000)");
+            }
+        }
+        return map;
     }
 }

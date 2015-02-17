@@ -55,8 +55,13 @@ public class SubpagePipeline implements Pipeline {
         if(allExtracted){
             Map<String,ResultItems> resultItemsMap = referalExtractedValues.get(fatherUrl);
             for(Map.Entry<String, ResultItems> entry : resultItemsMap.entrySet()){
-                if(entry.getKey().equals(currentUrl)) continue;
+                if(entry.getKey().equals(currentUrl)){
+                    continue;
+                }
                 ResultItems r = entry.getValue();
+                if(entry.getKey().equals(fatherUrl)){
+                    resultItems.setPageModel(r.getPageModel());
+                }
                 for(Map.Entry<String, Object> entry1 : r.getAll().entrySet()){
                     resultItems.put(entry1.getKey(),entry1.getValue());
                 }

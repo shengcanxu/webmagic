@@ -7,6 +7,7 @@ import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
+import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.StackScheduler;
 
@@ -27,7 +28,9 @@ public class News163Article extends PageModel{
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("163.com");
         ModelSpider.create(site, new News163Article())
                 .scheduler(new StackScheduler())
+                //.scheduler(new RedisScheduler("127.0.0.1"))
                 .addPipeline(new ConsolePipeline())
+                .addPipeline(new MysqlPipeline())
                 .addUrl("http://news.163.com/13/0802/05/958I1E330001124J.html").thread(1).run();
     }
 }
