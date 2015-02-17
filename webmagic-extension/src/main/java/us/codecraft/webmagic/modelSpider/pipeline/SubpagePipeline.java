@@ -30,10 +30,10 @@ public class SubpagePipeline implements Pipeline {
         Page page = resultItems.getPage();
         Map<String, Selector> subpageMap = pageModel.getSubpageMap();
         String currentUrl = page.getUrl().toString();
-        String fatherUrl = resultItems.getRequest().isSubPage() ? resultItems.getRequest().getSubPageFatherPage().getUrl().toString() : currentUrl;
+        String fatherUrl = resultItems.getRequest().isSubPage() ? resultItems.getRequest().getSubPageFatherUrl() : currentUrl;
         for(Map.Entry<String, Selector> entry : subpageMap.entrySet()){
             String subpageUrl = page.getHtml().selectList(entry.getValue()).links().get();
-            page.addSubPageRequest(new Request(subpageUrl),page, entry.getKey());
+            page.addSubPageRequest(new Request(subpageUrl),page.getUrl().toString(), entry.getKey());
             pageMap.put(fatherUrl, subpageUrl, Boolean.FALSE);
         }
 

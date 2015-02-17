@@ -35,11 +35,11 @@ public class MultiplePagesPipeline implements Pipeline {
         Page page = resultItems.getPage();
         List<String> multiPageUrls = page.getHtml().selectList(multiPagesSelector).all();
         String currentUrl = page.getUrl().toString();
-        String fatherUrl = resultItems.getRequest().hasFatherPage() ? resultItems.getRequest().getFatherPage().getUrl().toString() : currentUrl;
+        String fatherUrl = resultItems.getRequest().hasFatherPage() ? resultItems.getRequest().getFatherUrl() : currentUrl;
         if(multiPageUrls != null && multiPageUrls.size() != 0){
             for(String link : multiPageUrls){
                 if(pageMap.get(fatherUrl,link) == null) {
-                    page.addContentNextPageRequest(new Request(link), page);
+                    page.addContentNextPageRequest(new Request(link), page.getUrl().toString());
                     pageMap.put(fatherUrl, link, Boolean.FALSE);
                     pageOrderedUrls.add(link);
                 }

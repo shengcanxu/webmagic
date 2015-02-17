@@ -29,10 +29,10 @@ public class Request implements Serializable {
 
     private boolean isNextPageRequest = false;
 
-    private Page subPageFatherPage;
+    private String subPageFatherUrl;
     private String subPageName;
 
-    private Page fatherPage;
+    private String fatherUrl;
 
     /**
      * Store additional information in extras.
@@ -83,32 +83,32 @@ public class Request implements Serializable {
     }
 
     public  boolean isSubPage(){
-        return subPageFatherPage != null;
+        return subPageFatherUrl != null;
     }
 
-    public void  setSubPageFatherPage(Page fatherPage,String name){
-        this.subPageFatherPage = fatherPage;
-        this.subPageName = name;
+    public void  setSubPageFatherUrl(String fatherUrl,String subpageName){
+        this.subPageFatherUrl = fatherUrl;
+        this.subPageName = subpageName;
     }
 
     public String getSubPageName() {
         return subPageName;
     }
 
-    public Page getSubPageFatherPage(){
-        return subPageFatherPage;
+    public String getSubPageFatherUrl(){
+        return subPageFatherUrl;
     }
 
     public boolean hasFatherPage() {
-        return fatherPage != null;
+        return fatherUrl != null;
     }
 
-    public Page getFatherPage() {
-        return fatherPage;
+    public String getFatherUrl() {
+        return fatherUrl;
     }
 
-    public void setFatherPage(Page fatherPage) {
-        this.fatherPage = fatherPage;
+    public void setFatherUrl(String fatherUrl) {
+        this.fatherUrl = fatherUrl;
     }
 
     /**

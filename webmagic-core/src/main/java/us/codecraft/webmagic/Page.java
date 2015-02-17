@@ -203,16 +203,16 @@ public class Page {
         }
     }
 
-    public void addSubPageRequest(Request request,Page fatherPage,String name){
+    public void addSubPageRequest(Request request,String fatherUrl,String name){
         synchronized (targetRequests){
-            request.setSubPageFatherPage(fatherPage,name);
+            request.setSubPageFatherUrl(fatherUrl, name);
             targetRequests.add(request);
         }
     }
 
-    public void addContentNextPageRequest(Request request, Page fatherPage){
+    public void addContentNextPageRequest(Request request, String fatherUrl){
         synchronized (targetRequests){
-            request.setFatherPage(fatherPage);
+            request.setFatherUrl(fatherUrl);
             targetRequests.add(request);
         }
     }

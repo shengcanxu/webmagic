@@ -86,7 +86,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         }
         logger.info("downloading page {}", request.getUrl());
         CloseableHttpResponse httpResponse = null;
-        int statusCode=0;
+        int statusCode = 0;
         try {
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
             httpResponse = getHttpClient(site).execute(httpUriRequest);

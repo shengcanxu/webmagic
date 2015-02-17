@@ -3,12 +3,12 @@ package us.codecraft.webmagic.modelSpider.examples;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.modelSpider.annotation.SubPageField;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.DownloadFile;
+import us.codecraft.webmagic.modelSpider.annotation.SubPageField;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.scheduler.StackScheduler;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -42,10 +42,11 @@ public class XimalayaSubPage extends PageModel {
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site, new XimalayaSubPage())
-                .scheduler(new StackScheduler())
+                .scheduler(new RedisScheduler("127.0.0.1"))
+                //.scheduler(new StackScheduler())
                 //.addPipeline(new MysqlPipeline(true))
                 .addPipeline(new ConsolePipeline())
-                .addUrl("http://www.ximalaya.com/20115042/album/339173").run();
+                .addUrl("http://www.ximalaya.com/20115042/album/339173").thread(10).run();
     }
 }
 

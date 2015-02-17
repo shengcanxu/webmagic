@@ -1,7 +1,6 @@
 package us.codecraft.webmagic.scheduler;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.google.gson.Gson;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -62,13 +61,10 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     @Override
     protected void pushWhenNoDuplicate(Request request, Task task) {
         Jedis jedis = pool.getResource();
-        try {
-            jedis.rpush(getQueueKey(task), request.getUrl());
-            if (request.getExtras() != null) {
-                String field = DigestUtils.shaHex(request.getUrl());
-                String value = JSON.toJSONString(request);
-                jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
-            }
+        try{
+            Gson gson = new Gson();
+            String json = gson.toJson(request);
+            jedis.rpush(getQueueKey(task), json);
         } finally {
             pool.returnResource(jedis);
         }
@@ -77,21 +73,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     @Override
     public synchronized Request poll(Task task) {
         Jedis jedis = pool.getResource();
-        try {
-            String url = jedis.lpop(getQueueKey(task));
-            if (url == null) {
+        try{
+            String json = jedis.lpop(getQueueKey(task));
+            if (json == null){
                 return null;
             }
-            String key = ITEM_PREFIX + task.getUUID();
-            String field = DigestUtils.shaHex(url);
-            byte[] bytes = jedis.hget(key.getBytes(), field.getBytes());
-            if (bytes != null) {
-                Request o = JSON.parseObject(new String(bytes), Request.class);
-                return o;
-            }
-            Request request = new Request(url);
+            Gson gson = new Gson();
+            Request request = gson.fromJson(json, Request.class);
             return request;
-        } finally {
+        }finally {
             pool.returnResource(jedis);
         }
     }
