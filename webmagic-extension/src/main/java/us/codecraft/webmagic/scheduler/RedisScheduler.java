@@ -1,6 +1,8 @@
 package us.codecraft.webmagic.scheduler;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -16,15 +18,17 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
  */
 public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
+    Logger logger = LoggerFactory.getLogger(getClass());
+
     private JedisPool pool;
 
     private boolean depthFirst = false;
 
+    private boolean startOver = false;
+
     private static final String QUEUE_PREFIX = "queue_";
 
     private static final String SET_PREFIX = "set_";
-
-    private static final String ITEM_PREFIX = "item_";
 
     public RedisScheduler(String host) {
         this(new JedisPool(new JedisPoolConfig(), host));
@@ -54,6 +58,13 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     public boolean isDuplicate(Request request, Task task) {
         Jedis jedis = pool.getResource();
         try {
+            if(startOver){
+                jedis.del(getSetKey(task));
+                jedis.del(getQueueKey(task));
+                startOver = false;
+                logger.info("remove redis queue and start over parsing.");
+            }
+
             boolean isDuplicate = jedis.sismember(getSetKey(task), request.getUrl());
             if (!isDuplicate) {
                 jedis.sadd(getSetKey(task), request.getUrl());
@@ -125,5 +136,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         } finally {
             pool.returnResource(jedis);
         }
+    }
+
+    public RedisScheduler setStartOver(boolean startOver) {
+        this.startOver = startOver;
+        return this;
+    }
+
+    public RedisScheduler setDepthFirst(boolean depthFirst){
+        this.depthFirst = depthFirst;
+        return this;
     }
 }
