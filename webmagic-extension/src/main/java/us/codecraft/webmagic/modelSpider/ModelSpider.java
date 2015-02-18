@@ -2,10 +2,7 @@ package us.codecraft.webmagic.modelSpider;
 
 import us.codecraft.webmagic.*;
 import us.codecraft.webmagic.model.ModelPageProcessor;
-import us.codecraft.webmagic.modelSpider.pipeline.FileDownloadPipeline;
-import us.codecraft.webmagic.modelSpider.pipeline.FormatterPipeline;
-import us.codecraft.webmagic.modelSpider.pipeline.MultiplePagesPipeline;
-import us.codecraft.webmagic.modelSpider.pipeline.SubpagePipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.*;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
@@ -63,6 +60,7 @@ public class ModelSpider<T> extends Spider {
         this.pageModel = pageModel;
         this.addPipeline(new MultiplePagesPipeline());
         this.addPipeline(new SubpagePipeline());
+        this.addPipeline(new CustomFunctionPipeline());
         this.addPipeline(new FormatterPipeline());
         this.addPipeline(new FileDownloadPipeline());
     }

@@ -45,6 +45,8 @@ public class PageModel {
 
     private Map<String, List<Formatter>> formatterMap = new HashMap<>();
 
+    private Map<String, String> customFunctionMap = new HashMap<>();
+
     private boolean shouldExpand = false;
 
     public static PageModel createModelFromClass(Class<?> clazz){
@@ -98,6 +100,16 @@ public class PageModel {
 
             //get extractby parseurl extractors
             getAnnotationParseUrlsExtractor(field);
+
+            //get custom functions
+            getAnnotationCustomFunction(field);
+        }
+    }
+
+    private void getAnnotationCustomFunction(Field field){
+        CustomFunction customFunction = field.getAnnotation(CustomFunction.class);
+        if(customFunction != null){
+            customFunctionMap.put(field.getName(), customFunction.name());
         }
     }
 
@@ -268,5 +280,9 @@ public class PageModel {
 
     public Map<String, DownloadFile> getFileDownloadMap() {
         return fileDownloadMap;
+    }
+
+    public Map<String, String> getCustomFunctionMap() {
+        return customFunctionMap;
     }
 }
