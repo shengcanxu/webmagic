@@ -18,6 +18,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     private JedisPool pool;
 
+    private boolean depthFirst = false;
+
     private static final String QUEUE_PREFIX = "queue_";
 
     private static final String SET_PREFIX = "set_";
@@ -26,6 +28,11 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     public RedisScheduler(String host) {
         this(new JedisPool(new JedisPoolConfig(), host));
+    }
+
+    public RedisScheduler(String host, boolean depthFirst){
+        this(host);
+        this.depthFirst = depthFirst;
     }
 
     public RedisScheduler(JedisPool pool) {
@@ -64,7 +71,11 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         try{
             Gson gson = new Gson();
             String json = gson.toJson(request);
-            jedis.rpush(getQueueKey(task), json);
+            if(depthFirst){
+                jedis.lpush(getQueueKey(task), json);
+            }else {
+                jedis.rpush(getQueueKey(task), json);
+            }
         } finally {
             pool.returnResource(jedis);
         }
