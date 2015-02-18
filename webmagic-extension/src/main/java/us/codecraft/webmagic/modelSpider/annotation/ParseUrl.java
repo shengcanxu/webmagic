@@ -18,23 +18,17 @@ import java.lang.annotation.Target;
 public @interface ParseUrl {
 
     /**
-     * The url patterns to crawl. <br>
-     * Use regex expression with some changes: <br>
-     *      "." stand for literal character "." instead of "any character". <br>
-     *      "*" stand for any legal character for url in 0-n length ([^"'#]*) instead of "any length". <br>
+     * Extractor expression, support XPath only
      *
-     * @return the url patterns for class
+     * @return extractor expression
      */
-    String[] urlPattern();
+    String value();
 
     /**
-     * Define the region for url extracting. <br>
-     * Only support XPath.<br>
-     * When sourceRegion is set, the urls will be extracted only from the region instead of entire content. <br>
-     *
-     * @return the region for url extracting
+     * if subXpath is set, first parse and get strings from "value()" setting and then use subXpath to parse those strings.
+     * @return
      */
-    String sourceRegion() default "";
+    String subXpath() default "";
 
     /**
      * the next page xpath

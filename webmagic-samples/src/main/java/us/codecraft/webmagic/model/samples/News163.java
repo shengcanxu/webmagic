@@ -5,7 +5,6 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
-import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MultiPagePipeline;
 
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @author code4crafter@gmail.com <br>
  */
-@ParseUrl(urlPattern = "http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
+//@ParseUrl(urlPattern = "http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
 public class News163 implements MultiPageModel {
 
     @ExtractByUrl("http://news\\.163\\.com/\\d+/\\d+/\\d+/([^_]*).*\\.html")

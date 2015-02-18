@@ -8,7 +8,6 @@ import us.codecraft.webmagic.model.annotation.*;
 import us.codecraft.webmagic.model.formatter.BasicTypeFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatter;
 import us.codecraft.webmagic.model.formatter.ObjectFormatters;
-import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.selector.*;
 import us.codecraft.webmagic.utils.ClassUtils;
 import us.codecraft.webmagic.utils.ExtractorUtils;
@@ -239,26 +238,26 @@ public class PageModelExtractor {
         }
 
         //add ParseUrl annotation
-        Annotation[] annotations = clazz.getAnnotationsByType(ParseUrl.class);
-        if(annotations != null && annotations.length > 0){
-            for(Annotation a : annotations){
-                ParseUrl parseUrl = (ParseUrl) a;
-                String[] values = parseUrl.urlPattern();
-                Pattern[] patterns = new Pattern[values.length];
-                for(int i=0; i<values.length; i++){
-                    patterns[i] = Pattern.compile("(" + values[i].replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
-                }
-                parseUrlPatterns.add(patterns);
-                if (!parseUrl.sourceRegion().equals("")) {
-                    Selector region = new XpathSelector(parseUrl.sourceRegion());
-                    parseUrlRegionSelectors.add(region);
-                }
-                if(!parseUrl.nextPageRegion().equals("")) {
-                    Selector nextPage = new XpathSelector(parseUrl.nextPageRegion());
-                    parseUrlNextPageSelectors.add(nextPage);
-                }
-            }
-        }
+//        Annotation[] annotations = clazz.getAnnotationsByType(ParseUrl.class);
+//        if(annotations != null && annotations.length > 0){
+//            for(Annotation a : annotations){
+//                ParseUrl parseUrl = (ParseUrl) a;
+//                String[] values = parseUrl.urlPattern();
+//                Pattern[] patterns = new Pattern[values.length];
+//                for(int i=0; i<values.length; i++){
+//                    patterns[i] = Pattern.compile("(" + values[i].replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
+//                }
+//                parseUrlPatterns.add(patterns);
+//                if (!parseUrl.sourceRegion().equals("")) {
+//                    Selector region = new XpathSelector(parseUrl.sourceRegion());
+//                    parseUrlRegionSelectors.add(region);
+//                }
+//                if(!parseUrl.nextPageRegion().equals("")) {
+//                    Selector nextPage = new XpathSelector(parseUrl.nextPageRegion());
+//                    parseUrlNextPageSelectors.add(nextPage);
+//                }
+//            }
+//        }
     }
 
     public Object process(Page page) {

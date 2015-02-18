@@ -5,7 +5,6 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
-import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
 
@@ -14,8 +13,8 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
  */
 
 
-@ParseUrl(urlPattern = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
-@ParseUrl(urlPattern = "http://www.ximalaya.com/zhubo/\\d+/", sourceRegion = "//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]")
+//@ParseUrl(urlPattern = "http://www.ximalaya.com/\\d+/album/\\d+", sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]")
+//@ParseUrl(urlPattern = "http://www.ximalaya.com/zhubo/\\d+/", sourceRegion = "//*[@id=\"mainbox\"]//div[@class=\"personal_header\"]")
 public class XimalayaZhubo extends PageModel{
     @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
     private String name;

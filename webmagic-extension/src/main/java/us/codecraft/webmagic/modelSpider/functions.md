@@ -5,3 +5,4 @@
 5. able to format data using formatterPipeline
 6. able to download file using FileDownloadPipeline
 7. able to parse unlimited layer to get the content using parseurl annotation
+8. add checkIfCompleteParse in scheduler to make sure all put-in-queue requests are parsed. it's used for finding out the un-parsed reqeusts becauses of network issues;

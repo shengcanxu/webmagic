@@ -9,14 +9,15 @@ import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 /**
  * Created by canoxu on 2015/2/1.
  */
 
 
-@ParseUrl(urlPattern = "http://www.ximalaya.com/\\d+/album/\\d+",
-        sourceRegion = "//*[@id=\"discoverAlbum\"]//div[@class=\"layout_right\"]",
+@ParseUrl(subXpath = "//div/a/@href",
+        value = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_item\"]",
         nextPageRegion = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
 @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
 public class XimalayaAlbum extends PageModel {
@@ -27,6 +28,8 @@ public class XimalayaAlbum extends PageModel {
     @TextFormatter(types={TextFormatter.Type.TRIM, TextFormatter.Type.REMOVETAG})
     private String category;
 
+    private String playNum;
+
     @ExtractByUrl(value = "")
     private String PageURL;
 
@@ -34,6 +37,7 @@ public class XimalayaAlbum extends PageModel {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbum())
                 //.scheduler(new StackScheduler())
+                .scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
                 .addPipeline(new MysqlPipeline())
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();

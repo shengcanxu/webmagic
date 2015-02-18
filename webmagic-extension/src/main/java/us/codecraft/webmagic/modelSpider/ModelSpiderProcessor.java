@@ -46,8 +46,7 @@ public class ModelSpiderProcessor implements PageProcessor {
         int depth = page.getDepth();
         List<ParseUrlExtractor> linkExtractors = pageModel.getLinkExtractors();
         if ( depth < linkExtractors.size()){
-            Object linkExtractor = linkExtractors.get(depth);
-            ParseUrlExtractor parseUrlExtractor = (ParseUrlExtractor) linkExtractor;
+            ParseUrlExtractor parseUrlExtractor = linkExtractors.get(depth);
             List<String> links = parseUrlExtractor.extract(page);
             for(String link : links){
                 page.addTargetRequest(new Request(link));

@@ -2,13 +2,12 @@ package us.codecraft.webmagic.modelSpider.extractors;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
+import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by cano on 2015/2/7.
@@ -17,21 +16,18 @@ public class ParseUrlExtractor {
 
     protected Class clazz;
 
-    protected Pattern[] urlPatterns;
+    protected Selector selector;
 
-    protected Selector sourceRegion;
+    protected Selector subSelector;
 
     protected Selector nextPageRegion;
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
-        String[] patternStrings = parseUrl.urlPattern();
-        urlPatterns = new Pattern[patternStrings.length];
-        for(int i=0; i<patternStrings.length; i++){
-            urlPatterns[i] = Pattern.compile("(" + patternStrings[i].replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
-        }
+        String xpathStrings = parseUrl.value();
+        selector = new XpathSelector(xpathStrings);
 
-        if (!parseUrl.sourceRegion().equals("")) {
-            sourceRegion = new XpathSelector(parseUrl.sourceRegion());
+        if (!parseUrl.subXpath().equals("")) {
+            subSelector = new XpathSelector(parseUrl.subXpath());
         }
         if(!parseUrl.nextPageRegion().equals("")) {
             nextPageRegion = new XpathSelector(parseUrl.nextPageRegion());
@@ -45,25 +41,19 @@ public class ParseUrlExtractor {
      * @return
      */
     public List<String> extract(Page page) {
-        if(urlPatterns.length == 0) return new ArrayList<>();
-
-        List<String> links;
-        if(sourceRegion == null){
-            links = page.getHtml().links().all();
+        if(subSelector == null){
+            List<String> links = page.getHtml().selectDocumentForList(selector);
+            return links;
         }else{
-            links = page.getHtml().selectList(sourceRegion).links().all();
-        }
-
-        List<String> matchLinks = new ArrayList<>();
-        for(String link : links){
-            for(int i=0; i<urlPatterns.length; i++){
-                Matcher matcher = urlPatterns[i].matcher(link);
-                if(matcher.find()){
-                    matchLinks.add(matcher.group(1));
-                }
+            List<String> regions = page.getHtml().selectDocumentForList(selector);
+            List<String> links = new ArrayList<>();
+            for(String region : regions){
+                Html html = new Html(region);
+                String link = html.selectDocument(subSelector);
+                links.add(link);
             }
+            return links;
         }
-        return matchLinks;
     }
 
     /**
