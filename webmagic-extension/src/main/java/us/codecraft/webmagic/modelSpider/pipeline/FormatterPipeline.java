@@ -3,11 +3,11 @@ package us.codecraft.webmagic.modelSpider.pipeline;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.PageModel;
-import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
 import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Print page model in console.<br>
@@ -24,9 +24,9 @@ public class FormatterPipeline implements Pipeline {
         PageModel pageModel = (PageModel)resultItems.getPageModel();
         if(pageModel.getFormatterMap().size() == 0) return;
 
-        for (FieldValueExtractor extractor : pageModel.getFieldExtractors()) {
-            String name = extractor.getName();
-            List<Formatter> formatters = pageModel.getFormatterMap().get(name);
+        for (Map.Entry<String, List<Formatter>> entry : pageModel.getFormatterMap().entrySet()) {
+            String name = entry.getKey();
+            List<Formatter> formatters = entry.getValue();
             if (formatters != null) {
                 for (Formatter formatter : formatters) {
                     Object formated = formatter.format(resultItems.get(name));
