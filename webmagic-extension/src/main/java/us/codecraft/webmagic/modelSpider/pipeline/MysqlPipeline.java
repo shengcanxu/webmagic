@@ -29,18 +29,20 @@ public class MysqlPipeline implements Pipeline {
     private boolean shouldResetDb = false;
     private String separator = "@#$";
 
-    /**
-     *
-     * @param shouldResetDb true to drop table and recreate again, false to use the existing table if exists
-     */
-    public MysqlPipeline(boolean shouldResetDb){
-        this.shouldResetDb = shouldResetDb;
-    }
-
     public MysqlPipeline(){}
 
     public MysqlPipeline setSeparator(String separator){
         this.separator = separator;
+        return this;
+    }
+
+    /**
+     *
+     * @param shouldResetDb true to drop table and recreate again, false to use the existing table if exists
+     * @return
+     */
+    public MysqlPipeline setShouldResetDb(boolean shouldResetDb) {
+        this.shouldResetDb = shouldResetDb;
         return this;
     }
 

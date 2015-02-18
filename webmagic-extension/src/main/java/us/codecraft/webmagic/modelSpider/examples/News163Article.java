@@ -32,7 +32,7 @@ public class News163Article extends PageModel{
                 .scheduler(new StackScheduler())
                 //.scheduler(new RedisScheduler("127.0.0.1"))
                 .addPipeline(new ConsolePipeline())
-                .addPipeline(new MysqlPipeline(true))
+                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addUrl("http://news.163.com/13/0802/05/958I1E330001124J.html").thread(1).run();
     }
 }

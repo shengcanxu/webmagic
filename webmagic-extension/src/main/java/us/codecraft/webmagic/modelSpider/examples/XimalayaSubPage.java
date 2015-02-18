@@ -45,7 +45,7 @@ public class XimalayaSubPage extends PageModel {
         ModelSpider.create(site, new XimalayaSubPage())
                 //.scheduler(new RedisScheduler("127.0.0.1"))
                 .scheduler(new StackScheduler())
-                .addPipeline(new MysqlPipeline(true))
+                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://www.ximalaya.com/20115042/album/339173").thread(10).run();
     }

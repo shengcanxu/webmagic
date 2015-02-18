@@ -7,8 +7,8 @@ import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
+import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**
  * Created by canoxu on 2015/2/1.
@@ -33,8 +33,8 @@ public class XimalayaAlbum extends PageModel {
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbum())
-                .scheduler(new StackScheduler())
-                //.addPipeline(new MysqlPipeline())
+                //.scheduler(new StackScheduler())
+                .addPipeline(new MysqlPipeline())
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }
