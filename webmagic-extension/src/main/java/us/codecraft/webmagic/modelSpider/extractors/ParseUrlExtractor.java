@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.modelSpider.extractors;
 
 import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selector;
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by cano on 2015/2/7.
  */
 public class ParseUrlExtractor {
+    public static final String CONTENT_NAME = "content";
 
     protected Class clazz;
 
@@ -21,6 +23,8 @@ public class ParseUrlExtractor {
     protected Selector subSelector;
 
     protected Selector nextPageRegion;
+
+    protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
         String xpathStrings = parseUrl.value();
@@ -40,19 +44,32 @@ public class ParseUrlExtractor {
      * @param page
      * @return
      */
-    public List<String> extract(Page page) {
+    public List<Request> extract(Page page) {
+        List<Request> requests = new ArrayList<>();
         if(subSelector == null){
             List<String> links = page.getHtml().selectDocumentForList(selector);
-            return links;
+            for(String link : links){
+                Request request = new Request(link);
+                requests.add(request);
+            }
+            return requests;
+
         }else{
             List<String> regions = page.getHtml().selectDocumentForList(selector);
-            List<String> links = new ArrayList<>();
             for(String region : regions){
                 Html html = new Html(region);
                 String link = html.selectDocument(subSelector);
-                links.add(link);
+                Request request = new Request(link);
+
+                //get content in parseurl page and pass to the pages in next level (depth)
+                for(ExtractByParseUrlExtractor contentExtractor : contentExtractors){
+                    Selector contentSelector = contentExtractor.getSelector();
+                    String content = html.selectDocument(contentSelector);
+                    request.putContents(contentExtractor.getName(), content);
+                }
+                requests.add(request);
             }
-            return links;
+            return requests;
         }
     }
 
@@ -67,5 +84,13 @@ public class ParseUrlExtractor {
 
         }
         return null;
+    }
+
+    public Selector getSelector() {
+        return selector;
+    }
+
+    public void addExtractorByParseUrlExtractor(ExtractByParseUrlExtractor extractByParseUrlExtractor){
+        contentExtractors.add(extractByParseUrlExtractor);
     }
 }

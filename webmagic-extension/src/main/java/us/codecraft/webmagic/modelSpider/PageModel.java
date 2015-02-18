@@ -5,20 +5,19 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.annotation.*;
-import us.codecraft.webmagic.modelSpider.extractors.ExtractByExtractor;
-import us.codecraft.webmagic.modelSpider.extractors.ExtractByUrlExtractor;
-import us.codecraft.webmagic.modelSpider.extractors.FieldValueExtractor;
-import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
+import us.codecraft.webmagic.modelSpider.extractors.*;
 import us.codecraft.webmagic.modelSpider.formatter.Formatter;
 import us.codecraft.webmagic.modelSpider.formatter.RemoveTagFormatter;
 import us.codecraft.webmagic.modelSpider.formatter.TrimFormatter;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
-import us.codecraft.webmagic.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cano on 2015/2/7.
@@ -41,7 +40,9 @@ public class PageModel {
     private Map<String,PageModel> subpageModelMap = new HashMap<>();
 
     private List<ParseUrlExtractor> linkExtractors = new ArrayList<>();
+
     private List<FieldValueExtractor> fieldExtractors = new ArrayList<>();
+
     private Map<String, List<Formatter>> formatterMap = new HashMap<>();
 
     private boolean shouldExpand = false;
@@ -67,7 +68,7 @@ public class PageModel {
     private void init(Class clazz) {
         initClassExtractors(clazz);
 
-        Set<Field> fields = ClassUtils.getFieldsIncludeSuperClass(clazz);
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             ExtractByExtractor extractor = getAnnotationExtractBy(field);
@@ -95,6 +96,20 @@ public class PageModel {
             //get subpage fields
             getAnnotationSubPage(field);
 
+            //get extractby parseurl extractors
+            getAnnotationParseUrlsExtractor(field);
+        }
+    }
+
+    private void getAnnotationParseUrlsExtractor(Field field){
+        ExtractByParseUrl parseUrl = field.getAnnotation(ExtractByParseUrl.class);
+        if(parseUrl != null){
+            if(parseUrl.depth() > linkExtractors.size()){
+                logger.error("parserurl extractor depth exceeds the size of linkextractors");
+            }else{
+                ExtractByParseUrlExtractor parseUrlExtractor = new ExtractByParseUrlExtractor(parseUrl,field);
+                linkExtractors.get(parseUrl.depth()-1).addExtractorByParseUrlExtractor(parseUrlExtractor);
+            }
         }
     }
 

@@ -40,6 +40,11 @@ public class Request implements Serializable {
     private Map<String, Object> extras;
 
     /**
+     * store the content extracted from parseurl page
+     */
+    private Map<String, String> contents;
+
+    /**
      * Priority of the request.<br>
      * The bigger will be processed earlier. <br>
      * @see us.codecraft.webmagic.scheduler.PriorityScheduler
@@ -137,6 +142,18 @@ public class Request implements Serializable {
             extras = new HashMap<String, Object>();
         }
         extras.put(key, value);
+        return this;
+    }
+
+    public Map<String, String> getContents() {
+        return contents;
+    }
+
+    public Request putContents(String name, String content){
+        if(contents == null){
+            contents = new HashMap<>();
+        }
+        contents.put(name,content);
         return this;
     }
 

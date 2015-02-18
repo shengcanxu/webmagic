@@ -5,6 +5,7 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.modelSpider.annotation.ExtractByParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
@@ -28,6 +29,7 @@ public class XimalayaAlbum extends PageModel {
     @TextFormatter(types={TextFormatter.Type.TRIM, TextFormatter.Type.REMOVETAG})
     private String category;
 
+    @ExtractByParseUrl(value = "//span[@class=\"sound_playcount\"]/text()", depth = 1)
     private String playNum;
 
     @ExtractByUrl(value = "")
@@ -38,7 +40,7 @@ public class XimalayaAlbum extends PageModel {
         ModelSpider.create(site,new XimalayaAlbum())
                 //.scheduler(new StackScheduler())
                 .scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
-                .addPipeline(new MysqlPipeline())
+                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }

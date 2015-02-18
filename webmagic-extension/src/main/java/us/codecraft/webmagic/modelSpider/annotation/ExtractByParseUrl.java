@@ -15,23 +15,17 @@ import java.lang.annotation.Target;
 public @interface ExtractByParseUrl {
 
     /**
-     * Extractor expression, support XPath, CSS Selector and regex.
+     * Extractor expression, support XPath only.
      *
      * @return extractor expression
      */
     String value();
 
     /**
-     * types of extractor expressions
+     * extract value on NO. (depth) of page which is parsed on NO. (depth) of parseurl annotation
+     * @return
      */
-    public static enum Type {XPath, Regex, Css, JsonPath}
-
-    /**
-     * Extractor type, support XPath, CSS Selector and regex.
-     *
-     * @return extractor type
-     */
-    Type type() default Type.XPath;
+    int depth();
 
     /**
      * Define whether the field can be null.<br>

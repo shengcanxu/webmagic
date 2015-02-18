@@ -8,6 +8,7 @@ import us.codecraft.webmagic.modelSpider.extractors.ParseUrlExtractor;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The extension to PageProcessor for page model extractor.
@@ -47,9 +48,9 @@ public class ModelSpiderProcessor implements PageProcessor {
         List<ParseUrlExtractor> linkExtractors = pageModel.getLinkExtractors();
         if ( depth < linkExtractors.size()){
             ParseUrlExtractor parseUrlExtractor = linkExtractors.get(depth);
-            List<String> links = parseUrlExtractor.extract(page);
-            for(String link : links){
-                page.addTargetRequest(new Request(link));
+            List<Request> requests = parseUrlExtractor.extract(page);
+            for(Request request : requests){
+                page.addTargetRequest(request);
             }
 
             //next page links
@@ -72,6 +73,14 @@ public class ModelSpiderProcessor implements PageProcessor {
                     page.putField(name, fieldValues.get(0));
                 } else {
                     page.putField(name, fieldValues);
+                }
+            }
+
+            //add content stored  in request
+            Map<String, String> contents = page.getRequest().getContents();
+            if(contents != null){
+                for(Map.Entry<String, String> entry : contents.entrySet()){
+                    page.putField(entry.getKey(), entry.getValue());
                 }
             }
         }
