@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.scheduler;
 
+import com.google.gson.Gson;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
@@ -9,7 +10,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Created by cano on 2015/1/18.
  */
 public class StackScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler{
-    private LinkedBlockingDeque<Request> queue = new LinkedBlockingDeque<Request>();
+    private LinkedBlockingDeque<String> queue = new LinkedBlockingDeque<String>();
 
     @Override
     public int getLeftRequestsCount(Task task) {
@@ -23,11 +24,15 @@ public class StackScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public synchronized Request poll(Task task) {
-        return queue.poll();
+        Gson gson = new Gson();
+        String json = queue.poll();
+        return gson.fromJson(json,Request.class);
     }
 
     @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
-        queue.addFirst(request);
+        Gson gson = new Gson();
+        String json = gson.toJson(request);
+        queue.addFirst(json);
     }
 }
