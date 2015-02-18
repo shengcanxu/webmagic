@@ -4,6 +4,7 @@ import org.apache.http.annotation.ThreadSafe;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -28,6 +29,11 @@ public class QueueScheduler extends DuplicateRemovedScheduler implements Monitor
     @Override
     public synchronized Request poll(Task task) {
         return queue.poll();
+    }
+
+    @Override
+    public List checkIfCompleteParse(Task task) {
+        return null;
     }
 
     @Override

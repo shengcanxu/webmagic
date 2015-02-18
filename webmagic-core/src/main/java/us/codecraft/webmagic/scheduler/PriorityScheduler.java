@@ -6,6 +6,7 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.utils.NumberUtils;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -59,6 +60,11 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
             return poll;
         }
         return priorityQueueMinus.poll();
+    }
+
+    @Override
+    public List checkIfCompleteParse(Task task) {
+        return null;
     }
 
     @Override

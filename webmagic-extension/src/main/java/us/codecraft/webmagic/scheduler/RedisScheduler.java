@@ -10,6 +10,9 @@ import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Use Redis as url scheduler for distributed crawlers.<br>
  *
@@ -27,6 +30,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     private boolean startOver = false;
 
     private static final String QUEUE_PREFIX = "queue_";
+
+    private static final String QUEUE_PREFIX_DUPICATE = "queue_dupicate_";
 
     private static final String SET_PREFIX = "set_";
 
@@ -61,6 +66,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             if(startOver){
                 jedis.del(getSetKey(task));
                 jedis.del(getQueueKey(task));
+                jedis.del(getDupicateQueueKey(task));
                 startOver = false;
                 logger.info("remove redis queue and start over parsing.");
             }
@@ -87,6 +93,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }else {
                 jedis.rpush(getQueueKey(task), json);
             }
+            jedis.rpush(getDupicateQueueKey(task), json);
         } finally {
             pool.returnResource(jedis);
         }
@@ -114,6 +121,10 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     protected String getQueueKey(Task task) {
         return QUEUE_PREFIX + task.getUUID();
+    }
+
+    protected String getDupicateQueueKey(Task task) {
+        return QUEUE_PREFIX_DUPICATE + task.getUUID();
     }
 
     @Override
@@ -146,5 +157,26 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     public RedisScheduler setDepthFirst(boolean depthFirst){
         this.depthFirst = depthFirst;
         return this;
+    }
+
+    @Override
+    public List<Request> checkIfCompleteParse(Task task) {
+        Jedis jedis = pool.getResource();
+        Gson gson = new Gson();
+        List<Request> list = new ArrayList<>();
+        try{
+            String key = getDupicateQueueKey(task);
+            List<String> requests = jedis.lrange((key), 0, jedis.llen(key));
+            for(String json : requests){
+                Request request = gson.fromJson(json, Request.class);
+                boolean exist = jedis.sismember(getSetKey(task), request.getUrl());
+                if(!exist){
+                    list.add(request);
+                }
+            }
+            return list;
+        }finally {
+            pool.returnResource(jedis);
+        }
     }
 }

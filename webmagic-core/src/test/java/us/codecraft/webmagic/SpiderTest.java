@@ -8,6 +8,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.processor.SimplePageProcessor;
 import us.codecraft.webmagic.scheduler.Scheduler;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -86,6 +87,11 @@ public class SpiderTest {
                     return null;
                 }
                 return new Request("test");
+            }
+
+            @Override
+            public List checkIfCompleteParse(Task task) {
+                return null;
             }
         }).thread(10);
         spider.run();

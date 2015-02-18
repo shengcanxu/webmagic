@@ -8,6 +8,7 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.io.*;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -179,6 +180,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
         }
         fileCursorWriter.println(cursor.incrementAndGet());
         return queue.poll();
+    }
+
+    @Override
+    public List checkIfCompleteParse(Task task) {
+        return null;
     }
 
     @Override
