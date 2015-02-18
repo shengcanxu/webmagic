@@ -5,6 +5,7 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.modelSpider.annotation.FieldType;
 import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
@@ -19,6 +20,7 @@ public class News163Article extends PageModel{
     @MultiplePagesField(multiPageRegion = "//*[@id=\"epContentLeft\"]/div[@class=\"ep-pages\"]/a[@class!=\"ep-pages-all\"]/@href")
     @ExtractBy("//div[@id=\"endText\"]")
     @TextFormatter(types = TextFormatter.Type.REMOVETAG)
+    @FieldType(type = FieldType.Type.TEXT)
     private String content;
 
     @ExtractByUrl(value = "")
@@ -30,7 +32,7 @@ public class News163Article extends PageModel{
                 .scheduler(new StackScheduler())
                 //.scheduler(new RedisScheduler("127.0.0.1"))
                 .addPipeline(new ConsolePipeline())
-                .addPipeline(new MysqlPipeline())
+                .addPipeline(new MysqlPipeline(true))
                 .addUrl("http://news.163.com/13/0802/05/958I1E330001124J.html").thread(1).run();
     }
 }

@@ -6,6 +6,7 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.DownloadFile;
+import us.codecraft.webmagic.modelSpider.annotation.FieldType;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.lang.reflect.AccessibleObject;
@@ -137,12 +138,39 @@ public class MysqlPipeline implements Pipeline {
                 Map<String, String> subpageMap = getTableFieldsFromPageModel(field.getType());
                 map.putAll(subpageMap);
             }else if(field.getAnnotation(DownloadFile.class) != null){
-                map.put(field.getName(),"varchar(1000)");
+                map.put(field.getName(), getAnnotationFieldType(field));
                 map.put(field.getName()+"File", "varchar(1000)");
             }else{
-                map.put(field.getName(), "varchar(1000)");
+                map.put(field.getName(), getAnnotationFieldType(field));
             }
         }
         return map;
+    }
+
+    private String getAnnotationFieldType(Field field){
+        FieldType fieldType = field.getAnnotation(FieldType.class);
+        if(fieldType != null){
+            String type;
+            switch (fieldType.type()){
+                case INT:
+                    type = "int(11)";
+                    break;
+                case STRING:
+                    type = "varchar(1000)";
+                    break;
+                case TEXT:
+                    type = "text";
+                    break;
+                case DATETIME:
+                    type = "datetime";
+                    break;
+                default:
+                    type = "varchar(1000)";
+                    break;
+            }
+            return type;
+        }else{
+            return "varchar(1000)";
+        }
     }
 }
