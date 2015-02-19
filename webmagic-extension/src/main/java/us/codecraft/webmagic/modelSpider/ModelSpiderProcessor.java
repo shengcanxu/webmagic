@@ -54,9 +54,11 @@ public class ModelSpiderProcessor implements PageProcessor {
             }
 
             //next page links
-            String nextPageLink = parseUrlExtractor.extractNextPageLinks(page);
-            if(nextPageLink != null){
-                page.addNextPageRequest(new Request(nextPageLink));
+            List<String> nextPageLinks = parseUrlExtractor.extractNextPageLinks(page);
+            if(nextPageLinks != null){
+                for(String nextPageLink : nextPageLinks) {
+                    page.addNextPageRequest(new Request(nextPageLink));
+                }
             }
 
             page.getResultItems().setSkip(true);

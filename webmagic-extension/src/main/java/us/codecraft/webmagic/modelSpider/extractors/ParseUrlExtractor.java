@@ -9,6 +9,8 @@ import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by cano on 2015/2/7.
@@ -24,6 +26,8 @@ public class ParseUrlExtractor {
 
     protected Selector nextPageRegion;
 
+    protected Pattern nextPageLinkPattern;
+
     protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
@@ -35,6 +39,9 @@ public class ParseUrlExtractor {
         }
         if(!parseUrl.nextPageRegion().equals("")) {
             nextPageRegion = new XpathSelector(parseUrl.nextPageRegion());
+        }
+        if(!parseUrl.nextPageRegion().equals("")) {
+            nextPageLinkPattern = Pattern.compile("(" + parseUrl.nextPageLinkRegex().replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
         }
         this.clazz = clazz;
     }
@@ -49,8 +56,11 @@ public class ParseUrlExtractor {
         if(subSelector == null){
             List<String> links = page.getHtml().selectDocumentForList(selector);
             for(String link : links){
-                Request request = new Request(link);
-                requests.add(request);
+                Matcher matcher = nextPageLinkPattern.matcher(link);
+                if(matcher.find()){
+                    Request request = new Request(link);
+                    requests.add(request);
+                }
             }
             return requests;
 
@@ -59,15 +69,18 @@ public class ParseUrlExtractor {
             for(String region : regions){
                 Html html = new Html(region);
                 String link = html.selectDocument(subSelector);
-                Request request = new Request(link);
+                Matcher matcher = nextPageLinkPattern.matcher(link);
+                if(matcher.find()) {
+                    Request request = new Request(link);
 
-                //get content in parseurl page and pass to the pages in next level (depth)
-                for(ExtractByParseUrlExtractor contentExtractor : contentExtractors){
-                    Selector contentSelector = contentExtractor.getSelector();
-                    String content = html.selectDocument(contentSelector);
-                    request.putContents(contentExtractor.getName(), content);
+                    //get content in parseurl page and pass to the pages in next level (depth)
+                    for (ExtractByParseUrlExtractor contentExtractor : contentExtractors) {
+                        Selector contentSelector = contentExtractor.getSelector();
+                        String content = html.selectDocument(contentSelector);
+                        request.putContents(contentExtractor.getName(), content);
+                    }
+                    requests.add(request);
                 }
-                requests.add(request);
             }
             return requests;
         }
@@ -78,9 +91,9 @@ public class ParseUrlExtractor {
      * @param page
      * @return
      */
-    public String extractNextPageLinks(Page page){
+    public List<String> extractNextPageLinks(Page page){
         if(nextPageRegion != null){
-            return page.getHtml().selectList(nextPageRegion).links().get();
+            return page.getHtml().selectList(nextPageRegion).links().all();
 
         }
         return null;

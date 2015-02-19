@@ -35,4 +35,10 @@ public @interface ParseUrl {
      * @return
      */
     String nextPageRegion() default "";
+
+    /**
+     * the regex of next page link
+     * @return
+     */
+    String nextPageLinkRegex() default "";
 }
