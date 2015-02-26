@@ -8,6 +8,7 @@ import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,11 +57,8 @@ public class ParseUrlExtractor {
         if(subSelector == null){
             List<String> links = page.getHtml().selectDocumentForList(selector);
             for(String link : links){
-                Matcher matcher = nextPageLinkPattern.matcher(link);
-                if(matcher.find()){
-                    Request request = new Request(link);
-                    requests.add(request);
-                }
+                Request request = new Request(link);
+                requests.add(request);
             }
             return requests;
 
@@ -69,18 +67,15 @@ public class ParseUrlExtractor {
             for(String region : regions){
                 Html html = new Html(region);
                 String link = html.selectDocument(subSelector);
-                Matcher matcher = nextPageLinkPattern.matcher(link);
-                if(matcher.find()) {
-                    Request request = new Request(link);
+                Request request = new Request(link);
 
-                    //get content in parseurl page and pass to the pages in next level (depth)
-                    for (ExtractByParseUrlExtractor contentExtractor : contentExtractors) {
-                        Selector contentSelector = contentExtractor.getSelector();
-                        String content = html.selectDocument(contentSelector);
-                        request.putContents(contentExtractor.getName(), content);
-                    }
-                    requests.add(request);
+                //get content in parseurl page and pass to the pages in next level (depth)
+                for (ExtractByParseUrlExtractor contentExtractor : contentExtractors) {
+                    Selector contentSelector = contentExtractor.getSelector();
+                    String content = html.selectDocument(contentSelector);
+                    request.putContents(contentExtractor.getName(), content);
                 }
+                requests.add(request);
             }
             return requests;
         }
@@ -93,8 +88,18 @@ public class ParseUrlExtractor {
      */
     public List<String> extractNextPageLinks(Page page){
         if(nextPageRegion != null){
-            return page.getHtml().selectList(nextPageRegion).links().all();
-
+            List<String> links = page.getHtml().selectList(nextPageRegion).links().all();
+            if(nextPageLinkPattern == null){
+                Iterator<String> iterator = links.iterator();
+                while(iterator.hasNext()){
+                    String link = iterator.next();
+                    Matcher matcher = nextPageLinkPattern.matcher(link);
+                    if(!matcher.find()){
+                        iterator.remove();
+                    }
+                }
+            }
+            return links;
         }
         return null;
     }
