@@ -12,7 +12,7 @@
 ]]></data>
 </comment>
 <comment>
-<key><![CDATA[us.codecraft.webmagic.model.annotation.ExtractByUrl.value]]></key>
+<key><![CDATA[regrex]]></key>
 <data><![CDATA[ 抽取规则，支持正则表达式
 
  @return 抽取规则

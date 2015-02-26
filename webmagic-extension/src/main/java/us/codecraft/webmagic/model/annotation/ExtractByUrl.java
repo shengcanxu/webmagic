@@ -19,7 +19,7 @@ public @interface ExtractByUrl {
      *
      * @return extractor expression
      */
-    String value() default "";
+    String regrex() default "";
 
     /**
      * Define whether the field can be null.<br>

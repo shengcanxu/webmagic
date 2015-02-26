@@ -22,7 +22,7 @@ public class GithubRepo implements HasKey {
     @ExtractBy(value = "//h1[@class='entry-title public']/strong/a/text()", notNull = true)
     private String name;
 
-    @ExtractByUrl("https://github\\.com/(\\w+)/.*")
+    @ExtractByUrl(regrex = "https://github\\.com/(\\w+)/.*")
     private String author;
 
     @ExtractBy("//div[@id='readme']")

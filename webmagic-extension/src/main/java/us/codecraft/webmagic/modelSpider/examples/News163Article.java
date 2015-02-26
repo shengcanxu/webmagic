@@ -23,7 +23,7 @@ public class News163Article extends PageModel{
     @FieldType(type = FieldType.Type.TEXT)
     private String content;
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public static void main(String[] args) {

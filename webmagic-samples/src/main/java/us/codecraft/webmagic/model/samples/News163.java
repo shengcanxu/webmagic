@@ -17,10 +17,10 @@ import java.util.List;
 //@ParseUrl(urlPattern = "http://news.163.com/\\d+/\\d+/\\d+/\\w+*.html")
 public class News163 implements MultiPageModel {
 
-    @ExtractByUrl("http://news\\.163\\.com/\\d+/\\d+/\\d+/([^_]*).*\\.html")
+    @ExtractByUrl(regrex = "http://news\\.163\\.com/\\d+/\\d+/\\d+/([^_]*).*\\.html")
     private String pageKey;
 
-    @ExtractByUrl(value = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
+    @ExtractByUrl(regrex = "http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html", notNull = false)
     private String page;
 
     @ExtractBy(value = "//div[@class=\"ep-pages\"]//a/regex('http://news\\.163\\.com/\\d+/\\d+/\\d+/\\w+_(\\d+)\\.html',1)"

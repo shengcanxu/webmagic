@@ -19,7 +19,7 @@ public class XimalayaZhubo extends PageModel{
     @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
     private String name;
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public static void main(String[] args) {

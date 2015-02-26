@@ -27,7 +27,7 @@ public class XimalayaSubPage extends PageModel {
     private List<String> picture;
 
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     @SubPageField(SubPageRegion = "//*div[@class=\"personal_header\"]/div[@class=\"picture\"]")

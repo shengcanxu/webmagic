@@ -139,7 +139,7 @@ public class PageModelExtractor {
         FieldExtractor fieldExtractor = null;
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
         if (extractByUrl != null) {
-            String regexPattern = extractByUrl.value();
+            String regexPattern = extractByUrl.regrex();
             if (regexPattern.trim().equals("")) {
                 regexPattern = ".*";
             }

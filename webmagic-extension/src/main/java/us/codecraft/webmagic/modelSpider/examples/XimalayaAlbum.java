@@ -32,7 +32,7 @@ public class XimalayaAlbum extends PageModel {
     @ExtractByParseUrl(xpath = "//span[@class=\"sound_playcount\"]/text()", depth = 1)
     private String playNum;
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public static void main(String[] args) {

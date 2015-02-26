@@ -26,7 +26,7 @@ public class XimalayaAlbumList extends PageModel {
     private List<String> category;
 
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public static void main(String[] args) {

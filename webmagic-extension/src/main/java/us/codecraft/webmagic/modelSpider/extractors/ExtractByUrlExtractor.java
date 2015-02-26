@@ -8,7 +8,6 @@ import us.codecraft.webmagic.selector.Selector;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Created by cano on 2015/2/7.
@@ -26,7 +25,7 @@ public class ExtractByUrlExtractor implements FieldValueExtractor {
     protected boolean multi = false;
 
     public ExtractByUrlExtractor(ExtractByUrl extractByUrl, Field field){
-        String regexPattern = extractByUrl.value();
+        String regexPattern = extractByUrl.regrex();
         if (regexPattern.trim().equals("")) {
             regexPattern = ".*";
         }

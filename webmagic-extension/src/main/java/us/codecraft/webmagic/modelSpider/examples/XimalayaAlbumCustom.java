@@ -34,7 +34,7 @@ public class XimalayaAlbumCustom extends PageModel {
     @CustomFunction(name = "minusOne")
     private String playNum;
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public String minusOne(String value){

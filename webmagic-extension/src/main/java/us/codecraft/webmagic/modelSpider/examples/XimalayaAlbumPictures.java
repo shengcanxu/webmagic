@@ -27,7 +27,7 @@ public class XimalayaAlbumPictures extends PageModel {
     private List<String> picture;
 
 
-    @ExtractByUrl(value = "")
+    @ExtractByUrl(regrex = "")
     private String PageURL;
 
     public static void main(String[] args) {
