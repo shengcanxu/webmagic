@@ -117,7 +117,7 @@ public class PageModel {
         ExtractByParseUrl parseUrl = field.getAnnotation(ExtractByParseUrl.class);
         if(parseUrl != null){
             if(parseUrl.depth() > linkExtractors.size()){
-                logger.error("parserurl extractor depth exceeds the size of linkextractors");
+                logger.error("ExtractByParseUrl extractor depth exceeds the size of linkextractors");
             }else{
                 ExtractByParseUrlExtractor parseUrlExtractor = new ExtractByParseUrlExtractor(parseUrl,field);
                 linkExtractors.get(parseUrl.depth()-1).addExtractorByParseUrlExtractor(parseUrlExtractor);

@@ -15,6 +15,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
 import us.codecraft.webmagic.scheduler.Scheduler;
 import us.codecraft.webmagic.thread.CountableThreadPool;
+import us.codecraft.webmagic.utils.HttpConstant;
 import us.codecraft.webmagic.utils.UrlUtils;
 
 import java.io.Closeable;
@@ -490,6 +491,16 @@ public class Spider implements Runnable, Task {
     public Spider addUrl(String... urls) {
         for (String url : urls) {
             addRequest(new Request(url));
+        }
+        signalNewUrl();
+        return this;
+    }
+
+    public Spider addUrlPost(String... urls){
+        for (String url : urls){
+            Request request = new Request(url);
+            request.setMethod(HttpConstant.Method.POST);
+            addRequest(request);
         }
         signalNewUrl();
         return this;

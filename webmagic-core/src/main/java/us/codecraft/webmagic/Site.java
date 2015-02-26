@@ -20,7 +20,7 @@ public class Site {
 
     private String domain;
 
-    private String userAgent;
+    private String userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36";
 
     private Map<String, String> defaultCookies = new LinkedHashMap<String, String>();
 
@@ -429,17 +429,17 @@ public class Site {
     @Override
     public String toString() {
         return "Site{" +
-                "domain='" + domain + '\'' +
-                ", userAgent='" + userAgent + '\'' +
-                ", cookies=" + defaultCookies +
-                ", charset='" + charset + '\'' +
-                ", startRequests=" + startRequests +
-                ", sleepTime=" + sleepTime +
-                ", retryTimes=" + retryTimes +
-                ", cycleRetryTimes=" + cycleRetryTimes +
-                ", timeOut=" + timeOut +
-                ", acceptStatCode=" + acceptStatCode +
-                ", headers=" + headers +
+                "domain='" + domain + "\'\n" +
+                ", userAgent='" + userAgent + "\'\n" +
+                ", cookies=" + defaultCookies + "\n" +
+                ", charset='" + charset + "\'\n" +
+                ", startRequests=" + startRequests + "\n" +
+                ", sleepTime=" + sleepTime + "\n" +
+                ", retryTimes=" + retryTimes + "\n" +
+                ", cycleRetryTimes=" + cycleRetryTimes + "\n" +
+                ", timeOut=" + timeOut + "\n" +
+                ", acceptStatCode=" + acceptStatCode + "\n" +
+                ", headers=" + headers + "\n" +
                 '}';
     }
 
