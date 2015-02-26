@@ -157,9 +157,9 @@ public class HttpClientDownloader extends AbstractDownloader {
             return RequestBuilder.get();
         } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
             RequestBuilder requestBuilder = RequestBuilder.post();
-            NameValuePair[] nameValuePair = (NameValuePair[]) request.getExtra("nameValuePair");
-            if (nameValuePair != null && nameValuePair.length > 0) {
-                requestBuilder.addParameters(nameValuePair);
+            NameValuePair[] nameValuePairList = request.getPostData();
+            if (nameValuePairList != null && nameValuePairList.length > 0) {
+                requestBuilder.addParameters(nameValuePairList);
             }
             return requestBuilder;
         } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {

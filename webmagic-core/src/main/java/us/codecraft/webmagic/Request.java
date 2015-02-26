@@ -1,9 +1,13 @@
 package us.codecraft.webmagic;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import us.codecraft.webmagic.utils.Experimental;
+import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +42,11 @@ public class Request implements Serializable {
      * Store additional information in extras.
      */
     private Map<String, Object> extras;
+
+    /**
+     * store the namevaluepair for post request
+     */
+    private List<NameValuePair> postData;
 
     /**
      * store the content extracted from parseurl page
@@ -202,6 +211,23 @@ public class Request implements Serializable {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    /**
+     * return null if request method is not post
+     * @return
+     */
+    public NameValuePair[] getPostData() {
+        if(method == HttpConstant.Method.POST) {
+            return (NameValuePair[]) postData.toArray();
+        }else{
+            return null;
+        }
+    }
+
+    public void addPostData(String name, String value) {
+        NameValuePair nameValuePair = new BasicNameValuePair(name,value);
+        this.postData.add(nameValuePair);
     }
 
     @Override
