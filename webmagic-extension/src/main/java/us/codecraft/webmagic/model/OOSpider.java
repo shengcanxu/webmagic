@@ -21,10 +21,10 @@ import java.util.List;
  *      {@literal @}ExtractBy("//title")
  *      private String title;
  *
- *      {@literal @}ExtractBy(value = "div.BlogContent",type = ExtractBy.Type.Css)
+ *      {@literal @}ExtractBy(xpath = "div.BlogContent",type = ExtractBy.Type.Css)
  *      private String content;
  *
- *      {@literal @}ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)
+ *      {@literal @}ExtractBy(xpath = "//div[@class='BlogTags']/a/text()", multi = true)
  *      private List<String> tags;
  * }
  * </pre>

@@ -190,7 +190,7 @@ public class PageModel {
             ExtractBy extractBy = (ExtractBy) annotation;
             //ExtractByExtractor extractor = new ExtractByExtractor(extractBy);
             //TODO: add class extractBy annotation
-            //objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            //objectExtractor = new Extractor(new XpathSelector(extractBy.xpath()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
         }
 
         //add ParseUrl annotation

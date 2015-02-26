@@ -99,18 +99,18 @@ public class ProcessorBenchmark {
             "\t\t</div>\n" +
             "\t\t<div id=\"SearchBar\">\n" +
             "    \t\t<form action=\"http://www.oschina.net/search\">\n" +
-            "\t\t\t\t<input type='hidden' name='user' value='190591'/>\n" +
+            "\t\t\t\t<input type='hidden' name='user' xpath='190591'/>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<span class=\"ipt f_l\">\n" +
-            "    \t\t\t<input type='text' id='txt_q' name='q' class='SERACH' value='在 26755 款开源软件中搜索' onblur=\"(this.value=='')?this.value='在 26755 款开源软件中搜索':this.value\" onfocus=\"if(this.value=='在 26755 款开源软件中搜索'){this.value='';};this.select();\"/>\n" +
+            "    \t\t\t<input type='text' id='txt_q' name='q' class='SERACH' xpath='在 26755 款开源软件中搜索' onblur=\"(this.xpath=='')?this.xpath='在 26755 款开源软件中搜索':this.xpath\" onfocus=\"if(this.xpath=='在 26755 款开源软件中搜索'){this.xpath='';};this.select();\"/>\n" +
             "\t\t\t\t</span>\n" +
             "\t\t\t\t                <div class=\"search-by selectbox\">\n" +
             "    \t\t\t\t<span class=\"hide\">\n" +
             "    \t\t\t\t<select name='scope'>\t\t\t\t\t\n" +
-            "                        <option value='project' selected>软件</option>\n" +
-            "                        <option value='code'>代码</option>\n" +
-            "                        <option value='bbs'>讨论区</option>\n" +
-            "                        <option value='news'>新闻</option>\n" +
-            "                        <option value='blog'>博客</option>\n" +
+            "                        <option xpath='project' selected>软件</option>\n" +
+            "                        <option xpath='code'>代码</option>\n" +
+            "                        <option xpath='bbs'>讨论区</option>\n" +
+            "                        <option xpath='news'>新闻</option>\n" +
+            "                        <option xpath='blog'>博客</option>\n" +
             "    \t\t\t\t</select>\n" +
             "    \t\t\t\t</span>\n" +
             "                  <div class=\"search_on\" id=\"search-item\"><span class=\"text\">软件</span></div>\n" +
@@ -122,7 +122,7 @@ public class ProcessorBenchmark {
             "                     <li><a href=\"#5\">博客</a></li>\n" +
             "                  </ul>\n" +
             "                </div>\n" +
-            "\t\t\t\t<input type='submit' value='搜索' class='bnt f_r'/>\t\t\t\n" +
+            "\t\t\t\t<input type='submit' xpath='搜索' class='bnt f_r'/>\t\t\t\n" +
             "    \t\t</form>\n" +
             "\t\t</div>\n" +
             "\t\t<div class='clear'></div>\n" +
@@ -452,10 +452,10 @@ public class ProcessorBenchmark {
             "<div id='inline_reply_editor' style='display:none;'>\n" +
             "<div class=\"BlogCommentForm\">\n" +
             "\t<form id=\"form_inline_comment\" action=\"/action/blog/add_comment?blog=158200\" method=\"POST\">\n" +
-            "\t  <input type='hidden' id='inline_reply_id' name='reply_id' value=''/>          \n" +
+            "\t  <input type='hidden' id='inline_reply_id' name='reply_id' xpath=''/>          \n" +
             "      <textarea name=\"content\" style=\"width:550px;height:60px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_inline_comment').submit();}\"></textarea><br/>\n" +
-            "\t  <input type=\"submit\" value=\"回复\" id=\"btn_comment\" class=\"SUBMIT\"/> \n" +
-            "\t  <input type=\"button\" value=\"关闭\" class=\"SUBMIT\" id='btn_close_inline_reply'/> 文明上网，理性发言\n" +
+            "\t  <input type=\"submit\" xpath=\"回复\" id=\"btn_comment\" class=\"SUBMIT\"/> \n" +
+            "\t  <input type=\"button\" xpath=\"关闭\" class=\"SUBMIT\" id='btn_close_inline_reply'/> 文明上网，理性发言\n" +
             "    </form>\n" +
             "</div>\n" +
             "</div>\n" +
@@ -464,7 +464,7 @@ public class ProcessorBenchmark {
             "    <div class=\"BlogCommentForm\">\n" +
             "    <form id=\"form_comment\" action=\"/action/blog/add_comment?blog=158200\" method=\"POST\">          \n" +
             "      <textarea id='ta_post_content' name=\"content\" style=\"width:550px;height:100px;\" onkeydown=\"if((event.metaKey || event.ctrlKey)&&event.keyCode==13){$('#form_comment').submit();}\"></textarea><br/>\n" +
-            "\t  <input type=\"submit\" value=\"发表评论\" id=\"btn_comment\" class=\"SUBMIT\" /> \n" +
+            "\t  <input type=\"submit\" xpath=\"发表评论\" id=\"btn_comment\" class=\"SUBMIT\" /> \n" +
             "\t  <img id=\"submiting\" style=\"display:none\" src=\"/img/loading.gif\" align=\"absmiddle\"/>\n" +
             "\t  <span id='cmt_tip'>文明上网，理性发言</span>\n" +
             "    </form>\n" +

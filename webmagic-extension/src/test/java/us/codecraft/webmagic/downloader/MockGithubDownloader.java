@@ -39,7 +39,7 @@ public class MockGithubDownloader implements Downloader{
             "\n" +
             "    <meta name=\"msapplication-TileImage\" content=\"/windows-tile.png\" />\n" +
             "    <meta name=\"msapplication-TileColor\" content=\"#ffffff\" />\n" +
-            "    <meta name=\"selected-link\" value=\"repo_source\" data-pjax-transient />\n" +
+            "    <meta name=\"selected-link\" xpath=\"repo_source\" data-pjax-transient />\n" +
             "    <meta content=\"collector.githubapp.com\" name=\"octolytics-host\" /><meta content=\"github\" name=\"octolytics-app-id\" /><meta content=\"D2167A02:4E87:89497A:523FCC67\" name=\"octolytics-dimension-request_id\" />\n" +
             "    \n" +
             "\n" +
@@ -114,7 +114,7 @@ public class MockGithubDownloader implements Downloader{
             "      data-sha=\"c5ed5916d20b96963d906dde8bccc3627568e486\"\n" +
             "  >\n" +
             "\n" +
-            "    <input type=\"hidden\" name=\"nwo\" value=\"code4craft/webmagic\" />\n" +
+            "    <input type=\"hidden\" name=\"nwo\" xpath=\"code4craft/webmagic\" />\n" +
             "\n" +
             "    <div class=\"select-menu js-menu-container js-select-menu search-context-select-menu\">\n" +
             "      <span class=\"minibutton select-menu-button js-menu-target\">\n" +
@@ -126,13 +126,13 @@ public class MockGithubDownloader implements Downloader{
             "\n" +
             "          <div class=\"select-menu-item js-navigation-item js-this-repository-navigation-item selected\">\n" +
             "            <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
-            "            <input type=\"radio\" class=\"js-search-this-repository\" name=\"search_target\" value=\"repository\" checked=\"checked\" />\n" +
+            "            <input type=\"radio\" class=\"js-search-this-repository\" name=\"search_target\" xpath=\"repository\" checked=\"checked\" />\n" +
             "            <div class=\"select-menu-item-text js-select-button-text\">This repository</div>\n" +
             "          </div> <!-- /.select-menu-item -->\n" +
             "\n" +
             "          <div class=\"select-menu-item js-navigation-item js-all-repositories-navigation-item\">\n" +
             "            <span class=\"select-menu-item-icon octicon octicon-check\"></span>\n" +
-            "            <input type=\"radio\" name=\"search_target\" value=\"global\" />\n" +
+            "            <input type=\"radio\" name=\"search_target\" xpath=\"global\" />\n" +
             "            <div class=\"select-menu-item-text js-select-button-text\">All repositories</div>\n" +
             "          </div> <!-- /.select-menu-item -->\n" +
             "\n" +
@@ -145,7 +145,7 @@ public class MockGithubDownloader implements Downloader{
             "  </span>\n" +
             "\n" +
             "\n" +
-            "  <input type=\"hidden\" name=\"ref\" value=\"cmdform\">\n" +
+            "  <input type=\"hidden\" name=\"ref\" xpath=\"cmdform\">\n" +
             "\n" +
             "</form>\n" +
             "    </div>\n" +
@@ -279,7 +279,7 @@ public class MockGithubDownloader implements Downloader{
             "  <h3><strong>HTTPS</strong> clone URL</h3>\n" +
             "  <div class=\"clone-url-box\">\n" +
             "    <input type=\"text\" class=\"clone js-url-field\"\n" +
-            "           value=\"https://github.com/code4craft/webmagic.git\" readonly=\"readonly\">\n" +
+            "           xpath=\"https://github.com/code4craft/webmagic.git\" readonly=\"readonly\">\n" +
             "\n" +
             "    <span class=\"js-zeroclipboard url-box-clippy minibutton zeroclipboard-button\" data-clipboard-text=\"https://github.com/code4craft/webmagic.git\" data-copied-hint=\"copied!\" title=\"copy to clipboard\"><span class=\"octicon octicon-clippy\"></span></span>\n" +
             "  </div>\n" +
@@ -293,7 +293,7 @@ public class MockGithubDownloader implements Downloader{
             "  <h3><strong>Subversion</strong> checkout URL</h3>\n" +
             "  <div class=\"clone-url-box\">\n" +
             "    <input type=\"text\" class=\"clone js-url-field\"\n" +
-            "           value=\"https://github.com/code4craft/webmagic\" readonly=\"readonly\">\n" +
+            "           xpath=\"https://github.com/code4craft/webmagic\" readonly=\"readonly\">\n" +
             "\n" +
             "    <span class=\"js-zeroclipboard url-box-clippy minibutton zeroclipboard-button\" data-clipboard-text=\"https://github.com/code4craft/webmagic\" data-copied-hint=\"copied!\" title=\"copy to clipboard\"><span class=\"octicon octicon-clippy\"></span></span>\n" +
             "  </div>\n" +
@@ -810,10 +810,10 @@ public class MockGithubDownloader implements Downloader{
             "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"s\">\"//title\"</span><span class=\"o\">)</span>\n" +
             "        <span class=\"kd\">private</span> <span class=\"n\">String</span> <span class=\"n\">title</span><span class=\"o\">;</span>\n" +
             "\n" +
-            "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"n\">value</span> <span class=\"o\">=</span> <span class=\"s\">\"div.BlogContent\"</span><span class=\"o\">,</span><span class=\"n\">type</span> <span class=\"o\">=</span> <span class=\"n\">ExtractBy</span><span class=\"o\">.</span><span class=\"na\">Type</span><span class=\"o\">.</span><span class=\"na\">Css</span><span class=\"o\">)</span>\n" +
+            "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"n\">xpath</span> <span class=\"o\">=</span> <span class=\"s\">\"div.BlogContent\"</span><span class=\"o\">,</span><span class=\"n\">type</span> <span class=\"o\">=</span> <span class=\"n\">ExtractBy</span><span class=\"o\">.</span><span class=\"na\">Type</span><span class=\"o\">.</span><span class=\"na\">Css</span><span class=\"o\">)</span>\n" +
             "        <span class=\"kd\">private</span> <span class=\"n\">String</span> <span class=\"n\">content</span><span class=\"o\">;</span>\n" +
             "\n" +
-            "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"n\">value</span> <span class=\"o\">=</span> <span class=\"s\">\"//div[@class='BlogTags']/a/text()\"</span><span class=\"o\">,</span> <span class=\"n\">multi</span> <span class=\"o\">=</span> <span class=\"kc\">true</span><span class=\"o\">)</span>\n" +
+            "        <span class=\"nd\">@ExtractBy</span><span class=\"o\">(</span><span class=\"n\">xpath</span> <span class=\"o\">=</span> <span class=\"s\">\"//div[@class='BlogTags']/a/text()\"</span><span class=\"o\">,</span> <span class=\"n\">multi</span> <span class=\"o\">=</span> <span class=\"kc\">true</span><span class=\"o\">)</span>\n" +
             "        <span class=\"kd\">private</span> <span class=\"n\">List</span><span class=\"o\">&lt;</span><span class=\"n\">String</span><span class=\"o\">&gt;</span> <span class=\"n\">tags</span><span class=\"o\">;</span>\n" +
             "\n" +
             "        <span class=\"kd\">public</span> <span class=\"kd\">static</span> <span class=\"kt\">void</span> <span class=\"nf\">main</span><span class=\"o\">(</span><span class=\"n\">String</span><span class=\"o\">[]</span> <span class=\"n\">args</span><span class=\"o\">)</span> <span class=\"o\">{</span>\n" +

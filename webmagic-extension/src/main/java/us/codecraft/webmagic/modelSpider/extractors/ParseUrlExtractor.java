@@ -31,7 +31,7 @@ public class ParseUrlExtractor {
     protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
-        String xpathStrings = parseUrl.value();
+        String xpathStrings = parseUrl.xpath();
         selector = new XpathSelector(xpathStrings);
 
         if (!parseUrl.subXpath().equals("")) {

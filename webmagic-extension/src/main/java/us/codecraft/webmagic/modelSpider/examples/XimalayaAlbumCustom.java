@@ -19,7 +19,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 
 @ParseUrl(subXpath = "//div/a/@href",
-        value = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_item\"]",
+        xpath = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_item\"]",
         nextPageRegion = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
 @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
 public class XimalayaAlbumCustom extends PageModel {
@@ -30,7 +30,7 @@ public class XimalayaAlbumCustom extends PageModel {
     @TextFormatter(types={TextFormatter.Type.TRIM, TextFormatter.Type.REMOVETAG})
     private String category;
 
-    @ExtractByParseUrl(value = "//span[@class=\"sound_playcount\"]/text()", depth = 1)
+    @ExtractByParseUrl(xpath = "//span[@class=\"sound_playcount\"]/text()", depth = 1)
     @CustomFunction(name = "minusOne")
     private String playNum;
 

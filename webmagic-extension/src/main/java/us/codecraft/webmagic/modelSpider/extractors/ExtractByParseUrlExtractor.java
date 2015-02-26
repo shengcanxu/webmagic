@@ -24,7 +24,7 @@ public class ExtractByParseUrlExtractor implements FieldValueExtractor {
     protected int depth;
 
     public ExtractByParseUrlExtractor(ExtractByParseUrl extractByParseUrl, Field field){
-        selector = new XpathSelector(extractByParseUrl.value());
+        selector = new XpathSelector(extractByParseUrl.xpath());
         notNull = extractByParseUrl.notNull();
         this.depth = extractByParseUrl.depth();
         this.field = field;

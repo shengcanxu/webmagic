@@ -50,7 +50,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * @param key1
      * @param key2
-     * @return value
+     * @return xpath
      */
     public V get(K1 key1, K2 key2) {
         if (get(key1) == null) {
@@ -63,7 +63,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * @param key1
      * @param submap
-     * @return value
+     * @return xpath
      */
     public V put(K1 key1, Map<K2, V> submap) {
         return put(key1, submap);
@@ -73,7 +73,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
      * @param key1
      * @param key2
      * @param value
-     * @return value
+     * @return xpath
      */
     public V put(K1 key1, K2 key2, V value) {
         if (map.get(key1) == null) {
@@ -85,7 +85,7 @@ public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
     /**
      * @param key1
      * @param key2
-     * @return value
+     * @return xpath
      */
     public V remove(K1 key1, K2 key2) {
         if (get(key1) == null) {

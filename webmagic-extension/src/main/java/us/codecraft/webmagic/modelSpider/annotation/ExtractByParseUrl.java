@@ -19,10 +19,10 @@ public @interface ExtractByParseUrl {
      *
      * @return extractor expression
      */
-    String value();
+    String xpath();
 
     /**
-     * extract value on NO. (depth) of page which is parsed on NO. (depth) of parseurl annotation
+     * extract xpath on NO. (depth) of page which is parsed on NO. (depth) of parseurl annotation
      * @return
      */
     int depth();

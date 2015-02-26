@@ -22,10 +22,10 @@ public @interface ParseUrl {
      *
      * @return extractor expression
      */
-    String value();
+    String xpath();
 
     /**
-     * if subXpath is set, first parse and get strings from "value()" setting and then use subXpath to parse those strings.
+     * if subXpath is set, first parse and get strings from "xpath()" setting and then use subXpath to parse those strings.
      * @return
      */
     String subXpath() default "";
