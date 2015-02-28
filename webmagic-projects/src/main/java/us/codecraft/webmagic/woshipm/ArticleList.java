@@ -66,7 +66,8 @@ public class ArticleList extends PageModel {
 
 
     public static void main(String[] args){
-        Site site = Site.me().setRetryTimes(5).setTimeOut(100000).setDomain("woshipm.com").addHeader("Referer","http://www.woshipm.com/");
+        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5)
+                .setDomain("woshipm.com").addHeader("Referer","http://www.woshipm.com/");
         System.out.println(site);
 
         ModelSpider modelSpider = ModelSpider.create(site, new ArticleList());

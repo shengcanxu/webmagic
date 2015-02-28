@@ -91,7 +91,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             HttpUriRequest httpUriRequest = getHttpUriRequest(request, site, headers);
             httpResponse = getHttpClient(site).execute(httpUriRequest);
             statusCode = httpResponse.getStatusLine().getStatusCode();
-            request.putExtra(Request.STATUS_CODE, statusCode);
+            request.setStatusCode(statusCode);
             if (statusAccept(acceptStatCode, statusCode)) {
                 Page page = handleResponse(request, charset, httpResponse, task);
                 onSuccess(request);
@@ -108,7 +108,7 @@ public class HttpClientDownloader extends AbstractDownloader {
             onError(request);
             return null;
         } finally {
-        	request.putExtra(Request.STATUS_CODE, statusCode);
+            request.setStatusCode(statusCode);
             try {
                 if (httpResponse != null) {
                     //ensure the connection is released back to pool
@@ -144,7 +144,7 @@ public class HttpClientDownloader extends AbstractDownloader {
         if (site.getHttpProxyPool() != null && site.getHttpProxyPool().isEnable()) {
             HttpHost host = site.getHttpProxyFromPool();
 			requestConfigBuilder.setProxy(host);
-			request.putExtra(Request.PROXY, host);
+            request.setProxy(host);
 		}
         requestBuilder.setConfig(requestConfigBuilder.build());
         return requestBuilder.build();

@@ -42,16 +42,15 @@ public abstract class AbstractDownloader implements Downloader {
 
     protected Page addToCycleRetry(Request request, Site site) {
         Page page = new Page();
-        Object cycleTriedTimesObject = request.getExtra(Request.CYCLE_TRIED_TIMES);
-        if (cycleTriedTimesObject == null) {
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, 1));
+        int cycleTriedTimes = request.getCycleTriedTimes();
+        if (cycleTriedTimes == 0) {
+            page.addTargetRequest(request.setPriority(0).setCycleTriedTimes(1));
         } else {
-            int cycleTriedTimes = (Integer) cycleTriedTimesObject;
             cycleTriedTimes++;
             if (cycleTriedTimes >= site.getCycleRetryTimes()) {
                 return null;
             }
-            page.addTargetRequest(request.setPriority(0).putExtra(Request.CYCLE_TRIED_TIMES, cycleTriedTimes));
+            page.addTargetRequest(request.setPriority(0).setCycleTriedTimes(cycleTriedTimes));
         }
         page.setNeedCycleRetry(true);
         return page;

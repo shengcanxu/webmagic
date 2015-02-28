@@ -38,7 +38,7 @@ public abstract class DuplicateRemovedScheduler implements Scheduler {
     }
 
     protected boolean shouldReserved(Request request) {
-        return request.getExtra(Request.CYCLE_TRIED_TIMES) != null;
+        return request.getCycleTriedTimes() != 0;
     }
 
     protected void pushWhenNoDuplicate(Request request, Task task) {

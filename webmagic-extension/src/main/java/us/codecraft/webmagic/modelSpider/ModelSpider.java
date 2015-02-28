@@ -106,7 +106,7 @@ public class ModelSpider<T> extends Spider {
         extractAndAddRequests(page, spawnUrl);
 
         //for proxy status management
-        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
+        request.setStatusCode(page.getStatusCode());
         sleep(site.getSleepTime());
     }
 

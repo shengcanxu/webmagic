@@ -336,8 +336,7 @@ public class Spider implements Runnable, Task {
                             logger.error("process request " + requestFinal + " error", e);
                         } finally {
                             if (site.getHttpProxyPool()!=null && site.getHttpProxyPool().isEnable()) {
-                                site.returnHttpProxyToPool((HttpHost) requestFinal.getExtra(Request.PROXY), (Integer) requestFinal
-                                        .getExtra(Request.STATUS_CODE));
+                                site.returnHttpProxyToPool(requestFinal.getProxy(), requestFinal.getStatusCode());
                             }
                             pageCount.incrementAndGet();
                             signalNewUrl();
@@ -437,7 +436,7 @@ public class Spider implements Runnable, Task {
             }
         }
         //for proxy status management
-        request.putExtra(Request.STATUS_CODE, page.getStatusCode());
+        request.setStatusCode(page.getStatusCode());
         sleep(site.getSleepTime());
     }
 

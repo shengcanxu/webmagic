@@ -1,5 +1,6 @@
 package us.codecraft.webmagic;
 
+import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import us.codecraft.webmagic.utils.Experimental;
@@ -21,9 +22,10 @@ public class Request implements Serializable {
 
     private static final long serialVersionUID = 2062192774891352043L;
 
-    public static final String CYCLE_TRIED_TIMES = "_cycle_tried_times";
-    public static final String STATUS_CODE = "statusCode";
-    public static final String PROXY = "proxy";
+    //Extra values
+    private int cycleTriedTimes = 0;
+    private int statusCode = 0;
+    private HttpHost proxy;
 
     private String url;
 
@@ -228,6 +230,33 @@ public class Request implements Serializable {
     public void addPostData(String name, String value) {
         NameValuePair nameValuePair = new BasicNameValuePair(name,value);
         this.postData.add(nameValuePair);
+    }
+
+    public int getCycleTriedTimes() {
+        return cycleTriedTimes;
+    }
+
+    public Request setCycleTriedTimes(int cycleTriedTimes) {
+        this.cycleTriedTimes = cycleTriedTimes;
+        return this;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public Request setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+        return this;
+    }
+
+    public HttpHost getProxy() {
+        return proxy;
+    }
+
+    public Request setProxy(HttpHost proxy) {
+        this.proxy = proxy;
+        return this;
     }
 
     @Override
