@@ -62,7 +62,9 @@ public class StackScheduler extends DuplicateRemovedScheduler implements Monitor
         while(iterator.hasNext()){
             String json = iterator.next();
             Request request = gson.fromJson(json, Request.class);
-            list.add(request);
+            if(!urlSet.contains(request.getUrl())) {
+                list.add(request);
+            }
         }
         return list;
     }
