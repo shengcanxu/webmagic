@@ -34,6 +34,8 @@ public class PageModel {
 
     //for download files <Fieldname, DownloadFile>
     private Map<String,DownloadFile> fileDownloadMap = new HashMap<>();
+    //for download images from content <FieldName, DownloadContentImage>
+    private Map<String,DownloadContentImage> downloadContentImageMap = new HashMap<>();
 
     //for getting sub-pages
     private Map<String,Selector> subpageMap = new HashMap<>();
@@ -95,6 +97,9 @@ public class PageModel {
             //get if current field has file to download
             getAnnotationFileUrls(field);
 
+            //get if current filed has content image to download
+            getAnnotationContentImageUrls(field);
+
             //get subpage fields
             getAnnotationSubPage(field);
 
@@ -144,6 +149,14 @@ public class PageModel {
         if(downloadFile != null){
             String fileName = field.getName();
             fileDownloadMap.put(fileName, downloadFile);
+        }
+    }
+
+    private void getAnnotationContentImageUrls(Field field){
+        DownloadContentImage downloadContentImage = field.getAnnotation(DownloadContentImage.class);
+        if(downloadContentImage != null){
+            String fileName = field.getName();
+            downloadContentImageMap.put(fileName,downloadContentImage);
         }
     }
 
@@ -284,5 +297,13 @@ public class PageModel {
 
     public Map<String, String> getCustomFunctionMap() {
         return customFunctionMap;
+    }
+
+    public boolean hasContentImageToDownload(){
+        return downloadContentImageMap.size() != 0;
+    }
+
+    public Map<String, DownloadContentImage> getDownloadContentImageMap() {
+        return downloadContentImageMap;
     }
 }

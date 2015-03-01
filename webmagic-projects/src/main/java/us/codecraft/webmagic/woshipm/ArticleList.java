@@ -5,10 +5,12 @@ import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.modelSpider.annotation.DownloadContentImage;
 import us.codecraft.webmagic.modelSpider.annotation.ExtractByParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.FieldType;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
@@ -47,6 +49,7 @@ public class ArticleList extends PageModel {
 
     @ExtractBy(value = "//div[@class=\"content_box\"]/div[@class=\"con_txt clx\"]")
     @FieldType(type = FieldType.Type.TEXT)
+    @DownloadContentImage(savepath = "E:/test/")
     private String content;
 
     @ExtractBy(value = "//div[@class=\"content_box\"]/div[@class=\"con_txt clx\"]/div[@class=\"ludouVA\"]//div[@class=\"option hxItem\"]/div[@class=\"count\"]/text()")
@@ -69,7 +72,7 @@ public class ArticleList extends PageModel {
 
         ModelSpider modelSpider = ModelSpider.create(site, new ArticleList());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
-                //.addPipeline(new MysqlPipeline())
+                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsoleModelSpiderPipeline());
         for(int i=1; i<=1; i++) {
             modelSpider.addUrlPost("http://www.woshipm.com/page/" + i);

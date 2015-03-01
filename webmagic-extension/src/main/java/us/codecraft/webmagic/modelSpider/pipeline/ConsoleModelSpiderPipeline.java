@@ -48,5 +48,6 @@ public class ConsoleModelSpiderPipeline implements Pipeline {
 
             System.out.println(name + ":\t" + value);
         }
+        System.out.println();
     }
 }

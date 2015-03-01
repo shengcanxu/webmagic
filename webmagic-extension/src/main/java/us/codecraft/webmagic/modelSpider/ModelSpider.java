@@ -63,6 +63,7 @@ public class ModelSpider<T> extends Spider {
         this.addPipeline(new CustomFunctionPipeline());
         this.addPipeline(new FormatterPipeline());
         this.addPipeline(new FileDownloadPipeline());
+        this.addPipeline(new ContentImageDownloadPipeline());
     }
 
     public static ModelSpider create(Site site, PageModel pageModel) {
