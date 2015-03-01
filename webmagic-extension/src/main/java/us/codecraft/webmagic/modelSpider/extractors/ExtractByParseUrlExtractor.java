@@ -1,17 +1,18 @@
 package us.codecraft.webmagic.modelSpider.extractors;
 
-import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.modelSpider.annotation.ExtractByParseUrl;
+import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selector;
 import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.lang.reflect.Field;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by cano on 2015/2/7.
  */
-public class ExtractByParseUrlExtractor implements FieldValueExtractor {
+public class ExtractByParseUrlExtractor {
 
     protected Field field;
 
@@ -32,12 +33,13 @@ public class ExtractByParseUrlExtractor implements FieldValueExtractor {
     }
 
 
-    @Override
-    public List<String> extract(Page page) {
-        return null;
+    public Map<String,String> extract(Html html) {
+        String content = html.selectDocument(selector);
+        Map<String, String> contentMap = new HashMap<>();
+        contentMap.put(name,content);
+        return contentMap;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }

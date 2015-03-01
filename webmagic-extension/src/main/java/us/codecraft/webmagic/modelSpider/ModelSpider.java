@@ -87,6 +87,7 @@ public class ModelSpider<T> extends Spider {
         }
         pageProcessor.process(page);
 
+        //expand array values
         if (!page.getResultItems().isSkip()) {
             ResultItems resultItems = page.getResultItems();
             if(pageModel.isShouldExpand()){

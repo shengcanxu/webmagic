@@ -10,6 +10,7 @@ import us.codecraft.webmagic.selector.XpathSelector;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,9 +72,8 @@ public class ParseUrlExtractor {
 
                 //get content in parseurl page and pass to the pages in next level (depth)
                 for (ExtractByParseUrlExtractor contentExtractor : contentExtractors) {
-                    Selector contentSelector = contentExtractor.getSelector();
-                    String content = html.selectDocument(contentSelector);
-                    request.putContents(contentExtractor.getName(), content);
+                    Map<String, String> contentMap = contentExtractor.extract(html);
+                    request.putContents(contentMap);
                 }
                 requests.add(request);
             }

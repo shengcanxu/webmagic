@@ -160,11 +160,11 @@ public class Request implements Serializable {
         return contents;
     }
 
-    public Request putContents(String name, String content){
+    public Request putContents(Map<String,String> content){
         if(contents == null){
             contents = new HashMap<>();
         }
-        contents.put(name,content);
+        contents.putAll(content);
         return this;
     }
 
