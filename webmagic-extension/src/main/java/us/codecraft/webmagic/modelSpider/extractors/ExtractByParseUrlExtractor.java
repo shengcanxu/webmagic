@@ -7,6 +7,7 @@ import us.codecraft.webmagic.selector.XpathSelector;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,11 +23,14 @@ public class ExtractByParseUrlExtractor {
 
     protected boolean notNull = false;
 
+    protected boolean multi = false;
+
     protected int depth;
 
     public ExtractByParseUrlExtractor(ExtractByParseUrl extractByParseUrl, Field field){
         selector = new XpathSelector(extractByParseUrl.xpath());
         notNull = extractByParseUrl.notNull();
+        multi = List.class.isAssignableFrom(field.getType());
         this.depth = extractByParseUrl.depth();
         this.field = field;
         this.name = field.getName();
@@ -34,10 +38,25 @@ public class ExtractByParseUrlExtractor {
 
 
     public Map<String,String> extract(Html html) {
-        String content = html.selectDocument(selector);
         Map<String, String> contentMap = new HashMap<>();
-        contentMap.put(name,content);
-        return contentMap;
+        if(this.multi){
+            List<String> value;
+            value = html.selectDocumentForList(this.selector);
+            if ((value == null || value.size() == 0) && this.notNull) {
+                return contentMap;
+            }else{
+                String v = value.get(0);
+                for(int i=1; i<value.size(); i++){
+                    v = v + "," + value.get(i);
+                }
+                contentMap.put(name,v);
+                return contentMap;
+            }
+        }else {
+            String content = html.selectDocument(selector);
+            contentMap.put(name, content);
+            return contentMap;
+        }
     }
 
     public String getName() {

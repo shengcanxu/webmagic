@@ -160,7 +160,7 @@ public class Request implements Serializable {
         return contents;
     }
 
-    public Request putContents(Map<String,String> content){
+    public Request addContents(Map<String, String> content){
         if(contents == null){
             contents = new HashMap<>();
         }

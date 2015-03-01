@@ -20,7 +20,7 @@ import java.util.List;
         subXpath = "//h2/a/@href")
 public class ArticleList extends PageModel {
 
-    @ExtractByParseUrl(xpath = "//span[@class=\"f_c_tag\"]/a",depth = 1)
+    @ExtractByParseUrl(xpath = "//span[@class=\"f_c_tag\"]/a/text()",depth = 1)
     private List<String> tags;
 
     @ExtractByParseUrl(xpath = "//span[@class=\"f_c_view\"]/i/text()",depth = 1)
@@ -62,7 +62,7 @@ public class ArticleList extends PageModel {
 
 
     public static void main(String[] args){
-        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5)
+        Site site = Site.me().setRetryTimes(5).setTimeOut(10000).setCycleRetryTimes(5)
                 .setDomain("woshipm.com").addHeader("Referer","http://www.woshipm.com/");
         System.out.println(site);
 

@@ -73,7 +73,7 @@ public class ParseUrlExtractor {
                 //get content in parseurl page and pass to the pages in next level (depth)
                 for (ExtractByParseUrlExtractor contentExtractor : contentExtractors) {
                     Map<String, String> contentMap = contentExtractor.extract(html);
-                    request.putContents(contentMap);
+                    request.addContents(contentMap);
                 }
                 requests.add(request);
             }
