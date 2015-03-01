@@ -59,6 +59,13 @@ public class ParseUrlExtractor {
             List<String> links = page.getHtml().selectDocumentForList(selector);
             for(String link : links){
                 Request request = new Request(link);
+
+                //add content from upper-level parseurl into requests
+                Map<String,String> upperContent = page.getRequest().getContents();
+                if(upperContent != null) {
+                    request.addContents(upperContent);
+                }
+
                 requests.add(request);
             }
             return requests;
@@ -75,6 +82,13 @@ public class ParseUrlExtractor {
                     Map<String, String> contentMap = contentExtractor.extract(html);
                     request.addContents(contentMap);
                 }
+
+                //add content from upper-level parseurl into requests
+                Map<String,String> upperContent = page.getRequest().getContents();
+                if(upperContent != null) {
+                    request.addContents(upperContent);
+                }
+
                 requests.add(request);
             }
             return requests;
