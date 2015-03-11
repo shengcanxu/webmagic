@@ -8,10 +8,13 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
+import us.codecraft.webmagic.modelSpider.ModelSpider;
+import us.codecraft.webmagic.modelSpider.pipeline.BaseDAO;
 import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Use Redis as url scheduler for distributed crawlers.<br>
@@ -175,6 +178,37 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
                 }
             }
             return list;
+        }finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    @Override
+    public void postRun(Task task) {
+        Jedis jedis = pool.getResource();
+        BaseDAO dao = BaseDAO.getInstance();
+
+        //create table
+        String tableName;
+        if(task instanceof ModelSpider){
+            tableName = ((ModelSpider) task).getPageModel().getClazz().getSimpleName() + "UrlSet";
+        }else{
+            tableName = task.getUUID() + "UrlSet";
+        }
+        String sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
+        dao.executeUpdate(sql);
+        logger.info("drop table " + tableName + " and re-recreate again.");
+        logger.info("creating table " + tableName);
+        sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT,`url` varchar(1024) NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB;";
+        dao.executeUpdate(sql);
+
+        //store values
+        try{
+            Set<String> urlSet = jedis.smembers(getSetKey(task));
+            for(String url : urlSet){
+                sql = "INSERT INTO `" + tableName + "` (`id`,`url`) VALUES (NULL,'" + url + "')";
+                dao.executeUpdate(sql);
+            }
         }finally {
             pool.returnResource(jedis);
         }

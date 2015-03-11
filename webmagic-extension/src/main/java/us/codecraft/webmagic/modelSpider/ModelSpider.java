@@ -136,4 +136,8 @@ public class ModelSpider<T> extends Spider {
         }while(i<multiSize);
         return resultItemsesList;
     }
+
+    public PageModel getPageModel() {
+        return pageModel;
+    }
 }

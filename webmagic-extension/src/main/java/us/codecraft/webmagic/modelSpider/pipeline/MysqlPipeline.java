@@ -110,7 +110,7 @@ public class MysqlPipeline implements Pipeline {
         if(this.shouldResetDb){
             String sql = "DROP TABLE IF EXISTS `" + tableName + "`;";
             dao.executeUpdate(sql);
-            logger.info("drop table " + tableName + " and re-recrate again.");
+            logger.info("drop table " + tableName + " and re-recreate again.");
         }
 
         logger.info("creating table " + tableName);

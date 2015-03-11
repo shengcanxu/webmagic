@@ -188,6 +188,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     @Override
+    public void postRun(Task task) {
+
+    }
+
+    @Override
     public int getLeftRequestsCount(Task task) {
         return queue.size();
     }

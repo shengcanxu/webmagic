@@ -37,4 +37,9 @@ public interface Scheduler {
      */
     public List<Request> checkIfCompleteParse(Task task);
 
+    /**
+     * do some post jobs after all requests are done
+     */
+    public void postRun(Task task);
+
 }

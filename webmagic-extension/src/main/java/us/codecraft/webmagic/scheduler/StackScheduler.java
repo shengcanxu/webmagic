@@ -70,6 +70,10 @@ public class StackScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
+    public void postRun(Task task) {
+    }
+
+    @Override
     public void pushWhenNoDuplicate(Request request, Task task) {
         Gson gson = new Gson();
         String json = gson.toJson(request);

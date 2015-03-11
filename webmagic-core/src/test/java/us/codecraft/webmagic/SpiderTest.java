@@ -93,6 +93,11 @@ public class SpiderTest {
             public List checkIfCompleteParse(Task task) {
                 return null;
             }
+
+            @Override
+            public void postRun(Task task) {
+
+            }
         }).thread(10);
         spider.run();
     }

@@ -68,6 +68,11 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
     }
 
     @Override
+    public void postRun(Task task) {
+
+    }
+
+    @Override
     public int getLeftRequestsCount(Task task) {
         return noPriorityQueue.size();
     }
