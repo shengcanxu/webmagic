@@ -56,6 +56,11 @@ public class Request implements Serializable {
     private Map<String, String> contents;
 
     /**
+     * true if want to parsed this request even it's already parsed
+     */
+    private boolean isRefresh = false;
+
+    /**
      * Priority of the request.<br>
      * The bigger will be processed earlier. <br>
      * @see us.codecraft.webmagic.scheduler.PriorityScheduler
@@ -256,6 +261,15 @@ public class Request implements Serializable {
 
     public Request setProxy(HttpHost proxy) {
         this.proxy = proxy;
+        return this;
+    }
+
+    public boolean isRefresh() {
+        return isRefresh;
+    }
+
+    public Request setRefresh(boolean isRefresh) {
+        this.isRefresh = isRefresh;
         return this;
     }
 

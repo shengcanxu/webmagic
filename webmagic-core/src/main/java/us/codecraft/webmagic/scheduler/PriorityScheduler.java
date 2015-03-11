@@ -68,7 +68,12 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
     }
 
     @Override
-    public void postRun(Task task) {
+    public void saveQueue(Task task) {
+
+    }
+
+    @Override
+    public void recoverQueue(Task task) {
 
     }
 

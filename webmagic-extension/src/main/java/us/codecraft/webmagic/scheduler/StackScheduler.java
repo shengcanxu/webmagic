@@ -70,7 +70,12 @@ public class StackScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public void postRun(Task task) {
+    public void saveQueue(Task task) {
+    }
+
+    @Override
+    public void recoverQueue(Task task) {
+
     }
 
     @Override

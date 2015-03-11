@@ -104,19 +104,20 @@ public class BaseDAO {
      */
     public List executeQuery(String sql, Object[] param, int[] type) {
         ResultSet rs = null;
-        List list = null;
+        List<Map<String,Object>> list = null;
         PreparedStatement prsts = null;
         try {
             prsts = conn.prepareStatement(sql);
-            for (int i = 1; i <= param.length; i++) {
-                prsts.setObject(i, param[i - 1], type[i - 1]);
+            if(param != null) {
+                for (int i = 1; i <= param.length; i++) {
+                    prsts.setObject(i, param[i - 1], type[i - 1]);
+                }
             }
             rs = prsts.executeQuery();
-            list = new ArrayList();
+            list = new ArrayList<>();
             ResultSetMetaData rsm = rs.getMetaData();
-            Map map = null;
             while (rs.next()) {
-                map = new HashMap();
+                Map<String,Object> map = new HashMap<>();
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
                     map.put(rsm.getColumnName(i), rs.getObject(rsm.getColumnName(i)));
                 }

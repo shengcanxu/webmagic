@@ -188,7 +188,12 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     @Override
-    public void postRun(Task task) {
+    public void saveQueue(Task task) {
+
+    }
+
+    @Override
+    public void recoverQueue(Task task){
 
     }
 

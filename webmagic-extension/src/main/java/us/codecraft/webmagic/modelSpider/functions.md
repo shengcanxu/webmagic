@@ -8,3 +8,4 @@
 8. add checkIfCompleteParse in scheduler to make sure all put-in-queue requests are parsed. it's used for finding out the un-parsed reqeusts becauses of network issues;
 9. able to get content from the parseurl pages. means when content is gotten, they will passed along to the next level page, coming together with the final content
 10. add custom function. able to use custom functions to do parse now
+11. able to update and get refresh contents now. use addUrlForRefresh and setRecoverQueue of Spider

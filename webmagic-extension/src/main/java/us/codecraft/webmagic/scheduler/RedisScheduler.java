@@ -14,6 +14,7 @@ import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -75,10 +76,11 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }
 
             boolean isDuplicate = jedis.sismember(getSetKey(task), request.getUrl());
-            if (!isDuplicate) {
+            if (!isDuplicate || request.isRefresh()) {
                 jedis.sadd(getSetKey(task), request.getUrl());
+                return false;
             }
-            return isDuplicate;
+            return true;
         } finally {
             pool.returnResource(jedis);
         }
@@ -184,7 +186,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public void postRun(Task task) {
+    public void saveQueue(Task task) {
         Jedis jedis = pool.getResource();
         BaseDAO dao = BaseDAO.getInstance();
 
@@ -208,6 +210,31 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             for(String url : urlSet){
                 sql = "INSERT INTO `" + tableName + "` (`id`,`url`) VALUES (NULL,'" + url + "')";
                 dao.executeUpdate(sql);
+            }
+        }finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    @Override
+    public void recoverQueue(Task task) {
+        BaseDAO dao = BaseDAO.getInstance();
+        Jedis jedis = pool.getResource();
+
+        //get urls
+        String tableName;
+        if(task instanceof ModelSpider){
+            tableName = ((ModelSpider) task).getPageModel().getClazz().getSimpleName() + "UrlSet";
+        }else{
+            tableName = task.getUUID() + "UrlSet";
+        }
+
+        String sql = "select url from " + tableName;
+        List<Map<String,Object>> list = dao.executeQuery(sql,null,null);
+        try {
+            for (Map<String, Object> map : list) {
+                String url = (String) map.get("url");
+                jedis.sadd(getSetKey(task), url);
             }
         }finally {
             pool.returnResource(jedis);

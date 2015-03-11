@@ -108,6 +108,8 @@ public class Spider implements Runnable, Task {
 
     private int emptySleepTime = 30000;
 
+    private boolean recoverQueue = false;
+
     /**
      * create a spider with pageProcessor.
      *
@@ -305,6 +307,9 @@ public class Spider implements Runnable, Task {
         checkRunningStat();
         initComponent();
         logger.info("Spider " + getUUID() + " started!");
+
+        preRun();
+
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request request = scheduler.poll(this);
             if (request == null) {
@@ -354,8 +359,14 @@ public class Spider implements Runnable, Task {
         }
     }
 
+    protected void preRun(){
+        if(recoverQueue) {
+            this.scheduler.recoverQueue(this);
+        }
+    }
+
     protected void postRun(){
-        this.scheduler.postRun(this);
+        this.scheduler.saveQueue(this);
     }
 
     protected void onError(Request request) {
@@ -496,6 +507,19 @@ public class Spider implements Runnable, Task {
     public Spider addUrl(String... urls) {
         for (String url : urls) {
             addRequest(new Request(url));
+        }
+        signalNewUrl();
+        return this;
+    }
+
+    /**
+     * add urls to crawl. these urls will be parsed evern they are already parsed before
+     * @param urls
+     * @return
+     */
+    public Spider addUrlForRefresh(String... urls){
+        for (String url : urls){
+            addRequest(new Request(url).setRefresh(true));
         }
         signalNewUrl();
         return this;
@@ -767,5 +791,10 @@ public class Spider implements Runnable, Task {
      */
     public void setEmptySleepTime(int emptySleepTime) {
         this.emptySleepTime = emptySleepTime;
+    }
+
+    public Spider setRecoverQueue(boolean recoverQueue) {
+        this.recoverQueue = recoverQueue;
+        return this;
     }
 }

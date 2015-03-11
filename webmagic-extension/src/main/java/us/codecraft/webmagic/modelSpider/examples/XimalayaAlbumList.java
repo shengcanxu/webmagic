@@ -8,7 +8,7 @@ import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ExpandFieldValues;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.scheduler.StackScheduler;
+import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 import java.util.List;
 
@@ -32,9 +32,10 @@ public class XimalayaAlbumList extends PageModel {
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site, new XimalayaAlbumList())
-                .scheduler(new StackScheduler())
+                .scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsolePipeline())
-                .addUrl("http://album.ximalaya.com/dq/book/").run();
+                .addUrlForRefresh("http://album.ximalaya.com/dq/book/")
+                .setRecoverQueue(true).run();
     }
 }

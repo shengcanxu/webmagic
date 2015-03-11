@@ -38,8 +38,14 @@ public interface Scheduler {
     public List<Request> checkIfCompleteParse(Task task);
 
     /**
-     * do some post jobs after all requests are done
+     * save to queue to db
      */
-    public void postRun(Task task);
+    public void saveQueue(Task task);
+
+    /**
+     * recover queue from db
+     * @param task
+     */
+    public void recoverQueue(Task task);
 
 }
