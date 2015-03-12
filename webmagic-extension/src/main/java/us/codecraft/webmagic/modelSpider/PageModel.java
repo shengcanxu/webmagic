@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by cano on 2015/2/7.
  */
-public abstract class PageModel {
+public class PageModel {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Class<?> clazz;
@@ -51,17 +51,11 @@ public abstract class PageModel {
 
     private boolean shouldExpand = false;
 
-    public PageModel(){}
-
-    public PageModel(Class<?> clazz){
-        this.createModel(clazz);
+    public static PageModel createModelFromClass(Class<?> clazz){
+        PageModel pageModel = new PageModel();
+        pageModel.createModel(clazz);
+        return pageModel;
     }
-
-//    public static PageModel createModelFromClass(Class<?> clazz){
-//        PageModel pageModel = new PageModel();
-//        pageModel.createModel(clazz);
-//        return pageModel;
-//    }
 
     public void createModel(Class<?> clazz){
         this.clazz = clazz;
@@ -74,8 +68,6 @@ public abstract class PageModel {
         this.modelName = clazz.getSimpleName();
         init(clazz);
     }
-
-    abstract public List<String> getUpdateUrls();
 
     private void init(Class clazz) {
         initClassExtractors(clazz);
@@ -146,12 +138,7 @@ public abstract class PageModel {
 
             Class<?> type = field.getType();
             if(PageModel.class.isAssignableFrom(type)){
-                PageModel subpagePageModel = new PageModel(type) {
-                    @Override
-                    public List<String> getUpdateUrls() {
-                        return null;
-                    }
-                };
+                PageModel subpagePageModel = PageModel.createModelFromClass(type);
                 subpageModelMap.put(field.getName(), subpagePageModel);
             }
         }
