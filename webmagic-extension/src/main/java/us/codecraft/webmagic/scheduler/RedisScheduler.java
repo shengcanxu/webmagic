@@ -205,9 +205,11 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         dao.executeUpdate(sql);
 
         //store values
+        logger.info("storing parsed urls.");
         try{
             Set<String> urlSet = jedis.smembers(getSetKey(task));
             for(String url : urlSet){
+                logger.info(url);
                 sql = "INSERT INTO `" + tableName + "` (`id`,`url`) VALUES (NULL,'" + url + "')";
                 dao.executeUpdate(sql);
             }
@@ -230,8 +232,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         }
 
         String sql = "select url from " + tableName;
-        List<Map<String,Object>> list = dao.executeQuery(sql,null,null);
         try {
+            List<Map<String,Object>> list = dao.executeQuery(sql,null,null);
             for (Map<String, Object> map : list) {
                 String url = (String) map.get("url");
                 jedis.sadd(getSetKey(task), url);
