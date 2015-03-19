@@ -317,11 +317,15 @@ public class Spider implements Runnable, Task {
                     //print out the un-parsed urls
                     List<Request> leftRequests = scheduler.checkIfCompleteParse(this);
                     if(leftRequests != null || leftRequests.size() > 0){
-                        //TODO: change to add requests back to queue and re-parse them
-                        System.out.println("some urls are not parsed:");
+                        logger.info("some urls are not parsed:");
                         for(Request r : leftRequests){
-                            System.out.println(r.getUrl());
+                            logger.info(r.getUrl());
                         }
+                        logger.info("restart un-parsed urls");
+                        for(Request r : leftRequests){
+                            scheduler.push(r,this);
+                        }
+                        continue;
                     }
                     break;
                 }
