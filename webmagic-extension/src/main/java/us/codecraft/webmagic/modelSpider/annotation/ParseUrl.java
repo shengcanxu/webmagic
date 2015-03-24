@@ -22,16 +22,28 @@ public @interface ParseUrl {
      *
      * @return extractor expression
      */
-    String xpath();
+    String express();
 
     /**
-     * if subXpath is set, first parse and get strings from "xpath()" setting and then use subXpath to parse those strings.
+     * types of extractor expressions
+     */
+    public static enum Type {XPath, Regex, Css, JsonPath}
+
+    /**
+     * Extractor type, support XPath, CSS Selector and regex.
+     *
+     * @return extractor type
+     */
+    Type type() default Type.XPath;
+
+    /**
+     * if subXpath is set, first parse and get strings from "express()" setting and then use subXpath to parse those strings.
      * @return
      */
     String subXpath() default "";
 
     /**
-     * the next page xpath
+     * the next page express
      * @return
      */
     String nextPageRegion() default "";

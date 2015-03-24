@@ -19,7 +19,7 @@ import java.util.List;
  * Created by cano on 2015/2/19.
  */
 
-@ParseUrl(xpath = "//*[@id=\"ajaxContent\"]/div",
+@ParseUrl(express = "//*[@id=\"ajaxContent\"]/div",
         subXpath = "//h2/a/@href")
 public class ArticleList extends PageModel {
 

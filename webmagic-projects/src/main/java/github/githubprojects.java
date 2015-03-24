@@ -4,6 +4,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
+import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
 
@@ -11,7 +12,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
  * Created by cano on 2015/2/19.
  */
 
-
+@ParseUrl(express = "\"login\":\"[^\"]*\"", type = ParseUrl.Type.Regex)
 public class githubprojects extends PageModel {
 
     @ExtractByUrl(regrex = "")

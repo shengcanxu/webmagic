@@ -22,7 +22,7 @@ public @interface ExtractByParseUrl {
     String xpath();
 
     /**
-     * extract xpath on NO. (depth) of page which is parsed on NO. (depth) of parseurl annotation
+     * extract express on NO. (depth) of page which is parsed on NO. (depth) of parseurl annotation
      * @return
      */
     int depth();

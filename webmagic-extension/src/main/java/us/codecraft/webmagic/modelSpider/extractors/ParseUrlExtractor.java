@@ -3,9 +3,7 @@ package us.codecraft.webmagic.modelSpider.extractors;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
-import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selector;
-import us.codecraft.webmagic.selector.XpathSelector;
+import us.codecraft.webmagic.selector.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,7 +18,11 @@ import java.util.regex.Pattern;
 public class ParseUrlExtractor {
     public static final String CONTENT_NAME = "content";
 
+    public static enum Type {XPath, Regex, Css, JsonPath}
+
     protected Class clazz;
+
+    protected Type type = Type.XPath;
 
     protected Selector selector;
 
@@ -33,8 +35,28 @@ public class ParseUrlExtractor {
     protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
-        String xpathStrings = parseUrl.xpath();
-        selector = new XpathSelector(xpathStrings);
+        String express = parseUrl.express();
+        switch(parseUrl.type()){
+            case XPath:
+                type = Type.XPath;
+                selector = new XpathSelector(express);
+                break;
+            case Regex:
+                type = Type.Regex;
+                selector = new RegexSelector(express);
+                break;
+            case JsonPath:
+                type = Type.JsonPath;
+                selector = new JsonPathSelector(express);
+                break;
+            case Css:
+                type = Type.Css;
+                selector = new CssSelector(express);
+                break;
+            default:
+                type = Type.XPath;
+                selector = new XpathSelector(express);
+        }
 
         if (!parseUrl.subXpath().equals("")) {
             subSelector = new XpathSelector(parseUrl.subXpath());
