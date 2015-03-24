@@ -316,7 +316,7 @@ public class Spider implements Runnable, Task {
                 if (threadPool.getThreadAlive() == 0 && exitWhenComplete) {
                     //print out the un-parsed urls
                     List<Request> leftRequests = scheduler.checkIfCompleteParse(this);
-                    if(leftRequests != null || leftRequests.size() > 0){
+                    if(leftRequests != null && leftRequests.size() > 0){
                         logger.info("some urls are not parsed:");
                         for(Request r : leftRequests){
                             logger.info(r.getUrl());

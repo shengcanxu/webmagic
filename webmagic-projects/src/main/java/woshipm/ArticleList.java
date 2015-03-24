@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.woshipm;
+package woshipm;
 
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
