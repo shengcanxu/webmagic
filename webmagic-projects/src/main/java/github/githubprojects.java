@@ -8,15 +8,25 @@ import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by cano on 2015/2/19.
  */
 
-@ParseUrl(express = "\"login\":\"[^\"]*\"", type = ParseUrl.Type.Regex)
+@ParseUrl(express = "\"login\":\"[^\"]*\"", type = ParseUrl.Type.Regex, customFunction = "getUrl")
 public class githubprojects extends PageModel {
 
     @ExtractByUrl(regrex = "")
     private String pageUrl;
+
+    public String getUrl(String value){
+        Pattern regex = Pattern.compile("\"login\":\"([^\"]*)\"");
+        Matcher matcher = regex.matcher(value);
+        String author =  matcher.replaceAll("$1");
+        return "https://github.com/" + author + "?tab=repositories";
+    }
 
 
     public static void main(String[] args){

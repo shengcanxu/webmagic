@@ -2,9 +2,12 @@ package us.codecraft.webmagic.modelSpider.extractors;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.selector.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +34,8 @@ public class ParseUrlExtractor {
     protected Selector nextPageRegion;
 
     protected Pattern nextPageLinkPattern;
+
+    protected String customFunction;
 
     protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
@@ -67,6 +72,9 @@ public class ParseUrlExtractor {
         if(!parseUrl.nextPageRegion().equals("")) {
             nextPageLinkPattern = Pattern.compile("(" + parseUrl.nextPageLinkRegex().replace(".", "\\.").replace("*", "[^\"'#]*") + ")");
         }
+        if(!parseUrl.customFunction().equals("")){
+            customFunction = parseUrl.customFunction();
+        }
         this.clazz = clazz;
     }
 
@@ -79,6 +87,17 @@ public class ParseUrlExtractor {
         List<Request> requests = new ArrayList<>();
         if(subSelector == null){
             List<String> links = page.getHtml().selectDocumentForList(selector);
+
+            //call custom function is exists
+            if(customFunction != null){
+                List<String> newLinks = new ArrayList<>();
+                for(String link : links) {
+                    String newLink = applyCustomFunction(link, page, customFunction);
+                    newLinks.add(newLink);
+                }
+                links = newLinks;
+            }
+
             for(String link : links){
                 Request request = new Request(link);
 
@@ -97,6 +116,12 @@ public class ParseUrlExtractor {
             for(String region : regions){
                 Html html = new Html(region);
                 String link = html.selectDocument(subSelector);
+
+                //call custom function is exists
+                if(customFunction != null){
+                    link = applyCustomFunction(link,page,customFunction);
+                }
+
                 Request request = new Request(link);
 
                 //get content in parseurl page and pass to the pages in next level (depth)
@@ -115,6 +140,23 @@ public class ParseUrlExtractor {
             }
             return requests;
         }
+    }
+
+    public String applyCustomFunction(String url, Page page, String functionStr){
+        String newValue = "";
+        try {
+                PageModel pageModel = (PageModel) page.getPageModel();
+                Method customFunction = pageModel.getClass().getMethod(functionStr, String.class);
+                newValue = (String) customFunction.invoke(pageModel, url);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return newValue;
     }
 
     /**

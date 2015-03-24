@@ -53,4 +53,10 @@ public @interface ParseUrl {
      * @return
      */
     String nextPageLinkRegex() default "";
+
+    /**
+     * the custom function used to called before parse-url are done
+     * @return
+     */
+    String customFunction() default  "";
 }

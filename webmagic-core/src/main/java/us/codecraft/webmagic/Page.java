@@ -277,7 +277,11 @@ public class Page {
         this.pageModel = pageModel;
         this.resultItems.setPageModel(pageModel);
     }
-    
+
+    public Object getPageModel() {
+        return pageModel;
+    }
+
     @Override
     public String toString() {
         return "Page{" +
