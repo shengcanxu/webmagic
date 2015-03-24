@@ -9,3 +9,4 @@
 9. able to get content from the parseurl pages. means when content is gotten, they will passed along to the next level page, coming together with the final content
 10. add custom function. able to use custom functions to do parse now
 11. able to update and get refresh contents now. use addUrlForRefresh and setRecoverQueue of Spider
+12. 可以在parseurl上使用css，json和正则表达式来获取内容，并且可以使用custom function

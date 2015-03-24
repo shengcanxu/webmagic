@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.modelSpider.examples;
 
+import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.model.annotation.ExtractBy;
 import us.codecraft.webmagic.model.annotation.ExtractByUrl;
@@ -37,7 +38,7 @@ public class XimalayaAlbumCustom extends PageModel {
     @ExtractByUrl(regrex = "")
     private String PageURL;
 
-    public String minusOne(String value){
+    public String minusOne(String value, Page page){
         try {
             int num = Integer.parseInt(value);
             num = num - 1;

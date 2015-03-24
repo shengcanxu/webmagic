@@ -1,5 +1,6 @@
 package us.codecraft.webmagic.modelSpider.pipeline;
 
+import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.PageModel;
@@ -29,8 +30,8 @@ public class CustomFunctionPipeline implements Pipeline {
             String name = entry.getKey();
             String value = resultItems.get(name);
             try {
-                Method customFunction = pageModel.getClass().getMethod(entry.getValue(),String.class);
-                String newValue = (String) customFunction.invoke(pageModel,value);
+                Method customFunction = pageModel.getClass().getMethod(entry.getValue(),String.class, Page.class);
+                String newValue = (String) customFunction.invoke(pageModel,value,resultItems.getPage());
                 resultItems.put(name,newValue);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
