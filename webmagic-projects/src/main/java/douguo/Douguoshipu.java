@@ -21,7 +21,7 @@ public class Douguoshipu extends PageModel {
     private String pageUrl;
 
     public static void main(String[] args){
-        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5).setDeepFirst(false)
+        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5).setDeepFirst(true)
                 .setDomain("douguo.com/").addHeader("Referer","http://www.douguo.com/");
         System.out.println(site);
 

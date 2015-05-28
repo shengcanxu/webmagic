@@ -294,8 +294,14 @@ public class Spider implements Runnable, Task {
             }
         }
         if (startRequests != null) {
-            for (Request request : startRequests) {
-                scheduler.push(request, this);
+            if(site.isDeepFirst()){
+                for(int i=startRequests.size()-1; i>=0; i--){
+                    scheduler.push(startRequests.get(i),this);
+                }
+            }else{
+                for(int i=0; i<startRequests.size(); i++){
+                    scheduler.push(startRequests.get(i),this);
+                }
             }
             startRequests.clear();
         }
@@ -471,23 +477,42 @@ public class Spider implements Runnable, Task {
 
     protected void extractAndAddRequests(Page page, boolean spawnUrl) {
         if (spawnUrl && CollectionUtils.isNotEmpty(page.getTargetRequests())) {
-            logger.info("get " + page.getTargetRequests().size() + " links to follow.");
-            for (Request request : page.getTargetRequests()) {
-                if(request.isNextPageRequest()){
-                    request.setDepth(page.getDepth());
-                }else{
-                    request.setDepth(page.getDepth()+1);
-                }
-                addRequest(request);
+            List<Request> requests = page.getTargetRequests();
+            logger.info("get " + requests.size() + " links to follow.");
+            for (Request request : requests) {
+                request.setDepth(page.getDepth()+1);
+                logger.info(request.getUrl());
             }
+
+            List<Request> nextPageRequests = page.getNextPageRequests();
+            logger.info("get " + nextPageRequests.size() + " next pages to follow.");
+            for(Request request : nextPageRequests){
+                request.setDepth(page.getDepth());
+                logger.info(request.getUrl());
+            }
+
+            addRequests(requests);
+            addRequests(nextPageRequests);
         }
     }
 
     private void addRequest(Request request) {
-        if (site.getDomain() == null && request != null && request.getUrl() != null) {
-            site.setDomain(UrlUtils.getDomain(request.getUrl()));
-        }
+//        if (site.getDomain() == null && request != null && request.getUrl() != null) {
+//            site.setDomain(UrlUtils.getDomain(request.getUrl()));
+//        }
         scheduler.push(request, this);
+    }
+
+    private void addRequests(List<Request> requests){
+        if(site.isDeepFirst()){
+            for(int i=requests.size()-1; i>=0; i--){
+                scheduler.push(requests.get(i),this);
+            }
+        }else{
+            for(int i=0; i<requests.size(); i++){
+                scheduler.push(requests.get(i),this);
+            }
+        }
     }
 
     protected void checkIfRunning() {
@@ -509,9 +534,11 @@ public class Spider implements Runnable, Task {
      * @return
      */
     public Spider addUrl(String... urls) {
+        List<Request> requests = new ArrayList<>();
         for (String url : urls) {
-            addRequest(new Request(url));
+            requests.add(new Request(url));
         }
+        addRequests(requests);
         signalNewUrl();
         return this;
     }
@@ -522,19 +549,23 @@ public class Spider implements Runnable, Task {
      * @return
      */
     public Spider addUrlForRefresh(String... urls){
+        List<Request> requests = new ArrayList<>();
         for (String url : urls){
-            addRequest(new Request(url).setRefresh(true));
+            requests.add(new Request(url).setRefresh(true));
         }
+        addRequests(requests);
         signalNewUrl();
         return this;
     }
 
     public Spider addUrlPost(String... urls){
+        List<Request> requests = new ArrayList<>();
         for (String url : urls){
             Request request = new Request(url);
             request.setMethod(HttpConstant.Method.POST);
-            addRequest(request);
+            requests.add(request);
         }
+        addRequests(requests);
         signalNewUrl();
         return this;
     }
@@ -549,9 +580,9 @@ public class Spider implements Runnable, Task {
         destroyWhenExit = false;
         spawnUrl = false;
         startRequests.clear();
-        for (Request request : UrlUtils.convertToRequests(urls)) {
-            addRequest(request);
-        }
+        List<Request> requests = UrlUtils.convertToRequests(urls);
+        addRequests(requests);
+
         CollectorPipeline collectorPipeline = getCollectorPipeline();
         pipelines.add(collectorPipeline);
         run();
@@ -580,13 +611,13 @@ public class Spider implements Runnable, Task {
      * @param requests
      * @return
      */
-    public Spider addRequest(Request... requests) {
-        for (Request request : requests) {
-            addRequest(request);
-        }
-        signalNewUrl();
-        return this;
-    }
+//    public Spider addRequest(Request... requests) {
+//        for (Request request : requests) {
+//            addRequest(request);
+//        }
+//        signalNewUrl();
+//        return this;
+//    }
 
     private void waitNewUrl() {
         newUrlLock.lock();

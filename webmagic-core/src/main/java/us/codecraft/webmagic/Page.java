@@ -43,6 +43,7 @@ public class Page {
     private boolean needCycleRetry;
 
     private List<Request> targetRequests = new ArrayList<Request>();
+    private List<Request> nextPageRequests = new ArrayList<>();
 
     private int depth =0;
 
@@ -116,6 +117,10 @@ public class Page {
 
     public List<Request> getTargetRequests() {
         return targetRequests;
+    }
+
+    public List<Request> getNextPageRequests() {
+        return nextPageRequests;
     }
 
     /**
@@ -197,9 +202,8 @@ public class Page {
     }
 
     public void addNextPageRequest(Request request){
-        synchronized (targetRequests) {
-            request.setNextPageRequest(true);
-            targetRequests.add(request);
+        synchronized (nextPageRequests) {
+            nextPageRequests.add(request);
         }
     }
 

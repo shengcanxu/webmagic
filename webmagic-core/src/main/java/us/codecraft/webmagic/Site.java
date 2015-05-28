@@ -4,6 +4,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import org.apache.http.HttpHost;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.proxy.ProxyPool;
 import us.codecraft.webmagic.utils.UrlUtils;
 
@@ -17,6 +19,8 @@ import java.util.*;
  * @since 0.1.0
  */
 public class Site {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     private String domain;
 
@@ -40,6 +44,11 @@ public class Site {
     private int cycleRetryTimes = 0;
 
     private int timeOut = 5000;
+
+    /**
+     * 控制是广度优先还是深度优先爬取内容
+     */
+    private boolean deepFirst = false;
 
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
@@ -145,6 +154,9 @@ public class Site {
      * @return get domain
      */
     public String getDomain() {
+        if(domain == null || domain == ""){
+            logger.error("Site Domain is not set!");
+        }
         return domain;
     }
 
@@ -475,4 +487,12 @@ public class Site {
 		return this;
 	}
 
+    public boolean isDeepFirst() {
+        return deepFirst;
+    }
+
+    public Site setDeepFirst(boolean deepFirst) {
+        this.deepFirst = deepFirst;
+        return this;
+    }
 }

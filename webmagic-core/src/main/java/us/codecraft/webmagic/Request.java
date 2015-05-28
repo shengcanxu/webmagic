@@ -33,8 +33,6 @@ public class Request implements Serializable {
 
     private int depth = 0;
 
-    private boolean isNextPageRequest = false;
-
     private String subPageFatherUrl;
     private String subPageName;
 
@@ -93,14 +91,6 @@ public class Request implements Serializable {
 
     public long getPriority() {
         return priority;
-    }
-
-    public boolean isNextPageRequest() {
-        return isNextPageRequest;
-    }
-
-    public void setNextPageRequest(boolean isNextPageRequest) {
-        this.isNextPageRequest = isNextPageRequest;
     }
 
     public  boolean isSubPage(){

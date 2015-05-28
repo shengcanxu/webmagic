@@ -25,7 +25,7 @@ public class JokejiModel {
         OOSpider.create(Site.me().setDomain("www.jokeji.cn").setCharset("gbk").setSleepTime(100).setTimeOut(3000)
                 .setUserAgent("Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)")
                 , new ConsolePageModelPipeline(), JokejiModel.class).addUrl("http://www.jokeji.cn/").thread(2)
-                .scheduler(new RedisScheduler("127.0.0.1"))
+                .scheduler(new RedisScheduler("127.0.0.1",new Site()))
                 .run();
     }
 
