@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 public @interface MultiplePagesField {
 
     /**
-     * the region express to get multiple page urls
+     * the region expression to get multiple page urls
      * @return
      */
     String multiPageRegion() default "";

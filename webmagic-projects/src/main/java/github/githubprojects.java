@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * Created by cano on 2015/2/19.
  */
 
-@ParseUrl(express = "\"login\":\"[^\"]*\"", type = ParseUrl.Type.Regex, customFunction = "getUrl")
+@ParseUrl(expression = "\"login\":\"[^\"]*\"", type = ParseUrl.Type.Regex, customFunction = "getUrl")
 @ExpandFieldValues
 public class githubprojects extends PageModel {
 

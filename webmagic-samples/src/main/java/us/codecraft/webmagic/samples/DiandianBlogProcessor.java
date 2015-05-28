@@ -22,7 +22,7 @@ public class DiandianBlogProcessor implements PageProcessor {
         List<String> requests = page.getHtml().links().regex("(.*/post/.*)").all();
         //使用page.addTargetRequests()方法将待抓取的链接加入队列
         page.addTargetRequests(requests);
-        //page.putField(key,express)将抽取的内容加入结果Map
+        //page.putField(key,expression)将抽取的内容加入结果Map
         //x()和xs()使用xpath进行抽取
         page.putField("title", page.getHtml().xpath("//title").regex("(.*?)\\|").toString());
         //smartContent()使用readability技术直接抽取正文，对于规整的文本有比较好的抽取正确率

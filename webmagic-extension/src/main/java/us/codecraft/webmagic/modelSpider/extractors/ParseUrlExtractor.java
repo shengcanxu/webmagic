@@ -40,7 +40,7 @@ public class ParseUrlExtractor {
     protected List<ExtractByParseUrlExtractor> contentExtractors = new ArrayList<>();
 
     public ParseUrlExtractor(ParseUrl parseUrl, Class clazz){
-        String express = parseUrl.express();
+        String express = parseUrl.expression();
         switch(parseUrl.type()){
             case XPath:
                 type = Type.XPath;

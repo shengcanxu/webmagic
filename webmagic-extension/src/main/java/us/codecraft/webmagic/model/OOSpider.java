@@ -21,10 +21,10 @@ import java.util.List;
  *      {@literal @}ExtractBy("//title")
  *      private String title;
  *
- *      {@literal @}ExtractBy(express = "div.BlogContent",type = ExtractBy.Type.Css)
+ *      {@literal @}ExtractBy(expression = "div.BlogContent",type = ExtractBy.Type.Css)
  *      private String content;
  *
- *      {@literal @}ExtractBy(express = "//div[@class='BlogTags']/a/text()", multi = true)
+ *      {@literal @}ExtractBy(expression = "//div[@class='BlogTags']/a/text()", multi = true)
  *      private List<String> tags;
  * }
  * </pre>

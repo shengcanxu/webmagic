@@ -22,7 +22,7 @@ public @interface ParseUrl {
      *
      * @return extractor expression
      */
-    String express();
+    String expression();
 
     /**
      * types of extractor expressions
@@ -37,13 +37,13 @@ public @interface ParseUrl {
     Type type() default Type.XPath;
 
     /**
-     * if subXpath is set, first parse and get strings from "express()" setting and then use subXpath to parse those strings.
+     * if subXpath is set, first parse and get strings from "expression()" setting and then use subXpath to parse those strings.
      * @return
      */
     String subXpath() default "";
 
     /**
-     * the next page express
+     * the next page expression
      * @return
      */
     String nextPageRegion() default "";

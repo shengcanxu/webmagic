@@ -72,7 +72,7 @@ public class SpiderTest {
          *      body[r(_currentUrl).g(1)] = body[r(_currentUrl).g(1)] + (x("").r("",1,2).c())
          *
          *      body=body[r(_currentUrl).g(1)]
-         *      tags[%] = (tags[%] + express('')) . r('')
+         *      tags[%] = (tags[%] + expression('')) . r('')
          *
          *      _targetUrls.add('' + x('').r(''))
          *      _sourceUrls.add()
@@ -114,7 +114,7 @@ public class SpiderTest {
          *      content = t(_html) > c()
          *      title = x(_html, 'asd@asd') > r('',1)
          *      body[r(_currentUrl).g(1)] = body[r(_currentUrl).g(1)] + (x('') > r('',1,2) > c()) | x('')
-         *      tags[%] = tags + express('') > r('')
+         *      tags[%] = tags + expression('') > r('')
          *      model.setTargetUrl();
          *
          *      _targetUrl = '' + x('') & r('')

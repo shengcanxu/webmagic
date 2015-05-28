@@ -20,7 +20,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 
 @ParseUrl(subXpath = "//div/a/@href",
-        express = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_item\"]",
+        expression = "//*[@id=\"discoverAlbum\"]//div[@class=\"discoverAlbum_item\"]",
         nextPageRegion = "//*[@id=\"discoverAlbum\"]//a[@rel=\"next\"]")
 @ExtractBy(value = "//*[@id=\"timelinePage\"]//h1/text()")
 public class XimalayaAlbumCustom extends PageModel {
