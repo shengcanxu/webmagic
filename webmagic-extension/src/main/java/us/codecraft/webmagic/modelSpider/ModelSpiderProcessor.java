@@ -1,5 +1,7 @@
 package us.codecraft.webmagic.modelSpider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -17,6 +19,8 @@ import java.util.Map;
  * @since 0.2.0
  */
 public class ModelSpiderProcessor implements PageProcessor {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private Site site;
 
@@ -59,6 +63,8 @@ public class ModelSpiderProcessor implements PageProcessor {
                 for(String nextPageLink : nextPageLinks) {
                     page.addNextPageRequest(new Request(nextPageLink));
                 }
+
+                logger.info("get " + nextPageLinks.size() + " next pages");
             }
 
             page.getResultItems().setSkip(true);
