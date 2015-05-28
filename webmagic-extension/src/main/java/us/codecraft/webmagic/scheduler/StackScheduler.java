@@ -1,17 +1,10 @@
 package us.codecraft.webmagic.scheduler;
 
-import com.google.gson.Gson;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.scheduler.component.DuplicateRemover;
-
-import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
-
 /**
  * Created by cano on 2015/1/18.
+ * 屏蔽StackScheduler， 不再在scheduler上决定插入顺序，而是在site对象上决定
  */
-public class StackScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
+public class StackScheduler{/* extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
     private Deque<String> queue = new LinkedBlockingDeque<>();
 
@@ -84,5 +77,5 @@ public class StackScheduler extends DuplicateRemovedScheduler implements Monitor
         String json = gson.toJson(request);
         queue.addFirst(json);
         queue.push(json);
-    }
+    }*/
 }
