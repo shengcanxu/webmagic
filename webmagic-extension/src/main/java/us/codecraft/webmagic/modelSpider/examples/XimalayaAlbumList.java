@@ -32,7 +32,7 @@ public class XimalayaAlbumList extends PageModel {
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site, new XimalayaAlbumList())
-                .scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
+                .scheduler(new RedisScheduler("127.0.0.1",site).setStartOver(true))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").run();

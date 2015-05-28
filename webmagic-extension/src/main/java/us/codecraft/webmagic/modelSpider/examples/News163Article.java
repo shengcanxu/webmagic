@@ -10,7 +10,6 @@ import us.codecraft.webmagic.modelSpider.annotation.MultiplePagesField;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.scheduler.StackScheduler;
 
 /**
  * Created by canoxu on 2015/2/1.
@@ -29,7 +28,7 @@ public class News163Article extends PageModel{
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("163.com");
         ModelSpider.create(site, new News163Article())
-                .scheduler(new StackScheduler())
+                //.scheduler(new StackScheduler())
                 //.scheduler(new RedisScheduler("127.0.0.1"))
                 .addPipeline(new ConsolePipeline())
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))

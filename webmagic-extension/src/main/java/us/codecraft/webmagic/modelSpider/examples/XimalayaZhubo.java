@@ -25,7 +25,7 @@ public class XimalayaZhubo extends PageModel{
     public static void main(String[] args) {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site, new XimalayaZhubo())
-                .scheduler(new RedisScheduler("127.0.0.1",true))
+                .scheduler(new RedisScheduler("127.0.0.1",site))
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
     }

@@ -16,7 +16,7 @@ public class RedisSchedulerTest {
 
     @Before
     public void setUp() {
-        redisScheduler = new RedisScheduler("localhost");
+        redisScheduler = new RedisScheduler("localhost",new Site());
     }
 
     @Ignore("environment depended")

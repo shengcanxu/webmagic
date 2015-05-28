@@ -21,12 +21,12 @@ public class Douguoshipu extends PageModel {
     private String pageUrl;
 
     public static void main(String[] args){
-        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5)
+        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5).setDeepFirst(true)
                 .setDomain("douguo.com/").addHeader("Referer","http://www.douguo.com/");
         System.out.println(site);
 
         ModelSpider modelSpider = ModelSpider.create(site, new Douguoshipu());
-        modelSpider.scheduler(new RedisScheduler("127.0.0.1").setStartOver(true).setDepthFirst(true))
+        modelSpider.scheduler(new RedisScheduler("127.0.0.1",site).setStartOver(true))
                 //.addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsoleModelSpiderPipeline());
         modelSpider.addUrl("http://www.douguo.com/caipu/fenlei");

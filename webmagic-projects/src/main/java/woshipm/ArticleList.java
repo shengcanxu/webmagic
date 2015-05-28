@@ -71,7 +71,7 @@ public class ArticleList extends PageModel {
         System.out.println(site);
 
         ModelSpider modelSpider = ModelSpider.create(site, new ArticleList());
-        modelSpider.scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
+        modelSpider.scheduler(new RedisScheduler("127.0.0.1",site).setStartOver(true))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsoleModelSpiderPipeline());
         for(int i=1; i<=1; i++) {

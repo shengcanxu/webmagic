@@ -7,6 +7,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import us.codecraft.webmagic.Request;
+import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.pipeline.BaseDAO;
@@ -29,7 +30,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     private JedisPool pool;
 
-    private boolean depthFirst = false;
+    private Site site = null;
 
     private boolean startOver = false;
 
@@ -39,13 +40,13 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     private static final String SET_PREFIX = "set_";
 
-    public RedisScheduler(String host) {
+    private RedisScheduler(String host) {
         this(new JedisPool(new JedisPoolConfig(), host));
     }
 
-    public RedisScheduler(String host, boolean depthFirst){
+    public RedisScheduler(String host, Site site){
         this(host);
-        this.depthFirst = depthFirst;
+        this.site = site;
     }
 
     public RedisScheduler(JedisPool pool) {
@@ -93,7 +94,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         try{
             Gson gson = new Gson();
             String json = gson.toJson(request);
-            if(depthFirst){
+            if(site.isDeepFirst()){
                 jedis.lpush(getQueueKey(task), json);
             }else {
                 jedis.rpush(getQueueKey(task), json);
@@ -156,11 +157,6 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     public RedisScheduler setStartOver(boolean startOver) {
         this.startOver = startOver;
-        return this;
-    }
-
-    public RedisScheduler setDepthFirst(boolean depthFirst){
-        this.depthFirst = depthFirst;
         return this;
     }
 

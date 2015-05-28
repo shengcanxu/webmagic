@@ -12,7 +12,6 @@ import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.annotation.TextFormatter;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
-import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 /**
  * Created by canoxu on 2015/2/1.
@@ -52,7 +51,7 @@ public class XimalayaAlbumCustom extends PageModel {
         Site site = Site.me().setTimeOut(10000).setRetryTimes(5).setDomain("www.ximalaya.com");
         ModelSpider.create(site,new XimalayaAlbumCustom())
                 //.scheduler(new StackScheduler())
-                .scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
+                //.scheduler(new RedisScheduler("127.0.0.1").setStartOver(true))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsolePipeline())
                 .addUrl("http://album.ximalaya.com/dq/book/").thread(1).run();
