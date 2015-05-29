@@ -21,7 +21,7 @@ public class Douguoshipu extends PageModel {
     private String pageUrl;
 
     public static void main(String[] args){
-        Site site = Site.me().setRetryTimes(5).setTimeOut(1000).setCycleRetryTimes(5).setDeepFirst(true)
+        Site site = Site.me().setRetryTimes(5).setTimeOut(10000).setCycleRetryTimes(5).setDeepFirst(true).setMaxDeep(2)
                 .setDomain("douguo.com/").addHeader("Referer","http://www.douguo.com/");
         System.out.println(site);
 
@@ -31,6 +31,6 @@ public class Douguoshipu extends PageModel {
                 .addPipeline(new ConsoleModelSpiderPipeline());
         modelSpider.addUrl("http://www.douguo.com/caipu/fenlei");
 
-        modelSpider.thread(1).run();
+        modelSpider.thread(5).run();
     }
 }

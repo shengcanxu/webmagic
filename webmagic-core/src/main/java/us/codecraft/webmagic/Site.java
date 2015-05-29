@@ -50,6 +50,11 @@ public class Site {
      */
     private boolean deepFirst = false;
 
+    /**
+     * 控制爬虫不爬去超过maxDeep深度的内容
+     */
+    private int maxDeep = 1000;
+
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
@@ -494,5 +499,14 @@ public class Site {
     public Site setDeepFirst(boolean deepFirst) {
         this.deepFirst = deepFirst;
         return this;
+    }
+
+    public int getMaxDeep() {
+        return maxDeep;
+    }
+
+    public Site setMaxDeep(int maxDeep) {
+        this.maxDeep = maxDeep;
+        return  this;
     }
 }

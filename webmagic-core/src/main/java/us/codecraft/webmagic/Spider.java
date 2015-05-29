@@ -441,6 +441,10 @@ public class Spider implements Runnable, Task {
     }
 
     protected void processRequest(Request request) {
+        if(request.getDepth() >= site.getMaxDeep()){
+            return;
+        }
+
         Page page = downloader.download(request, this);
         if (page == null) {
             sleep(site.getSleepTime());
