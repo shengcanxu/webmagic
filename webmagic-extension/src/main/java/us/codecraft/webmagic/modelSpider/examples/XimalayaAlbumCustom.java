@@ -37,9 +37,9 @@ public class XimalayaAlbumCustom extends PageModel {
     @ExtractByUrl(regrex = "")
     private String PageURL;
 
-    public String minusOne(String value, Page page){
+    public Object minusOne(Object value, Page page){
         try {
-            int num = Integer.parseInt(value);
+            int num = (int)value;
             num = num - 1;
             return Integer.toString(num);
         }catch (Exception e){

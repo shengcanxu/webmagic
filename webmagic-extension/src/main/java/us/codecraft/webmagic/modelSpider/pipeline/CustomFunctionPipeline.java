@@ -28,10 +28,10 @@ public class CustomFunctionPipeline implements Pipeline {
 
         for (Map.Entry<String,String> entry : customFunctions.entrySet()) {
             String name = entry.getKey();
-            String value = resultItems.get(name);
+            Object value = resultItems.get(name);
             try {
-                Method customFunction = pageModel.getClass().getMethod(entry.getValue(),String.class, Page.class);
-                String newValue = (String) customFunction.invoke(pageModel,value,resultItems.getPage());
+                Method customFunction = pageModel.getClass().getMethod(entry.getValue(),Object.class, Page.class);
+                Object newValue = customFunction.invoke(pageModel,value,resultItems.getPage());
                 resultItems.put(name,newValue);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

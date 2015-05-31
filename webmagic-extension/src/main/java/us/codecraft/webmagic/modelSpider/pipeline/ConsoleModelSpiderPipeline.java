@@ -39,10 +39,10 @@ public class ConsoleModelSpiderPipeline implements Pipeline {
         System.out.println("get page: " + resultItems.getRequest().getUrl());
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
             String name = entry.getKey();
-            String value = entry.getValue().toString();
+            String value = entry.getValue() == null ? "" : entry.getValue().toString();
 
             //just output part of TEXT type content
-            if(fieldTypeMap.containsKey(name) && fieldTypeMap.get(name).type() == FieldType.Type.TEXT){
+            if(value.length() > 100 && fieldTypeMap.containsKey(name) && fieldTypeMap.get(name).type() == FieldType.Type.TEXT){
                 value = value.substring(0,100) + "......";
             }
 

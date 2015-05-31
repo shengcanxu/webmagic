@@ -63,7 +63,7 @@ public class ContentImageDownloadPipeline implements Pipeline {
                     logger.error("download fail " + tryTimes + " times for " + url);
                 }
             }
-            resultItems.put(entry.getKey()+"Image", imageUrlToPath);
+            resultItems.put(entry.getKey()+"FileMap", imageUrlToPath);
         }
     }
 

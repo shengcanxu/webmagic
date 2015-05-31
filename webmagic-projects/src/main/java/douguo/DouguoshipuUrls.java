@@ -42,7 +42,7 @@ public class DouguoshipuUrls extends PageModel {
         ModelSpider modelSpider = ModelSpider.create(site, new DouguoshipuUrls());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(true))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
-                .addPipeline(new DownloadRawPipeline("D:\\software\\redis\\data\\rawfile\\"))
+                .addPipeline(new DownloadRawPipeline("D:/software/redis/data/rawfile/"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
 

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.modelSpider.PageModel;
-import us.codecraft.webmagic.modelSpider.annotation.DownloadContentImage;
 import us.codecraft.webmagic.modelSpider.annotation.DownloadFile;
 import us.codecraft.webmagic.modelSpider.annotation.FieldType;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -142,10 +141,7 @@ public class MysqlPipeline implements Pipeline {
                 map.putAll(subpageMap);
             }else {
                 if (field.getAnnotation(DownloadFile.class) != null) {
-                    map.put(field.getName() + "File", "varchar(1000)");
-                }
-                if (field.getAnnotation(DownloadContentImage.class) != null){
-                    map.put(field.getName() + "Image", "text");
+                    map.put(field.getName() + "FileMap", "text");
                 }
                 map.put(field.getName(), getAnnotationFieldType(field));
             }

@@ -5,7 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Define the extractor for field or class.<br>
+ * 采用 XPATH， REGREX CSS JSON 等方式从HTML中抓取想要的内容
+ *
+ * 可以采用 | 来选择多个xpath， 如：@ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"xtip\"]/text()|//*[@id=\"fullStory\"]/text()")
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0

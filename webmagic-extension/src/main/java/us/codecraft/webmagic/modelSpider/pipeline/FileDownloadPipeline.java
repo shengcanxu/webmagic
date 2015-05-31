@@ -55,7 +55,11 @@ public class FileDownloadPipeline implements Pipeline {
                         urlList = new ArrayList<>();
                         urlList.add((String)urls);
                     }
+
+                    String imageUrlToPath = "";
                     for(String url : urlList){
+                        if(url.trim().length() == 0) continue;
+
                         String filePath;
                         if(downloadFile.inSeperateFolder()){
                             //get folderName from url
@@ -82,11 +86,12 @@ public class FileDownloadPipeline implements Pipeline {
                             if(succ) break;
                         }
                         if(succ){
-                            resultItems.put(entry.getKey()+"File", filePath);
+                            imageUrlToPath = imageUrlToPath + url + "=" + filePath + ";";
                         }else{
                             logger.error("download fail " + tryTimes + " times for " + url);
                         }
                     }
+                    resultItems.put(entry.getKey()+"FileMap", imageUrlToPath);
                     break;
                 default:
                     break;
