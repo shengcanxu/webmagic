@@ -41,17 +41,17 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     private static final String SET_PREFIX = "set_";
 
     private RedisScheduler(String host) {
-        this(new JedisPool(new JedisPoolConfig(), host));
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxActive(100);
+        config.setMaxIdle(20);
+        config.setMaxWait(10000l);
+        this.pool = new JedisPool(config, host);
+        setDuplicateRemover(this);
     }
 
     public RedisScheduler(String host, Site site){
         this(host);
         this.site = site;
-    }
-
-    public RedisScheduler(JedisPool pool) {
-        this.pool = pool;
-        setDuplicateRemover(this);
     }
 
     @Override
