@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by canoxu on 2015/2/10.
- *
+ * 下载field对应的文件
  */
 
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)

@@ -7,6 +7,7 @@ import us.codecraft.webmagic.modelSpider.ModelSpider;
 import us.codecraft.webmagic.modelSpider.PageModel;
 import us.codecraft.webmagic.modelSpider.annotation.ExpandFieldValues;
 import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
+import us.codecraft.webmagic.modelSpider.pipeline.DownloadRawPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
 
@@ -37,7 +38,9 @@ public class DouguoshipuUrls extends PageModel {
         ModelSpider modelSpider = ModelSpider.create(site, new DouguoshipuUrls());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(false))
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
+                .addPipeline(new DownloadRawPipeline("D:\\software\\redis\\data\\rawfile\\"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
+
 
 //        List<String> urls = FileUtils.getUrlsFromFile("D:\\software\\redis\\data\\douguocaipumulu.txt");
 //        modelSpider.addUrls(urls);
