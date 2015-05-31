@@ -14,7 +14,7 @@ import us.codecraft.webmagic.scheduler.RedisScheduler;
 
 @ParseUrl(expression = "//*[@id=\"main\"]/div[@class=\"sortf\"]//ul/li/a/@href", nextPageRegion = "")
 @ParseUrl(expression = "//*[@id=\"container\"]//h3/a/@href", nextPageRegion = "//*[@id=\"main\"]//div[@class=\"pagination\"]//span/")
-public class Douguoshipu extends PageModel {
+public class DouguoshipuUrls extends PageModel {
 
 
     @ExtractByUrl(regrex = "")
@@ -25,7 +25,7 @@ public class Douguoshipu extends PageModel {
                 .setDomain("douguo.com").addHeader("Referer","http://www.douguo.com/");
         System.out.println(site);
 
-        ModelSpider modelSpider = ModelSpider.create(site, new Douguoshipu());
+        ModelSpider modelSpider = ModelSpider.create(site, new DouguoshipuUrls());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1",site).setStartOver(false))
                 //.addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsoleModelSpiderPipeline());
