@@ -42,9 +42,9 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     private RedisScheduler(String host) {
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxActive(100);
+        config.setMaxActive(1000);
         config.setMaxIdle(20);
-        config.setMaxWait(10000l);
+        config.setMaxWait(100000l);
         this.pool = new JedisPool(config, host);
         setDuplicateRemover(this);
     }
@@ -122,15 +122,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     protected String getSetKey(Task task) {
-        return SET_PREFIX + task.getUUID();
+        return SET_PREFIX + ((ModelSpider) task).getPageModel().getModelName();
     }
 
     protected String getQueueKey(Task task) {
-        return QUEUE_PREFIX + task.getUUID();
+        return QUEUE_PREFIX + ((ModelSpider) task).getPageModel().getModelName();
     }
 
     protected String getDupicateQueueKey(Task task) {
-        return QUEUE_PREFIX_DUPICATE + task.getUUID();
+        return QUEUE_PREFIX_DUPICATE + ((ModelSpider) task).getPageModel().getModelName();
     }
 
     @Override

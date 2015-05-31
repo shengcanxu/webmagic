@@ -39,16 +39,11 @@ public class RedisListToFile {
         config.setMaxWait(10000l);
         pool = new JedisPool(config, "127.0.0.1");
 
-        boolean borrowOrOprSuccess = true;
         try {
             jedis = pool.getResource();
         } catch (JedisConnectionException e) {
-            borrowOrOprSuccess = false;
             if (jedis != null)
                 pool.returnBrokenResource(jedis);
-        } finally {
-            if (borrowOrOprSuccess)
-                pool.returnResource(jedis);
         }
 
         //get file resource
