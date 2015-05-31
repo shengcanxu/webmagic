@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by canoxu on 2015/2/10.
- * 下载field对应的文件
+ * 下载field对应的文件，用在field上
  */
 
 @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
@@ -16,10 +16,16 @@ public @interface DownloadFile {
     String savepath();
 
     /**
-     * The type of DownloadFile annotation
+     * 下载的文件的类型
      */
     public static enum Type {PICTURE,FILE}
 
     Type type() default Type.FILE;
+
+    /**
+     * 是不是将不同的页面的文件/图片放置在不同的目录上。 false就是将所有的文件都放到同一个目录
+     * @return
+     */
+    boolean inSeperateFolder() default false;
 
 }

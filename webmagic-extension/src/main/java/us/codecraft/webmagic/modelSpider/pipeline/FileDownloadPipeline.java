@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,30 +48,38 @@ public class FileDownloadPipeline implements Pipeline {
                 case PICTURE:
                     Object urls = resultItems.get(entry.getKey());
                     Page page = resultItems.getPage();
-                    if(urls instanceof List){
-                        List<String> urlList = (List<String>) urls;
-                        for(String url : urlList){
-                            String filePath = downloadFile.savepath() + DigestUtils.md5Hex(url) +  url.substring(url.lastIndexOf("."));
+                    List<String> urlList;
+                    if(urls instanceof List) {
+                        urlList = (List<String>) urls;
+                    }else {
+                        urlList = new ArrayList<>();
+                        urlList.add((String)urls);
+                    }
+                    for(String url : urlList){
+                        String filePath;
+                        if(downloadFile.inSeperateFolder()){
+                            //get folderName from url
+                            String folderName = resultItems.getRequest().getUrl();
+                            folderName = folderName.replace(".","").replace("/","").replace(":","").replace("?","").replace("&","").replace("-","");
+                            if(folderName.length() >=300){
+                                folderName = folderName.substring(folderName.length()-300,folderName.length());
+                            }
 
-                            boolean succ = false;
-                            for (int i=0; i<tryTimes; i++) {
-                                succ = downloadAndSaveFile(url, filePath, task.getSite());
-                                if(succ) break;
+                            //create folder if needed
+                            File folder  = new File(downloadFile.savepath()+folderName);
+                            if(!folder.exists()){
+                                folder.mkdir();
                             }
-                            if(succ){
-                                resultItems.put(entry.getKey()+"File", filePath);
-                            }else{
-                                logger.error("download fail " + tryTimes + " times for " + url);
-                            }
+
+                            filePath = downloadFile.savepath() + folderName + "/" + DigestUtils.md5Hex(url) +  url.substring(url.lastIndexOf("."));
+                        }else{
+                            filePath = downloadFile.savepath() + DigestUtils.md5Hex(url) +  url.substring(url.lastIndexOf("."));
                         }
-                    }else{
-                        String url = (String) urls;
-                        String filePath = downloadFile.savepath() + DigestUtils.md5Hex(url) +  url.substring(url.lastIndexOf("."));
 
                         boolean succ = false;
                         for (int i=0; i<tryTimes; i++) {
                             succ = downloadAndSaveFile(url, filePath, task.getSite());
-                            if (succ) break;
+                            if(succ) break;
                         }
                         if(succ){
                             resultItems.put(entry.getKey()+"File", filePath);

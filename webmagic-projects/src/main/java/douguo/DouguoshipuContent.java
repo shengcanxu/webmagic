@@ -20,8 +20,8 @@ public class DouguoshipuContent extends PageModel {
     @ExtractByUrl(regrex = "")
     private String pageUrl;
 
-    @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"bokpic\"]//a/img/@href")
-    @DownloadFile(savepath = "D:\\software\\redis\\data\\pictures\\", type = DownloadFile.Type.PICTURE)
+    @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"bokpic\"]//a/@href")
+    @DownloadFile(savepath = "D:/software/redis/data/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
     private String picutre;
 
     public static void main(String[] args){
