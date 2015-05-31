@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
+ * 插入SQL的时候的类型
  * Created by canoxu on 2015/2/10.
  */
 
