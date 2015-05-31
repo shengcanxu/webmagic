@@ -547,6 +547,16 @@ public class Spider implements Runnable, Task {
         return this;
     }
 
+    public Spider addUrls(List<String> urls){
+        List<Request> requests = new ArrayList<>();
+        for (String url : urls) {
+            requests.add(new Request(url));
+        }
+        addRequests(requests);
+        signalNewUrl();
+        return this;
+    }
+
     /**
      * add urls to crawl. these urls will be parsed evern they are already parsed before
      * @param urls

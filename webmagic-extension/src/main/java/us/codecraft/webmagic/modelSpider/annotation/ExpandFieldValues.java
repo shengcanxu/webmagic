@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Define if should expand List field values into multiple fields
+ * 将list的值摊开多条记录，用在class上
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0

@@ -39,7 +39,7 @@ public class ConsoleModelSpiderPipeline implements Pipeline {
         System.out.println("get page: " + resultItems.getRequest().getUrl());
         for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
             String name = entry.getKey();
-            String value = (String)entry.getValue();
+            String value = entry.getValue().toString();
 
             //just output part of TEXT type content
             if(fieldTypeMap.containsKey(name) && fieldTypeMap.get(name).type() == FieldType.Type.TEXT){
