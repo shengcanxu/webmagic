@@ -101,7 +101,13 @@ public class DouguoshipuContent extends PageModel {
 
     public Object getStepImages(Object value, Page page){
         List<String> result = new ArrayList<>();
-        List<String> list = (List<String>) value;
+        List<String> list;
+        if(value instanceof List) {
+            list = (List<String>) value;
+        }else{
+            list = new ArrayList<>();
+            list.add((String) value);
+        }
         for(int i=0; i<list.size(); i++){
             String str = list.get(i);
             Document document = Jsoup.parse(str);
@@ -178,6 +184,6 @@ public class DouguoshipuContent extends PageModel {
                 .addPipeline(new DownloadRawPipeline("D:/software/redis/data/contentrawfile/"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(20).run();
+        modelSpider.thread(1).run();
     }
 }
