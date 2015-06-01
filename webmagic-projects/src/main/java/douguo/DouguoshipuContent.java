@@ -32,7 +32,7 @@ public class DouguoshipuContent extends PageModel {
     private String pageUrl;
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"bokpic\"]//a/@href")
-    @DownloadFile(savepath = "D:/software/redis/data/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
+    @DownloadFile(savepath = "E:/spider/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
     private String picutre;
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"falisc mbm mb40\"]/span[1]/text()")
@@ -89,7 +89,7 @@ public class DouguoshipuContent extends PageModel {
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"step clearfix\"]/div/html()")
     @CustomFunction(name = "getStepImages")
-    @DownloadFile(savepath = "D:/software/redis/data/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
+    @DownloadFile(savepath = "E:/spider/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
     @FieldType(type = FieldType.Type.TEXT)
     private List<String> stepImage;
 
@@ -174,10 +174,10 @@ public class DouguoshipuContent extends PageModel {
 
         ModelSpider modelSpider = ModelSpider.create(site, new DouguoshipuContent());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(false))
-                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
+                .addPipeline(new MysqlPipeline().setShouldResetDb(false))
                 .addPipeline(new DownloadRawPipeline("D:/software/redis/data/contentrawfile/"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(10).run();
+        modelSpider.thread(20).run();
     }
 }

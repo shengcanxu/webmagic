@@ -45,7 +45,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         config.setMaxActive(1000);
         config.setMaxIdle(20);
         config.setMaxWait(100000l);
-        this.pool = new JedisPool(config, host);
+        this.pool = new JedisPool(config, host,6379,100000);
         setDuplicateRemover(this);
     }
 
