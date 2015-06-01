@@ -184,6 +184,6 @@ public class DouguoshipuContent extends PageModel {
                 .addPipeline(new DownloadRawPipeline("D:/software/redis/data/contentrawfile/"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(1).run();
+        modelSpider.thread(20 ).run();
     }
 }
