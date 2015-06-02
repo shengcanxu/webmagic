@@ -67,7 +67,7 @@ public class CountableThreadPool {
             }
         }
         threadAlive.incrementAndGet();
-        System.out.println("        error:" + threadAlive);
+        //System.out.println("        error:" + threadAlive);
         executorService.execute(new Runnable() {
             @Override
             public void run() {
@@ -77,7 +77,7 @@ public class CountableThreadPool {
                     try {
                         reentrantLock.lock();
                         threadAlive.decrementAndGet();
-                        System.out.println("        error:" + threadAlive);
+                        //System.out.println("        error:" + threadAlive);
                         condition.signal();
                     } finally {
                         reentrantLock.unlock();

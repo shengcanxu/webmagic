@@ -16,6 +16,7 @@ import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.DownloadRawPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
+import us.codecraft.webmagic.utils.FileUtils;
 import us.codecraft.xsoup.Xsoup;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class DouguoshipuContent extends PageModel {
     private String pageUrl;
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"bokpic\"]//a/@href")
-    @DownloadFile(savepath = "E:/spider/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
+    @DownloadFile(savepath = "D:/software/redis/data/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
     private String picutre;
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"falisc mbm mb40\"]/span[1]/text()")
@@ -89,7 +90,7 @@ public class DouguoshipuContent extends PageModel {
 
     @ExtractBy(value = "//*[@id=\"main\"]//div[@class=\"step clearfix\"]/div/html()")
     @CustomFunction(name = "getStepImages")
-    @DownloadFile(savepath = "E:/spider/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
+    @DownloadFile(savepath = "D:/software/redis/data/pictures/", type = DownloadFile.Type.PICTURE, inSeperateFolder = true)
     @FieldType(type = FieldType.Type.TEXT)
     private List<String> stepImage;
 
@@ -171,7 +172,7 @@ public class DouguoshipuContent extends PageModel {
     }
 
     public static void main(String[] args){
-        //FileUtils.getFromFileToRedis("D:\\software\\redis\\data\\douguocookbooklinks.txt", "DouguoshipuContent", true);
+        //FileUtils.getFromFileToRedis("D:\\software\\redis\\data\\links.txt", "DouguoshipuContent", true);
 
 
         Site site = Site.me().setRetryTimes(5).setTimeOut(10000).setCycleRetryTimes(5).setDeepFirst(false)
@@ -184,6 +185,6 @@ public class DouguoshipuContent extends PageModel {
                 .addPipeline(new DownloadRawPipeline("D:/software/redis/data/contentrawfile/"))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(20 ).run();
+        modelSpider.thread(20).run();
     }
 }
