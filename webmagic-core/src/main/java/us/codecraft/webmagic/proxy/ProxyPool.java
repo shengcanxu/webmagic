@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.DelayQueue;
 
 /**
- * Pooled Proxy Object
+ * 代理池对象
  *
  * @author yxssfxwzy@sina.com <br>
  * @see Proxy
@@ -29,8 +29,19 @@ public class ProxyPool {
     private BlockingQueue<Proxy> proxyQueue = new DelayQueue<Proxy>();
     private Map<String, Proxy> allProxy = new ConcurrentHashMap<String, Proxy>();
 
+
+    private final int maxFail = 20;
+    /**
+     * 每一个proxy下一次再次启用的时间间隔
+     */
     private int reuseInterval = 1500;// ms
+    /**
+     * 如果失败次数大于等于maxFail， 就让proxy休息的时长
+     */
     private int reviveTime = 2 * 60 * 60 * 1000;// ms
+    /**
+     * 每隔多长时间将现在的proxy pool保存一下
+     */
     private int saveProxyInterval = 10 * 60 * 1000;// ms
 
     private boolean isEnable = false;
@@ -228,7 +239,7 @@ public class ProxyPool {
                 p.fail(statusCode);
                 break;
         }
-        if (p.getFailedNum() > 20) {
+        if (p.getFailedNum() >= reviveTime) {
             p.setReuseTimeInterval(reviveTime);
             logger.error("remove proxy >>>> " + host + ">>>>" + p.getFailedType() + " >>>> remain proxy >>>> " + proxyQueue.size());
             return;
