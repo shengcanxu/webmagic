@@ -45,6 +45,7 @@ public class FileUtils {
 
     public static void getFromFileToRedis(String filePath,String redisKey,boolean startOver){
         List<String> urls = getUrlsFromFile(filePath);
+        System.out.println("get " + urls.size() + " urls");
 
         //get jedis resource
         JedisPool pool;
@@ -67,6 +68,7 @@ public class FileUtils {
             }
 
             //do add to redis
+            int i =0;
             for (String url : urls) {
                 Request request = new Request(url);
                 Gson gson = new Gson();
@@ -74,6 +76,9 @@ public class FileUtils {
                 jedis.sadd(getSetKey(redisKey), url);
                 jedis.rpush(getQueueKey(redisKey),json);
                 jedis.rpush(getDupicateQueueKey(redisKey), json);
+
+                i++;
+                System.out.println("No. " + i);
             }
 
         } catch (JedisConnectionException e) {

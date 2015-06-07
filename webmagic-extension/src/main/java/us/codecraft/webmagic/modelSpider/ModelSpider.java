@@ -5,6 +5,7 @@ import us.codecraft.webmagic.model.ModelPageProcessor;
 import us.codecraft.webmagic.modelSpider.pipeline.*;
 import us.codecraft.webmagic.pipeline.Pipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.selector.PlainText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,18 @@ public class ModelSpider<T> extends Spider {
             return;
         }
 
-        Page page = downloader.download(request, this);
+        Page page;
+        if(!site.isGetContent() && request.getDepth() >= pageModel.getLinkExtractors().size()){
+            //只是获得连接，不爬取内容
+            page = new Page();
+            page.setRequest(request);
+            page.setUrl(new PlainText(request.getUrl()));
+            page.setDepth(request.getDepth());
+        }else{
+            page = downloader.download(request, this);
+        }
+
+
         if (page == null) {
             sleep(site.getSleepTime());
             onError(request);

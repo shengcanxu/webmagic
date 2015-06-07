@@ -55,6 +55,11 @@ public class Site {
      */
     private int maxDeep = 1000;
 
+    /**
+     * 为false的时候，不爬取内容，只是保存连接到数据库
+     */
+    private boolean getContent = true;
+
     private static final Set<Integer> DEFAULT_STATUS_CODE_SET = new HashSet<Integer>();
 
     private Set<Integer> acceptStatCode = DEFAULT_STATUS_CODE_SET;
@@ -508,5 +513,14 @@ public class Site {
     public Site setMaxDeep(int maxDeep) {
         this.maxDeep = maxDeep;
         return  this;
+    }
+
+    public boolean isGetContent() {
+        return getContent;
+    }
+
+    public Site setGetContent(boolean getContent) {
+        this.getContent = getContent;
+        return this;
     }
 }
