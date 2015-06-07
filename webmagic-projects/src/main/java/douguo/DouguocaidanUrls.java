@@ -11,7 +11,7 @@ import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.DownloadRawPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
-import us.codecraft.webmagic.utils.FileUtils;
+import us.codecraft.webmagic.utils.file.FileUtils;
 
 import java.util.List;
 

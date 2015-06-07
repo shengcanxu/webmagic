@@ -1,4 +1,4 @@
-package us.codecraft.webmagic.utils;
+package us.codecraft.webmagic.utils.file;
 
 import com.google.gson.Gson;
 import redis.clients.jedis.Jedis;

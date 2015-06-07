@@ -34,7 +34,7 @@ public class ChufangCaipuUrls extends PageModel {
                 .addPipeline(new MysqlPipeline().setShouldResetDb(true))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(2000000).run();
+        modelSpider.thread(20).run();
     }
 }
 
