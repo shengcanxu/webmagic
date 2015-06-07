@@ -72,7 +72,7 @@ public class MysqlPipeline implements Pipeline {
     }
 
     private void insertToDb(String tableName, ResultItems resultItems) {
-        String sql = "INSERT INTO `" + tableName + "` (";
+        String sql = "INSERT DELAYED INTO `" + tableName + "` (";
         String keys = "`id`";
         String values = "NULL";
 
@@ -118,7 +118,7 @@ public class MysqlPipeline implements Pipeline {
         for (Map.Entry<String,String> entry : map.entrySet()) {
             sql = sql + ", `" + entry.getKey() + "` " + entry.getValue() + " NULL";
         }
-        sql = sql + ", PRIMARY KEY (`id`)) ENGINE=InnoDB;";
+        sql = sql + ", PRIMARY KEY (`id`)) ENGINE=myisam;";
         logger.info(sql);
         dao.executeUpdate(sql);
 

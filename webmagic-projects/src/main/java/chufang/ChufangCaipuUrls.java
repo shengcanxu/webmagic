@@ -31,7 +31,7 @@ public class ChufangCaipuUrls extends PageModel {
 
         ModelSpider modelSpider = ModelSpider.create(site, new ChufangCaipuUrls());
         modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(false))
-                .addPipeline(new MysqlPipeline().setShouldResetDb(true))
+                .addPipeline(new MysqlPipeline().setShouldResetDb(false))
                 .addPipeline(new ConsoleModelSpiderPipeline());
 
         modelSpider.thread(20).run();
