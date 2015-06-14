@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.String;
 
 /**
  * Created by cano on 2015/5/30.
@@ -18,49 +19,43 @@ import java.io.IOException;
  */
 public class RedisListToFile {
 
-    private String filePath = null;
-    private String listName = null;
+    private static RedisListToFile instance = null;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private JedisPool pool;
     private Jedis jedis;
     FileOutputStream output;
 
-
-    public RedisListToFile(String filePath, String listName) {
-        this.filePath = filePath;
-        this.listName = listName;
-    }
-
-    public void run(){
+    private RedisListToFile(){
         //get jedis resource
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxActive(100);
         config.setMaxIdle(20);
         config.setMaxWait(10000l);
         pool = new JedisPool(config, "127.0.0.1");
+    }
 
+    public static RedisListToFile getInstance(){
+        if(instance == null){
+            instance = new MysqlToRedis();
+        }
+        return  instance;
+    }
+
+    public void redisListToFile(String filePath, String listName){
         try {
             jedis = pool.getResource();
-        } catch (JedisConnectionException e) {
-            if (jedis != null)
-                pool.returnBrokenResource(jedis);
-        }
 
-        //get file resource
-        File storeFile = new File(filePath);
-        if(storeFile.exists()){
-            System.out.println("file exists for " + filePath);
-        }
-        try {
+            //get file resource
+            File storeFile = new File(filePath);
+            if(storeFile.exists()){
+                System.out.println("file exists for " + filePath);
+            }
             output = new FileOutputStream(storeFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        int i =0;
-        try {
-            while(true) {
-                String json = jedis.lpop(listName);
+            List<String> list = jedis.lrange((listName), 0, jedis.llen(listName));
+            for(int i=0; i<list.size(); i++){
+                String json = list.get(i);
                 if (json == null) {
                     break;
                 }
@@ -70,21 +65,20 @@ public class RedisListToFile {
                 String content = request.getUrl() + "\n";
                 output.write(content.getBytes());
 
-                i++;
                 System.out.println(i);
             }
 
-            pool.returnResource(jedis);
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+            pool.returnResource(jedis);
+
+        } catch (JedisConnectionException e) {
+            if (jedis != null)
+                pool.returnBrokenResource(jedis);
+        }
     }
 
     public static void main(String[] args){
-        RedisListToFile redisListToFile = new RedisListToFile("f:/douguocaipuurls", "queue_dupicate_douguo.com/");
-        redisListToFile.run();
+        RedisListToFile redisListToFile = RedisListToFile.getInstance();
+        redisListToFile.redisListToFile("f:/douguocaipuurls", "queue_dupicate_douguo.com/");
     }
 }
