@@ -8,16 +8,14 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import us.codecraft.webmagic.Request;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.String;
 
 /**
  * Created by cano on 2015/5/30.
  * 将list从redis中读出来并写入到文件
  */
-public class RedisListToFile {
+public class RedisToFile {
 
     private static RedisListToFile instance = null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -26,7 +24,7 @@ public class RedisListToFile {
     private Jedis jedis;
     FileOutputStream output;
 
-    private RedisListToFile(){
+    private RedisToFile(){
         //get jedis resource
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxActive(100);
@@ -68,6 +66,33 @@ public class RedisListToFile {
                 System.out.println(i);
             }
 
+
+            pool.returnResource(jedis);
+
+        } catch (JedisConnectionException e) {
+            if (jedis != null)
+                pool.returnBrokenResource(jedis);
+        }
+    }
+
+    public void redisSetToFile(String filePath, String setName){
+        try {
+            jedis = pool.getResource();
+
+            //get file resource
+            File storeFile = new File(filePath);
+            if(storeFile.exists()){
+                System.out.println("file exists for " + filePath);
+            }
+            output = new FileOutputStream(storeFile);
+
+            List<String> list = jedis.srange((setName), 0, jedis.slen(setName));
+            for(int i=0; i<list.size(); i++){
+                String content = list.get(i) + "\n";
+                output.write(content.getBytes());
+
+                System.out.println(i);
+            }
 
             pool.returnResource(jedis);
 
