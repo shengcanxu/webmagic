@@ -388,6 +388,8 @@ public class Spider implements Runnable, Task {
     }
 
     protected void onSuccess(Request request) {
+        scheduler.completeParse(request, this);
+
         if (CollectionUtils.isNotEmpty(spiderListeners)) {
             for (SpiderListener spiderListener : spiderListeners) {
                 spiderListener.onSuccess(request);

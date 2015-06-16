@@ -32,6 +32,11 @@ public class QueueScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
+    public void completeParse(Request request, Task task) {
+
+    }
+
+    @Override
     public List checkIfCompleteParse(Task task) {
         return null;
     }

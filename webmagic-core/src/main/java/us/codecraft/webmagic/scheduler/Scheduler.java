@@ -33,7 +33,13 @@ public interface Scheduler {
     public Request poll(Task task);
 
     /**
-     * compare the parse queue copy with parsed set, return the un-parsed request if there is any,other returns null or null list
+     * 标志一个request or task执行完毕
+     * @param task
+     */
+    public void completeParse(Request request, Task task);
+
+    /**
+     * 判断是否所有的request都执行完毕
      */
     public List<Request> checkIfCompleteParse(Task task);
 

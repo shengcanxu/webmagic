@@ -63,6 +63,11 @@ public class PriorityScheduler extends DuplicateRemovedScheduler implements Moni
     }
 
     @Override
+    public void completeParse(Request request, Task task) {
+
+    }
+
+    @Override
     public List checkIfCompleteParse(Task task) {
         return null;
     }

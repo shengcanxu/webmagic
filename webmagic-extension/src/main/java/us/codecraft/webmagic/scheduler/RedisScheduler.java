@@ -121,6 +121,20 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         }
     }
 
+    @Override
+    public void completeParse(Request request, Task task) {
+        Jedis jedis = pool.getResource();
+
+        try{
+            Gson gson = new Gson();
+            String json = gson.toJson(request);
+            jedis.lrem(getDupicateQueueKey(task),1,json);
+
+        }finally {
+            pool.returnResource(jedis);
+        }
+    }
+
     protected String getSetKey(Task task) {
         return SET_PREFIX + ((ModelSpider) task).getPageModel().getModelName();
     }
@@ -170,10 +184,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             List<String> requests = jedis.lrange((key), 0, jedis.llen(key));
             for(String json : requests){
                 Request request = gson.fromJson(json, Request.class);
-                boolean exist = jedis.sismember(getSetKey(task), request.getUrl());
-                if(!exist){
-                    list.add(request);
-                }
+                list.add(request);
             }
             return list;
         }finally {

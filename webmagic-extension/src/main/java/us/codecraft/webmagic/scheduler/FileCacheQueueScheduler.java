@@ -183,6 +183,11 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     @Override
+    public void completeParse(Request request, Task task) {
+
+    }
+
+    @Override
     public List checkIfCompleteParse(Task task) {
         return null;
     }
