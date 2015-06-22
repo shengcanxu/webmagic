@@ -59,11 +59,6 @@ public class BloomFilterDuplicateRemover implements DuplicateRemover {
     }
 
     @Override
-    public void resetDuplicateCheck(Task task) {
-        rebuildBloomFilter();
-    }
-
-    @Override
     public int getTotalRequestsCount(Task task) {
         return counter.get();
     }

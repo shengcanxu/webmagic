@@ -83,11 +83,6 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
                     }
 
                     @Override
-                    public void resetDuplicateCheck(Task task) {
-                        urls.clear();
-                    }
-
-                    @Override
                     public int getTotalRequestsCount(Task task) {
                         return urls.size();
                     }

@@ -20,12 +20,6 @@ public interface DuplicateRemover {
     public boolean isDuplicate(Request request, Task task);
 
     /**
-     * Reset duplicate check.
-     * @param task
-     */
-    public void resetDuplicateCheck(Task task);
-
-    /**
      * Get TotalRequestsCount for monitor.
      * @param task
      * @return

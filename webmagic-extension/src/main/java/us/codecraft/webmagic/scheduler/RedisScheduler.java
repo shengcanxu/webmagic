@@ -55,16 +55,6 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     @Override
-    public void resetDuplicateCheck(Task task) {
-        Jedis jedis = pool.getResource();
-        try {
-            jedis.del(getSetKey(task));
-        } finally {
-            pool.returnResource(jedis);
-        }
-    }
-
-    @Override
     public boolean isDuplicate(Request request, Task task) {
         Jedis jedis = pool.getResource();
         try {

@@ -24,11 +24,6 @@ public class HashSetDuplicateRemover implements DuplicateRemover {
     }
 
     @Override
-    public void resetDuplicateCheck(Task task) {
-        urls.clear();
-    }
-
-    @Override
     public int getTotalRequestsCount(Task task) {
         return urls.size();
     }
