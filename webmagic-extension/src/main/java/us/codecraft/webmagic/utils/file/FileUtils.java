@@ -43,6 +43,12 @@ public class FileUtils {
         return urls;
     }
 
+    /**
+     * 从文件读取到redis
+     * @param filePath
+     * @param redisKey
+     * @param startOver
+     */
     public static void getFromFileToRedis(String filePath,String redisKey,boolean startOver){
         List<String> urls = getUrlsFromFile(filePath);
         System.out.println("get " + urls.size() + " urls");
@@ -88,6 +94,34 @@ public class FileUtils {
             if (borrowOrOprSuccess)
                 pool.returnResource(jedis);
         }
+    }
+
+    /**
+     * 将proxy的ip和port从文件中读取出来
+     * @param filePath
+     * @return
+     */
+    public static List<String[]> getProxyFromFile(String filePath){
+        List<String[]> proxies = new ArrayList<>();
+
+        try {
+            File fin = new File(filePath);
+            FileInputStream fis = new FileInputStream(fin);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
+
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+                String[] proxy = line.split(" ");
+                proxies.add(proxy);
+            }
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return proxies;
     }
 
     private static String getSetKey(String redisKey) {

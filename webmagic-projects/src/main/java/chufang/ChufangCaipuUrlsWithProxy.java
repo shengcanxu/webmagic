@@ -8,8 +8,8 @@ import us.codecraft.webmagic.modelSpider.annotation.ParseUrl;
 import us.codecraft.webmagic.modelSpider.pipeline.ConsoleModelSpiderPipeline;
 import us.codecraft.webmagic.modelSpider.pipeline.MysqlPipeline;
 import us.codecraft.webmagic.scheduler.RedisScheduler;
+import us.codecraft.webmagic.utils.file.FileUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,27 +26,25 @@ public class ChufangCaipuUrlsWithProxy extends PageModel {
     private String pageUrl;
 
     public static void main(String[] args){
-        //FileUtils.getFromFileToRedis("D:\\software\\redis\\data\\categoryurls.txt", "ChufangCaipuUrlsWithProxy", true);
+        if(false){
+            FileUtils.getFromFileToRedis("D:\\software\\redis\\data\\categoryurls.txt", "ChufangCaipuUrlsWithProxy", true);
+        }else {
 
-        Site site = Site.me().setRetryTimes(5).setTimeOut(10000).setCycleRetryTimes(5).setDeepFirst(true).setGetContent(true)
-                .setDomain("xiachufang.com").addHeader("Referer","http://www.xiachufang.com/");
+            Site site = Site.me().setRetryTimes(5).setTimeOut(10000).setCycleRetryTimes(5).setDeepFirst(true).setGetContent(true)
+                    .setDomain("xiachufang.com").addHeader("Referer", "http://www.xiachufang.com/");
 
-        List<String[]> httpProxyList = new ArrayList<>();
-        String[] ips = new String[2];
-        ips[0] = "120.203.158.148"; ips[1] = "8118";
-        httpProxyList.add(ips);
-        String[] ips2 = new String[2];
-        ips2[0] = "120.203.148.7"; ips2[1] = "8118";
-        httpProxyList.add(ips2);
-        site.setHttpProxyPool(httpProxyList);
-        System.out.println(site);
+            List<String[]> httpProxyList = FileUtils.getProxyFromFile("D:\\software\\redis\\data\\proxies.txt");
+            site.setHttpProxyPool(httpProxyList);
+            System.out.println(site);
 
-        ModelSpider modelSpider = ModelSpider.create(site, new ChufangCaipuUrlsWithProxy());
-        modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(false))
-                .addPipeline(new MysqlPipeline().setShouldResetDb(false))
-                .addPipeline(new ConsoleModelSpiderPipeline());
+            ModelSpider modelSpider = ModelSpider.create(site, new ChufangCaipuUrlsWithProxy());
+            modelSpider.scheduler(new RedisScheduler("127.0.0.1", site).setStartOver(false))
+                    .addPipeline(new MysqlPipeline().setShouldResetDb(false))
+                    .addPipeline(new ConsoleModelSpiderPipeline());
 
-        modelSpider.thread(1).run();
+            modelSpider.thread(20).run();
+
+        }
     }
 }
 
