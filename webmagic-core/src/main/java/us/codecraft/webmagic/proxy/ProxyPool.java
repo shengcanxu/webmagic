@@ -207,7 +207,7 @@ public class ProxyPool {
     }
 
     public void returnProxy(HttpHost host, int statusCode) {
-        Proxy p = allProxy.get(host.getAddress().getHostAddress());
+         Proxy p = allProxy.get(host.getAddress().getHostAddress());
         if (p == null) {
             return;
         }

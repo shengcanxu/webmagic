@@ -75,7 +75,6 @@ public class FileUtils {
                 String json = gson.toJson(request);
                 jedis.sadd(getSetKey(redisKey), url);
                 jedis.rpush(getQueueKey(redisKey),json);
-                jedis.rpush(getDupicateQueueKey(redisKey), json);
 
                 i++;
                 System.out.println("No. " + i);
