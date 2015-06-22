@@ -1,6 +1,7 @@
 package us.codecraft.webmagic.scheduler;
 
 import com.google.gson.Gson;
+import org.apache.http.HttpHost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
@@ -89,7 +90,6 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             }else {
                 jedis.rpush(getQueueKey(task), json);
             }
-            jedis.rpush(getDupicateQueueKey(task), json);
         } finally {
             pool.returnResource(jedis);
         }
@@ -100,6 +100,8 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
         Jedis jedis = pool.getResource();
         try{
             String json = jedis.lpop(getQueueKey(task));
+            jedis.rpush(getDupicateQueueKey(task), json);
+
             if (json == null){
                 return null;
             }
@@ -117,7 +119,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
         try{
             Gson gson = new Gson();
+
+            HttpHost httpHost = request.getProxy();
+            int statusCode = request.getStatusCode();
+            request.setProxy(null);
+            request.setStatusCode(0);
             String json = gson.toJson(request);
+            request.setProxy(httpHost);
+            request.setStatusCode(statusCode);
+
             jedis.lrem(getDupicateQueueKey(task),1,json);
 
         }finally {
