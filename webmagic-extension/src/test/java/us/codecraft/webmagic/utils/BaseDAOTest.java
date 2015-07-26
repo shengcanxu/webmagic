@@ -14,7 +14,7 @@ public class BaseDAOTest {
 
     @Test
     public void executeQueryTest(){
-        BaseDAO baseDao=BaseDAO.getInstance();
+        BaseDAO baseDao=BaseDAO.getInstance("cano");
 
         String sql="SELECT * FROM testjava where id=?";
         Object[] param= new Object[]{1};
@@ -30,7 +30,7 @@ public class BaseDAOTest {
 
     @Test
     public void executeUpdateTest(){
-        BaseDAO baseDao = BaseDAO.getInstance();
+        BaseDAO baseDao = BaseDAO.getInstance("cano");
 
         String sql="insert into testjava (`title`,`num`) values (?,?)";
         Object[] param= new Object[]{"hello",323};

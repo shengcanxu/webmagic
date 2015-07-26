@@ -11,19 +11,22 @@ import java.util.Map;
 
 public class BaseDAO {
     private final static String DRIVER = "com.mysql.jdbc.Driver";
-    private final static String URL = "jdbc:mysql://127.0.0.1:3306/cano?characterEncoding=UTF-8";
+    private final static String URL = "jdbc:mysql://127.0.0.1:3306/";
     private final static String USERNAME = "root";
     private final static String PASSWORD = "";
 
-    private static BaseDAO instance = null;
+    private static Map<String,BaseDAO> instances = new HashMap<>();
     private Connection conn = null;
+    private String dbName = null;
 
     private void BaseDAO(){ }
 
-    public static BaseDAO getInstance(){
+    public static BaseDAO getInstance(String dbName){
+        BaseDAO instance = instances.get(dbName);
         if(instance == null){
             instance = new BaseDAO();
-            instance.getConn();
+            instance.getConn(dbName);
+            instances.put(dbName, instance);
             return instance;
         }else{
             return instance;
@@ -36,14 +39,15 @@ public class BaseDAO {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    private void getConn() {
+    private void getConn(String dbName) {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            String connString = URL + dbName + "?characterEncoding=UTF-8";
+            conn = DriverManager.getConnection(connString, USERNAME, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,8 +64,10 @@ public class BaseDAO {
     }
 
     protected void finalize() throws Throwable {
-        instance.close();
-        instance = null;
+        for(Map.Entry<String,BaseDAO> entry : instances.entrySet()){
+            entry.getValue().close();
+        }
+        instances = null;
     }
 
     /**
@@ -93,6 +99,10 @@ public class BaseDAO {
         Object[] param = new Object[0];
         int[] type = new int[0];
         return executeUpdate(sql,param, type);
+    }
+
+    public List executeQuery(String sql){
+        return this.executeQuery(sql,null,null);
     }
 
     /**
@@ -129,5 +139,13 @@ public class BaseDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public static void main(String[] args){
+        BaseDAO base1 = BaseDAO.getInstance("cano");
+        BaseDAO base2 = BaseDAO.getInstance("cano");
+
+        BaseDAO base3 = BaseDAO.getInstance("duoguo");
+
     }
 }

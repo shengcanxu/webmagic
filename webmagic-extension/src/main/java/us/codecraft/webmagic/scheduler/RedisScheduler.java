@@ -195,7 +195,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     @Override
     public void saveQueue(Task task) {
         Jedis jedis = pool.getResource();
-        BaseDAO dao = BaseDAO.getInstance();
+        BaseDAO dao = BaseDAO.getInstance("cano");
 
         //create table
         String tableName;
@@ -227,7 +227,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
 
     @Override
     public void recoverQueue(Task task) {
-        BaseDAO dao = BaseDAO.getInstance();
+        BaseDAO dao = BaseDAO.getInstance("cano");
         Jedis jedis = pool.getResource();
 
         //get urls

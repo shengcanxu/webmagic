@@ -23,7 +23,7 @@ public class MysqlPipeline implements Pipeline {
     public static enum STATUS {Success,Failure,NotStarted}
 
     private STATUS status = STATUS.NotStarted;
-    private BaseDAO dao = BaseDAO.getInstance();
+    private BaseDAO dao = BaseDAO.getInstance("cano");
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean shouldResetDb = false;
