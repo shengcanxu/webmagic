@@ -26,6 +26,7 @@ public class BaseDAO {
         if(instance == null){
             instance = new BaseDAO();
             instance.getConn(dbName);
+            instance.dbName = dbName;
             instances.put(dbName, instance);
             return instance;
         }else{

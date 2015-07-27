@@ -2,6 +2,10 @@ package us.codecraft.webmagic.utils.DB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.codecraft.webmagic.modelSpider.pipeline.BaseDAO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cano on 2015/5/30.
@@ -31,11 +35,26 @@ public class CombineTables {
      * @param duplicateColumn
      */
     public void doCombineTables(String fromDB,String toDB, String fromTable, String toTable, String duplicateColumn) {
+        BaseDAO toDao = BaseDAO.getInstance(toDB);
+        BaseDAO fromDao = BaseDAO.getInstance(fromDB);
 
+
+        //get the max-id from fromdb
+        String sql = "select max(id) as maxid from " + toTable;
+        List result = toDao.executeQuery(sql);
+        int maxid = ((Map<String, Integer>)result.get(0)).get("maxid");
+
+        //get the number of records from todb
+        sql = "select count(id) as countid from " + fromTable;
+        List result2 = fromDao.executeQuery(sql);
+        long countid = ((Map<String,Long>)result2.get(0)).get("countid");
+
+        int  a = 2;
     }
 
 
     public static void main(String[] args){
         CombineTables mysqlToRedis = CombineTables.getInstance();
+        mysqlToRedis.doCombineTables("douguo2","douguo","douguocaidancontent","douguocaidancontent","pageUrl");
     }
 }
