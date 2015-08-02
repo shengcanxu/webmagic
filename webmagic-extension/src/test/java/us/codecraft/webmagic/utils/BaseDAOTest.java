@@ -20,8 +20,8 @@ public class BaseDAOTest {
         Object[] param= new Object[]{1};
         int[] type={Types.INTEGER};
 
-        List<Map<String, String>> list=(List<Map<String, String>>) baseDao.executeQuery(sql, param, type);
-        for (Map<String, String> item : list){
+        List<Map<String, Object>> list=(List<Map<String, Object>>) baseDao.executeQuery(sql, param, type);
+        for (Map<String, Object> item : list){
             for(Map.Entry entry : item.entrySet()){
                 System.out.println(entry.getKey() + "  " + entry.getValue());
             }

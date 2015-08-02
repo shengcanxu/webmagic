@@ -102,7 +102,7 @@ public class BaseDAO {
         return executeUpdate(sql,param, type);
     }
 
-    public List executeQuery(String sql){
+    public List<Map<String,Object>> executeQuery(String sql){
         return this.executeQuery(sql,null,null);
     }
 
@@ -113,7 +113,7 @@ public class BaseDAO {
      * @param type 值类型集
      * @return 结果集
      */
-    public List executeQuery(String sql, Object[] param, int[] type) {
+    public List<Map<String,Object>> executeQuery(String sql, Object[] param, int[] type) {
         ResultSet rs = null;
         List<Map<String,Object>> list = null;
         PreparedStatement prsts = null;

@@ -49,12 +49,62 @@ public class CombineTables {
         List result2 = fromDao.executeQuery(sql);
         long countid = ((Map<String,Long>)result2.get(0)).get("countid");
 
-        int  a = 2;
+        for(int i= 0; i < countid; i=i+10){
+            long limitFrom = i;
+            sql = "select * from " + fromTable + " limit " + limitFrom + " , 100" ;
+            List<Map<String,Object>> fromResult = fromDao.executeQuery(sql);
+            for(Map<String,Object> item : fromResult){
+                checkAndInsert(item,toDao, toTable,duplicateColumn);
+            }
+
+            System.out.println("complete 10 records, index now is : " + i);
+        }
+    }
+
+    /**
+     * 检查是否item已经在toDao中存在，如果不存在就插入
+     * @param item
+     * @param toDao
+     * @param toTable
+     */
+    private void checkAndInsert(Map<String, Object> item, BaseDAO toDao, String toTable, String duplicateColumn){
+        Object duplicateValue = item.get(duplicateColumn);
+        String sql = "select * from " + toTable + " where " + duplicateColumn + " = ";
+        if(duplicateValue instanceof String){
+            sql = sql + "'" + duplicateValue + "'";
+        }else{
+            sql = sql + duplicateValue;
+        }
+        List<Map<String,Object>> result = toDao.executeQuery(sql);
+
+        if(result.size() == 0){ //only insert if not exists
+            String keys = "";
+            String values = "";
+            for(Map.Entry<String, Object> entry : item.entrySet()){
+                if(entry.getKey().equals("id")) continue;
+
+                keys = keys + "`" + entry.getKey() + "`,";
+                if(entry.getValue() instanceof String){
+                    values = values + "'" + entry.getValue() + "',";
+                }else{
+                    values = values + entry.getValue() + ",";
+                }
+            }
+
+            keys = keys.substring(0,keys.length()-1);
+            values = values.substring(0,values.length()-1);
+            sql = "insert into " + toTable + " (" + keys + ") values (" + values + ")";
+            System.out.println(sql);
+            toDao.executeUpdate(sql);
+
+        }else{
+            System.out.println("duplicate");
+        }
     }
 
 
     public static void main(String[] args){
         CombineTables mysqlToRedis = CombineTables.getInstance();
-        mysqlToRedis.doCombineTables("douguo2","douguo","douguocaidancontent","douguocaidancontent","pageUrl");
+        mysqlToRedis.doCombineTables("douguo2","douguo","douguoshipucontent","douguoshipucontent","pageUrl");
     }
 }
